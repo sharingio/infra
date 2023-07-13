@@ -4,7 +4,7 @@ kind: HelmRelease
 # https://fluxcd.io/flux/components/helm/helmreleases/#specification
 metadata:
   name: cert-manager
-  namespace: cert-manager
+  namespace: flux-system
 spec:
   interval: 30m
   chart:
@@ -16,7 +16,11 @@ spec:
         name: cert-manager
         namespace: flux-system
       interval: 12h
+  targetNamespace: cert-manager
+  storageNamespace: flux-system
+  maxHistory: 10
   install:
     createNamespace: true
   values:
     installCRDs: true
+  # valuesFrom:
