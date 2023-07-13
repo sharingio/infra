@@ -29,3 +29,21 @@ spec:
     provider: sops
     secretRef:
       name: sops-gpg
+  components:
+    - ../../cert-manager
+  # patches:
+  #   - patch: |
+  #       - op: add
+  #         path: /spec/values/extraEnvVars
+  #         value:
+  #           name: "GHOST_ENABLE_HTTPS"
+  #           value: "yes"
+  #       - op: add
+  #         path: /spec/values/extraEnvVars
+  #         value:
+  #           name: "SETMYVAR"
+  #           value: "MYVALUE"
+  #     target:
+  #       kind: HelmRelease
+  #       name: ghost
+  #       namespace: ghost
