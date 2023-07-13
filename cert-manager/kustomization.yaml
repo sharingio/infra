@@ -1,4 +1,4 @@
 # https://kubectl.docs.kubernetes.io/guides/config_management/components/
-resourcesa:
+resources:
   - chart.yaml
   - release.yaml
