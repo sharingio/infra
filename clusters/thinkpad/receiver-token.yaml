@@ -1,40 +1,8 @@
 apiVersion: v1
 data:
-    token: ENC[AES256_GCM,data:qxIdvftaD91b7dd0fMQjU1+e4GIHWRBBCvJbcEDxTO4a4mvxsZfZyK6/n9n/Ci2SuBwCGpto4p0=,iv:Jl96JOeNKanMubplp1NZIznuQz+wIsz5xe5Mh4V16fQ=,tag:XLgkXBYuOTpRXwGuGO8DTg==,type:str]
+  token: YjhkZGIyM2U0ZWMzNzU4Y2Y1MGRjZjJkMGI0OTY5MDMxM2QzZWMwNA==
 kind: Secret
 metadata:
-    creationTimestamp: null
-    name: receiver-token
-    namespace: flux-system
-sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
-    age: []
-    lastmodified: "2023-07-13T10:51:56Z"
-    mac: ENC[AES256_GCM,data:pnTrDvmxi1eZUMTfnk6c9q0mEm17JHGSWwEVwwhxhUVohjV0HWUo/gZdZokAoZ2GXV3NL1I4dA45E2CfgAhLvOlTeKzrh6YPLd+Gxkay7Z6ygfbyrUceXNtJYvcA0wF9aQxDsEahNIDOSJkiwRC+INr4DOhvKkI5nDjM9HRxhSM=,iv:7/mikq07uLE5TsBMMFXLnbSm44CiHlHbdp+HMQ0obdk=,tag:1KGamCQhDPWx4BZ9gAUAdg==,type:str]
-    pgp:
-        - created_at: "2023-07-13T10:51:55Z"
-          enc: |
-            -----BEGIN PGP MESSAGE-----
-
-            hQIMAx4MM/7fP/y8ARAA0GNkeKggIk+bGR4oyTCq3sCd29pWti3R7uG8puf4opJv
-            sk2JXk0uPt/38KMM7XYOhfQHwPyfbwjS/CRuWaruJdyeV4QL5NAJVvirhPU43i+Z
-            l7EQ8qZW4Y3FQ30PkGIWfwEAT4OEvtgnOoqY/SdI1h8j1J3Xed2PdUxMrUWOea7M
-            CCPDsvBx91Frni94lZRg5PVaseDYk6G8t2oEjiuipRDqBuNQbUbPpjdTpMTAOh5Y
-            JAWkbrlNuH1rx+H8nKURQzo9i0Hr+b4kTyGDc2yRmYD8n/dp/0TT4ipR7FYFteOy
-            ZXK/OdsIEkXQ5GjAua58mx2ewDcNKR6MhrbevmqKgwxfynkBmHQsE9DsyJGWCzOK
-            kFxfuNd8TR6Mux23BWrIIb+C4bDipM36w6vTESNxlLrdw2V9L691CqFuzRKL58qg
-            9G7dufr1swQB/EYzXnfU8H4lrfDXGGQ2w95poIOYMYZEyCxm1jCGkku3UtPU6fXn
-            lyj55GW0Duj2mD0+ZPc3Jn6UNHtYokw4C4kZ+HWJeYEUheLcgS0SfG9qRu8Z/xcT
-            IEtI1+b/MBIp8c0M+5TvGxk4mkuVyincqlOE0fDBCFNgD92kzd269fzioScy1rMY
-            rqRwRUMKkU+1gy1iOmIK9SWuLWV7hZPQ8GX4HQeysY8VfiMyg7HTxayeX6zNsWvU
-            aAEJAhDfdjTsl24U4MUKoT1fjmXsQkfioYDty7LaJinHsoOOmkaPl5DwQjBfkfwg
-            JbOWPA56YTVgmuZ+vlAIYljQ+apEQ+0R+fDAKevmqp7yDyFSt3EhCWEPs6s6MsSi
-            zlt9w3kP6Vsj
-            =LTb6
-            -----END PGP MESSAGE-----
-          fp: 1EE79B3DA3C67B0204A9CDA39100B3510A99E0DC
-    encrypted_regex: ^(data|stringData)$
-    version: 3.7.3
+  creationTimestamp: null
+  name: receiver-token
+  namespace: flux-system
