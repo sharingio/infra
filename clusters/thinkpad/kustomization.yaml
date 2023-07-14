@@ -7,3 +7,4 @@ resources:
 components:
   - ../../cert-manager
   - ../../longhorn
+  - ../../nginx
