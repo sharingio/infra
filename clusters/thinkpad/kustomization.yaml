@@ -8,3 +8,4 @@ components:
   - ../../cert-manager
   - ../../longhorn
   - ../../nginx
+  - ../../cilium
