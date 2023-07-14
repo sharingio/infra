@@ -1,0 +1,34 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+# https://fluxcd.io/flux/components/helm/helmreleases/#specification
+metadata:
+  name: longhorn
+  namespace: longhorn
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: longhorn
+      version: "1.5.0" # Current as of June 15 2023
+      sourceRef:
+        kind: HelmRepository
+        name: longhorn
+        namespace: flux-system
+      interval: 12h
+  maxHistory: 10
+  install:
+    createNamespace: true
+  # https://github.com/longhorn/charts/blob/v1.5.x/charts/longhorn/values.yaml
+  values:
+    ingress:
+      enable: true
+      host: longhorn.sharing.io
+      annotations:
+        kubernetes.io/ingress.class: nginx
+    enablePSP: true
+    # namespaceOverride: "longhorn"
+    # kubernetes.io/tls-acme: true
+    # tls: true
+    # tlsSecret: wildcard-tls
+  # values:
