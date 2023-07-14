@@ -1,8 +1,40 @@
 apiVersion: v1
 data:
-  token: YjhkZGIyM2U0ZWMzNzU4Y2Y1MGRjZjJkMGI0OTY5MDMxM2QzZWMwNA==
+    token: ENC[AES256_GCM,data:Y8GJnUW5z5UA+ZXU+mpYDWEj/uWTFiOu+Jh3GXpQp5Xz/G/cjU1a0hp5n6S4pMyjAsfonrpIWoE=,iv:0Q3/dwpOnrvFtGQPWfBRto/2wn9ub6c90my0como+X0=,tag:iAGpJ6amhYh7kc+qSzrO7A==,type:str]
 kind: Secret
 metadata:
-  creationTimestamp: null
-  name: receiver-token
-  namespace: flux-system
+    creationTimestamp: null
+    name: receiver-token
+    namespace: flux-system
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2023-07-14T18:45:55Z"
+    mac: ENC[AES256_GCM,data:OCgFsFTqDBHP0FWUaxydOp6yTLtJWHV+2wNIRqOIyGZW+AF5qEqup2S2i1Hoenzm67Gsc4kVhvaP23VAWRmoX7Mp19SQYrUYHYJjPT25RXCX6LI5YJlq3CGNFOw9UMJ6TznAju5OaLbKfUrtvFe9N5eu5d1Z2NUmplaSiwGfmGI=,iv:s7/23AdIVKyN0iDGTuZhvp7IgiXjVVMiRaKdqNScB0w=,tag:E2FDX9/3qJOnxiDS4D9gYw==,type:str]
+    pgp:
+        - created_at: "2023-07-14T18:45:55Z"
+          enc: |
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMAx4MM/7fP/y8ARAA21wGQu9s0Kae8MUaKQCpV2V7lQv6CCVtoQznUY4dVIW4
+            PU7aSzyGIKd/zDSDnZWamo82TydBRJKtSsNx2nrCeR+n9a90tgFEtnqkTWl/iJLm
+            eGvP2yyzEWU1KG0/4SWwqFvTMllGQk0AjLOnsfxI7oV6bUoabNzBkrOHZEySLgA/
+            vY2nyKp8jlvpQ0uoHD/JJpXLnUzz9v0taUqC33rGpzsCLkIshqJZEwRlsCKMM3L2
+            vP1ijgC0XRmmqCCiHoSM7ojGIfnlTLuWTPzKSPL0MlRWjPEUE0inEBg+0q2dy2mj
+            OYrssf//Pcb1t1gC2FXATo0pozqP4gMz3jYyPHnt52zV15xln/GmHOTs1Ij53giJ
+            SODzHk28/Fdw5orsOQap6gTs121i8veim6C4O7SElqu7Hy2KgtPYCR9ctYQOXazz
+            m6xC7XHhm5WcrhyE+RZVS+cv4I8W3ICyz5M24ZJwz71uZiHKGdSd5Hxm2C9unGUG
+            ayoCjZ+O+9tdf2vFVWXigOZ7nxawKxubDWIe4pQEu7reG+vIwRp5AhlV42axc2El
+            cio8F3W+q4Nke8ZcSU0CtAiR/beCcrfJnQmZT1NZXuuDTGVxzPEBM9GZQoEGHGDI
+            pEd8u+1zmysv7NRhKsBQcV7P86lvwnSW9FE/Xa00z8Ew3vWIjIAiTvrE0G8nSErU
+            aAEJAhCO8VW3L7gCm9TH76T1zFQEJs9K8yXl6yFWuP7PrgMaQBVF2DDfwErIcfFX
+            BRXR5VZWu0RdkgtBuvNsJp1UgWktTneWdz9IchPV+x5eTVNPrn5WW5xHU1Ze7QCR
+            ldK7B4GQvxnO
+            =WDdI
+            -----END PGP MESSAGE-----
+          fp: 1EE79B3DA3C67B0204A9CDA39100B3510A99E0DC
+    encrypted_regex: ^(data|stringData)$
+    version: 3.7.3
