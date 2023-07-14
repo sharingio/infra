@@ -2,8 +2,8 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1 # <-- Component notation
 kind: Component
 resources:
+  - hubble-ingress.yaml
   # - helm-repo.yaml
   # I get the following errer when trying to 'manage' the exsiting helm release of cilium from bootstrapping kubernetes
   # Kustomization reconciliation failed: kustomize build failed: accumulating components: accumulateDirectory: "recursed accumulation of path '/tmp/kustomization-2424112580/cilium': accumulating resources: accumulation err='merging resources from 'helm-release.yaml': may not add resource with an already registered id: HelmRelease.v2beta1.helm.toolkit.fluxcd.io/longhorn.flux-system': must build at directory: '/tmp/kustomization-2424112580/cilium/helm-release.yaml': file is not directory"
   # - helm-release.yaml
-  - hubble-ingress.yaml
