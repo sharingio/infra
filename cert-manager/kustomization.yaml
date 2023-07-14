@@ -5,4 +5,5 @@ resources:
   - helm-repo.yaml
   - helm-release.yaml
   - cluster-issuer.yaml
-  - cert.yaml
+  # Cert will depend on cluster-issuer and other
+  # - cert.yaml
