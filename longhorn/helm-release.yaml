@@ -11,11 +11,11 @@ spec:
     spec:
       chart: longhorn
       version: "1.4.2" # Had issues with 1.5.0!
+      interval: 12h
       sourceRef:
         kind: HelmRepository
         name: longhorn
         namespace: flux-system
-      interval: 12h
   targetNamespace: longhorn
   storageNamespace: flux-system
   maxHistory: 10
