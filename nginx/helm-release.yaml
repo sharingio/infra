@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: ingress-nginx
-  namespace: ingress-nginx
+  namespace: flux-system
 spec:
   interval: 30m
   chart:
@@ -15,6 +15,11 @@ spec:
         name: ingress-nginx
         namespace: flux-system
       interval: 12h
+  targetNamespace: longhorn
+  storageNamespace: flux-system
+  maxHistory: 10
+  install:
+    createNamespace: true
   # https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
   # What's the show values command for flux?
   values:
