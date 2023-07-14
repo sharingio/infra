@@ -28,7 +28,7 @@ spec:
       host: longhorn.sharing.io
       annotations:
         kubernetes.io/ingress.class: nginx
-    enablePSP: true
+    # enablePSP: true
     # namespaceOverride: "longhorn"
     # kubernetes.io/tls-acme: true
     # tls: true
