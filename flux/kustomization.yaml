@@ -2,4 +2,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1 # <-- Kustomization API
 kind: Kustomization
 resources:
   - receiver.yaml
-  - receiver-tokes.yaml
+  - receiver-token.yaml
