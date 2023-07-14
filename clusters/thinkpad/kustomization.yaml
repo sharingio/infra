@@ -5,10 +5,12 @@ resources:
   - receiver.yaml
   - receiver-token.yaml
   - cert-manager.yaml
+  - nginx.yaml
+  - longhorn.yaml
   # - pdns-tsig-key.yaml
   # I'd prefer this load via components: - ../../cilium
   # - ../../cilium/hubble-ingress.yaml
 components:
-  - ../../longhorn
-  - ../../nginx
+  # - ../../longhorn
+  # - ../../nginx
   # - ../../cilium
