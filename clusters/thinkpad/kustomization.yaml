@@ -7,7 +7,7 @@ resources:
   # I'd prefer this load via components: - ../../cilium
   - ../../cilium/hubble-ingress.yaml
 components:
-  - ../../cert-manager
+  # - ../../cert-manager
   - ../../longhorn
   - ../../nginx
   # - ../../cilium
