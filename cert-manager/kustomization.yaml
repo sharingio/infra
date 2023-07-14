@@ -4,6 +4,6 @@ kind: Component
 resources:
   - helm-repo.yaml
   - helm-release.yaml
-  - cluster-issuer.yaml
+  # - cluster-issuer.yaml
   # Cert will depend on cluster-issuer and other
   # - cert.yaml
