@@ -20,3 +20,20 @@ spec:
   #     kind: Ingress
   #     name: hubble
   #     namespace: kube-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: coder-db
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./coder-db"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-gpg
