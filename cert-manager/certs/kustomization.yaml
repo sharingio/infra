@@ -4,3 +4,4 @@ resources:
   - cluster-issuer.yaml
   # Cert will depend on cluster-issuer and other
   - cert.yaml
+  - pdns-tsig-key.yaml

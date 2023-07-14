@@ -6,11 +6,12 @@ resources:
   - nginx.yaml
   - longhorn.yaml
   - cilium.yaml # just for incress for now
+  - gitops.yaml
+  - flux.yaml
   # Dashboard
-  - gitops-dashboard.yaml
-  - receiver.yaml
-  - receiver-token.yaml
-  - pdns-tsig-key.yaml
+  # - receiver.yaml
+  # - receiver-token.yaml
+  # - pdns-tsig-key.yaml
   # I'd prefer this load via components: - ../../cilium
   # - ../../cilium/hubble-ingress.yaml
 components:

@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gitops
+  namespace: kube-system
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: gitops.sharing.io
+      http:
+        paths:
+          - backend:
+              service:
+                name: hubble-ui
+                port:
+                  number: 80
+            path: /
+            pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - gitops.sharing.io
