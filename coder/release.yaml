@@ -160,8 +160,8 @@ spec:
         tls:
           enable: true
           # wildcardSecretName:
-        host: "coder..ii.nz"
-        wildCardHost: "*.coder.ii.nz"
+        host: "space.sharing.io"
+        wildCardHost: "*.sharing.io"
         service:
           type: ClusterIP
         annotations:
