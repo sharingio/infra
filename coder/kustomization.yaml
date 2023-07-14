@@ -5,4 +5,4 @@ resources:
   - db-release.yaml
   - release.yaml
   - ingress.yaml
-  - coder-secret.yaml
+  # - coder-secret.yaml
