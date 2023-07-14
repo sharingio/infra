@@ -1,0 +1,26 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    # The ACME server URL
+    server: https://acme-v02.api.letsencrypt.org/directory
+
+    # Email address used for ACME registration
+    email: sharing.io@ii.coop # REPLACE THIS WITH YOUR EMAIL!!!
+
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: letsencrypt
+    # https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuerDNS01ProviderRFC2136
+    solvers:
+      - dns01:
+          rfc2136:
+            nameserver: 123.253.176.253:53
+            tsigKeyName: sharing.io
+            tsigAlgorithm: HMACSHA256
+            tsigSecretSecretRef:
+              name: pdns
+              key: key
