@@ -22,7 +22,7 @@ spec:
   install:
     createNamespace: true
   dependsOn:
-    - name: nginx
+    - name: ingress-nginx
   # https://github.com/cert-manager/cert-manager/blob/master/deploy/charts/cert-manager/values.yaml
   values:
     installCRDs: true
