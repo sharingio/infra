@@ -4,7 +4,7 @@ kind: HelmRelease
 # https://fluxcd.io/flux/components/helm/helmreleases/#specification
 metadata:
   name: longhorn
-  namespace: longhorn
+  namespace: flux-system
 spec:
   interval: 30m
   chart:
@@ -16,6 +16,8 @@ spec:
         name: longhorn
         namespace: flux-system
       interval: 12h
+  targetNamespace: longhorn
+  storageNamespace: flux-system
   maxHistory: 10
   install:
     createNamespace: true
