@@ -11,6 +11,10 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-gpg
   # healthChecks:
   #   - apiVersion: networking.k8s.io/v1
   #     kind: Ingress
