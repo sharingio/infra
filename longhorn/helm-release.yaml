@@ -21,6 +21,8 @@ spec:
   maxHistory: 10
   install:
     createNamespace: true
+  dependsOn:
+    - name: ingress-nginx
   # https://github.com/longhorn/charts/blob/v1.5.x/charts/longhorn/values.yaml
   values:
     ingress:
