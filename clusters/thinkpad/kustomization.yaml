@@ -4,5 +4,6 @@ resources:
   - gitops-dashboard.yaml
   - receiver.yaml
   - receiver-token.yaml
+components:
   - ../../cert-manager
   - ../../longhorn
