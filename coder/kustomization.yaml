@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1 # <-- Kustomization API
+kind: Kustomization
+resources:
+  - repositories.yaml
+  - db-release.yaml
+  - release.yaml
+  - ingress.yaml
+  - coder-secret.yaml

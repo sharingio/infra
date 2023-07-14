@@ -1,0 +1,28 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: coder-db
+  namespace: coder
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: postgresql
+      version: "12.5.5" # Current as of May 25, 2023
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: flux-system
+      interval: 12h
+  values:
+    auth:
+      existingSecret: coder
+      username: coder
+      database: coder
+    # primary:
+    #   persistence:
+    #     enabled: false
+    persistence:
+      enabled: true
+      size: 10Gi
