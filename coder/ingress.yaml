@@ -16,15 +16,8 @@ metadata:
       proxy_set_header Connection "upgrade";
       proxy_cache_bypass $http_upgrade;
       }
-  creationTimestamp: "2023-03-29T09:32:57Z"
-  generation: 3
-  labels:
-    kustomize.toolkit.fluxcd.io/name: flux-system
-    kustomize.toolkit.fluxcd.io/namespace: flux-system
   name: coder
   namespace: coder
-  resourceVersion: "1877647"
-  uid: a1df49d3-44d0-4b5f-8d6e-f336826d166f
 spec:
   ingressClassName: nginx
   rules:
