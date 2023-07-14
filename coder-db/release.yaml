@@ -15,9 +15,13 @@ spec:
         name: bitnami
         namespace: flux-system
       interval: 12h
+  targetNamespace: coder
+  install:
+    createNamespace: true
+  storageNamespace: flux-system
   values:
     auth:
-      existingSecret: coder
+      existingSecret: coder-db
       username: coder
       database: coder
     # primary:
