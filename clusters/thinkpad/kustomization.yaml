@@ -4,10 +4,11 @@ resources:
   - gitops-dashboard.yaml
   - receiver.yaml
   - receiver-token.yaml
+  # - pdns-tsig-key.yaml
   # I'd prefer this load via components: - ../../cilium
   - ../../cilium/hubble-ingress.yaml
 components:
   # - ../../cert-manager
   - ../../longhorn
-  - ../../nginx
+  # - ../../nginx
   # - ../../cilium
