@@ -8,4 +8,6 @@ components:
   - ../../cert-manager
   - ../../longhorn
   - ../../nginx
-  - ../../cilium
+  # We can't manage this
+  # Kustomization reconciliation failed: kustomize build failed: accumulating components: accumulateDirectory: "recursed accumulation of path '/tmp/kustomization-2424112580/cilium': accumulating resources: accumulation err='merging resources from 'helm-release.yaml': may not add resource with an already registered id: HelmRelease.v2beta1.helm.toolkit.fluxcd.io/longhorn.flux-system': must build at directory: '/tmp/kustomization-2424112580/cilium/helm-release.yaml': file is not directory"
+  # - ../../cilium
