@@ -5,6 +5,7 @@ resources:
   - cert-manager.yaml
   - nginx.yaml
   - longhorn.yaml
+  - cilium.yaml # just for incress for now
   # Dashboard
   - gitops-dashboard.yaml
   - receiver.yaml
