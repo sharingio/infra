@@ -1,70 +1,47 @@
-# https://github.com/bitnami/charts/blob/main/bitnami/ghost/values.yaml
-global:
-  # storageClass: "ceph-filesystem"
-  storageClass: "longhorn"
+existingSecret: ghost-passwords
 extraEnvVars:
-  - name: GHOST_SMTP_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: ghost-passwords
-        key: smtp-password
   - name: LOG_LEVEL
-    value: ${LOG_LEVEL:=DEBUG}
-#   - name: GHOST_ENABLE_HTTPS
-#     value: yes
-#   - name: GHOST_HOST
-#     value: abcs.news
-#   - name: ALLOW_EMPTY_PASSWORD
-#     value: no
+    value: DEBUG
+ghostBlogTitle: ABCS News
+ghostEmail: chris@mcclimans.net
+ghostEnableHttps: false
+ghostHost: abcs.news
+ghostPath: /
+ghostUsername: chris
+global:
+  storageClass: longhorn
 image:
   registry: docker.io
   repository: bitnami/ghost
   tag: 5.53.2-debian-11-r0
-  # debug: false
-ghostUsername: ${GHOST_USERNAME:=admin}
-ghostEmail: ${GHOST_BLOG_EMAIL:=admin@example.com}
-ghostBlogTitle: ${GHOST_BLOG_TITLE:=MyTitle}
-smtpHost: ${GHOST_SMTP_HOST:=smtp.fastmail.com}
-smtpPort: ${GHOST_SMTP_PORT_NUMBER:=465}
-smtpUser: ${GHOST_SMTP_USER:=admin@example.com}
-smtpProtocol: ${GHOST_SMTP_PROTOCOL:=ssl}
-ghostHost: ${GHOST_HOST:=example.com}
-ghostPath: "/"
-ghostEnableHttps: false
-existingSecret: "ghost-passwords"
-smtpExistingSecret: "ghost-passwords"
-# ghostHost: "abcs.news"
-persistence:
-  enabled: true
-  # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
-  accessModes:
-    - "ReadWriteMany"
-  size: 10Gi
+ingress:
+  enabled: false
+  extraHosts: ghost.abcs.news
+  hostname: abcs.news
+  ingressClassName: nginx
+  secrets:
+    - certificate: CAN WE JUST USE EXISTING SECRET
+      key: RATHER NOT PUT KEY HERE
+      name: abcs.news-tls
+  tls: false
 mysql:
   auth:
-    existingSecret: "ghost-passwords"
+    existingSecret: ghost-passwords
   primary:
     persistence:
+      accessModes:
+        - ReadWriteMany
       enabled: true
       size: 20Gi
-      # storageClass: ceph-filesystem
       storageClass: longhorn
-      accessModes:
-        - "ReadWriteMany"
-# ingress:
-#   enabled: false
-#   hostname: "${GHOST_HOST:=abcs.news}"
-#   tls: false
-#   # extraHosts: "ghost.abcs.news"
-#   ingressClassName: "nginx"
-#   # https://github.com/bitnami/charts/blob/main/bitnami/ghost/templates/tls-secrets.yaml#L8-LL24
-#   secrets:
-#     # Seems to require:
-#     # .name
-#     # .certificate
-#     # .key
-#     - name: "abcs.news-tls"
-#       certificate: "CAN WE JUST USE EXISTING SECRET"
-#       key: "RATHER NOT PUT KEY HERE"
+persistence:
+  accessModes:
+    - ReadWriteMany
+  enabled: true
+  size: 10Gi
 service:
   type: ClusterIP
+smtpHost: smtp.fastmail.com
+smtpPort: "465"
+smtpProtocol: ssl
+smtpUser: chris@mcclimans.net
