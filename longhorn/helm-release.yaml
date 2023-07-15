@@ -29,6 +29,8 @@ spec:
     # By sure to apt-get install nfs-common
     ingress:
       enabled: true
+      tls: true
+      ingressClassName: nginx
       # tls: true
       host: longhorn.sharing.io
       annotations:
