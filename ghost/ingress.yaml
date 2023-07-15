@@ -20,7 +20,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: ghost
+                name: ghost-ghost
                 port:
                   number: 80
 # status:

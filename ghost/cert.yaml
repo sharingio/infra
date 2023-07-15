@@ -3,7 +3,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: abcs.news-cert
-  namespace: ingress-nginx
+  namespace: ghost
 spec:
   secretName: abcs.news-tls
   dnsNames:
