@@ -17,21 +17,6 @@ spec:
       name: sops-gpg
   patches:
     - patch: |
-        - op: add
-          path: /spec/values/extraEnvVars
-          value:
-            name: "ENV_HR"
-            value: "yes"
-        - op: add
-          path: /spec/values/extraEnvVars
-          value:
-            name: "SETMYVAR"
-            value: "MYVALUE"
-      target:
-        kind: HelmRelease
-        name: ghost
-        namespace: flux-system
-    - patch: |
         - path: /spec/containers/0/env
           op: add
           value:
@@ -46,3 +31,18 @@ spec:
         kind: Deployment
         name: ghost-ghost
         namespace: ghost
+    # - patch: |
+    #     - op: add
+    #       path: /spec/values/extraEnvVars
+    #       value:
+    #         name: "ENV_HR"
+    #         value: "yes"
+    #     - op: add
+    #       path: /spec/values/extraEnvVars
+    #       value:
+    #         name: "SETMYVAR"
+    #         value: "MYVALUE"
+    #   target:
+    #     kind: HelmRelease
+    #     name: ghost
+    #     namespace: flux-system
