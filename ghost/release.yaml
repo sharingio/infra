@@ -23,6 +23,8 @@ spec:
         name: bitnami
         namespace: flux-system
       interval: 12h
+  # https://fluxcd.io/flux/guides/helmreleases/#refer-to-values-in-configmaps-generated-with-kustomize
   valuesFrom:
     - kind: ConfigMap
       name: ghost-values
+      namespace: ghost
