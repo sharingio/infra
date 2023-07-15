@@ -63,12 +63,19 @@ spec:
           accessModes:
             - "ReadWriteMany"
     ingress:
-      enabled: true
+      enabled: false
       hostname: "abcs.news"
       tls: false
       extraHosts: "ghost.abcs.news"
       ingressClassName: "nginx"
+      # https://github.com/bitnami/charts/blob/main/bitnami/ghost/templates/tls-secrets.yaml#L8-LL24
       secrets:
-        - "abcs.news-tls"
+        # Seems to require:
+        # .name
+        # .certificate
+        # .key
+        - name: "abcs.news-tls"
+          certificate: "CAN WE JUST USE EXISTING SECRET"
+          key: "RATHER NOT PUT KEY HERE"
     service:
       type: ClusterIP
