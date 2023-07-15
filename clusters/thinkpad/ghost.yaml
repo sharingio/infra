@@ -20,7 +20,7 @@ spec:
         - op: add
           path: /spec/values/extraEnvVars
           value:
-            name: "GHOST_ENABLE_HTTPS"
+            name: "ENV_HR"
             value: "yes"
         - op: add
           path: /spec/values/extraEnvVars
@@ -30,18 +30,18 @@ spec:
       target:
         kind: HelmRelease
         name: ghost
-        namespace: ghost
+      namespace: flux-system
     - patch: |
         - path: /spec/containers/0/env
           op: add
           value:
-            name: "GHOST_ENABLE_HTTPS"
-            value: "yes"
-        - path: /spec/containers/0/env
-          op: add
-          value:
-            name: "VAR_FROM_DEPLOYMENT"
+            name: "ENV_DEPLOYMENT"
             value: "YES"
+        # - path: /spec/containers/0/env
+        #   op: add
+        #   value:
+        #     name: "GHOST_ENABLE_HTTPS"
+        #     value: "yes"
       target:
         kind: Deployment
         name: ghost
