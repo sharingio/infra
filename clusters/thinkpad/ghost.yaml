@@ -29,34 +29,34 @@ spec:
       GHOST_SMTP_PROTOCOL: "ssl"
       GHOST_SMTP_PORT_NUMBER: "465"
   patches:
-    - target:
-        kind: Deployment
-        name: ghost-ghost
-        namespace: ghost
-      patch: |
+    - patch: |
         - path: /spec/template/spec/containers/0/env/
           op: add
           value:
             name: "ENV_DEPLOYMENT"
             value: "YES"
-
-        # - path: /spec/containers/0/env
-        #   op: add
-        #   value:
-        #     name: "GHOST_ENABLE_HTTPS"
-        #     value: "yes"
-    # - patch: |
-    #     - op: add
-    #       path: /spec/values/extraEnvVars
-    #       value:
-    #         name: "ENV_HR"
-    #         value: "yes"
-    #     - op: add
-    #       path: /spec/values/extraEnvVars
-    #       value:
-    #         name: "SETMYVAR"
-    #         value: "MYVALUE"
-    #   target:
-    #     kind: HelmRelease
-    #     name: ghost
-    #     namespace: flux-system
+      target:
+        kind: Deployment
+        name: ghost-ghost
+        namespace: ghost
+# Comments
+# - path: /spec/containers/0/env
+#   op: add
+#   value:
+#     name: "GHOST_ENABLE_HTTPS"
+#     value: "yes"
+# - patch: |
+#     - op: add
+#       path: /spec/values/extraEnvVars
+#       value:
+#         name: "ENV_HR"
+#         value: "yes"
+#     - op: add
+#       path: /spec/values/extraEnvVars
+#       value:
+#         name: "SETMYVAR"
+#         value: "MYVALUE"
+#   target:
+#     kind: HelmRelease
+#     name: ghost
+#     namespace: flux-system
