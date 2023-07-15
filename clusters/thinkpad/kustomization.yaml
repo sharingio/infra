@@ -9,6 +9,7 @@ resources:
   - gitops.yaml
   - flux.yaml
   - coder.yaml
+  - ghost.yaml
 # components:
 #   - ../../longhorn
 #   - ../../nginx
