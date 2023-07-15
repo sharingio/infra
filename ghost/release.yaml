@@ -27,20 +27,20 @@ spec:
     global:
       # storageClass: "ceph-filesystem"
       storageClass: "longhorn"
-    extraEnvVars:
-      - name: LOG_LEVEL
-        value: DEBUG
-      - name: GHOST_SMTP_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: ghost-passwords
-            key: smtp-password
-      - name: GHOST_ENABLE_HTTPS
-        value: yes
-      - name: GHOST_HOST
-        value: abcs.news
-      - name: ALLOW_EMPTY_PASSWORD
-        value: no
+    # extraEnvVars:
+    #   - name: LOG_LEVEL
+    #     value: DEBUG
+    #   - name: GHOST_SMTP_PASSWORD
+    #     valueFrom:
+    #       secretKeyRef:
+    #         name: ghost-passwords
+    #         key: smtp-password
+    #   - name: GHOST_ENABLE_HTTPS
+    #     value: yes
+    #   - name: GHOST_HOST
+    #     value: abcs.news
+    #   - name: ALLOW_EMPTY_PASSWORD
+    #     value: no
     image:
       registry: docker.io
       repository: bitnami/ghost
