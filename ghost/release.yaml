@@ -46,14 +46,14 @@ spec:
       repository: bitnami/ghost
       tag: 5.53.2-debian-11-r0
       # debug: false
-    ghostUsername: "${GHOST_USERNAME:=admin}"
-    ghostEmail: "${GHOST_BLOG_EMAIL:=admin@example.com}"
-    ghostBlogTitle: "${GHOST_BLOG_TITLE:=MyTitle}"
-    smtpHost: "${GHOST_SMTP_HOST:=smtp.fastmail.com}"
-    smtpPort: "${GHOST_SMTP_PORT_NUMBER:=465}"
-    smtpUser: "${GHOST_SMTP_USER:=admin@example.com}"
-    smtpProtocol: "${GHOST_SMTP_PROTOCOL:=ssl}"
-    ghostHost: "${GHOST_HOST:=example.com}"
+    ghostUsername: ${GHOST_USERNAME:=admin}
+    ghostEmail: ${GHOST_BLOG_EMAIL:=admin@example.com}
+    ghostBlogTitle: ${GHOST_BLOG_TITLE:=MyTitle}
+    smtpHost: ${GHOST_SMTP_HOST:=smtp.fastmail.com}
+    smtpPort: ${GHOST_SMTP_PORT_NUMBER:=465}
+    smtpUser: ${GHOST_SMTP_USER:=admin@example.com}
+    smtpProtocol: ${GHOST_SMTP_PROTOCOL:=ssl}
+    ghostHost: ${GHOST_HOST:=example.com}
     ghostPath: "/"
     ghostEnableHttps: false
     existingSecret: "ghost-passwords"
