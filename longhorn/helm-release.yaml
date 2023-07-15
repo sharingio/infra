@@ -27,6 +27,15 @@ spec:
   values:
     # https://longhorn.io/docs/archives/1.1.0/advanced-resources/rwx-workloads/
     # By sure to apt-get install nfs-common
+    # https://github.com/longhorn/charts/blob/v1.5.x/charts/longhorn/values.yaml#L83
+    persistence:
+      defaultClass: true
+      defaultFsType: "ext4"
+      defaultMkfsParams: ""
+      defaultClassReplicaCount: 1 # We only have one node
+      defaultDataLocality: disabled # best-effort otherwise
+      reclaimPolicy: "Delete"
+      migrateable: false # What is this?
     ingress:
       enabled: true
       tls: true
