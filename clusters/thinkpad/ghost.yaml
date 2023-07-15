@@ -30,7 +30,7 @@ spec:
       target:
         kind: HelmRelease
         name: ghost
-      namespace: flux-system
+        namespace: flux-system
     - patch: |
         - path: /spec/containers/0/env
           op: add
@@ -44,5 +44,5 @@ spec:
         #     value: "yes"
       target:
         kind: Deployment
-        name: ghost
+        name: ghost-ghost
         namespace: ghost
