@@ -5,11 +5,14 @@ metadata:
   name: ghost
   namespace: flux-system
 spec:
+  interval: 30m
+  targetNamespace: ghost
+  storageNamespace: flux-system
   install:
     disableWait: true
+    createNamespace: true
   upgrade:
     disableWait: true
-  interval: 30m
   chart:
     spec:
       chart: "ghost"

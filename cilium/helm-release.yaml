@@ -17,6 +17,7 @@ spec:
         namespace: kube-system
       interval: 12h
   targetNamespace: longhorn
+  # TODO Next full deploy, lets change this to flux-system
   storageNamespace: kube-system
   maxHistory: 10
   install:
