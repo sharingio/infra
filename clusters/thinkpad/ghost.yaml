@@ -1,0 +1,44 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: ghost
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./ghost
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  patches:
+    - patch: |
+        - op: add
+          path: /spec/values/extraEnvVars
+          value:
+            name: "GHOST_ENABLE_HTTPS"
+            value: "yes"
+        - op: add
+          path: /spec/values/extraEnvVars
+          value:
+            name: "SETMYVAR"
+            value: "MYVALUE"
+      target:
+        kind: HelmRelease
+        name: ghost
+        namespace: ghost
+    - patch: |
+        - path: /spec/containers/0/env
+          op: add
+          value:
+            name: "GHOST_ENABLE_HTTPS"
+            value: "yes"
+        - path: /spec/containers/0/env
+          op: add
+          value:
+            name: "VAR_FROM_DEPLOYMENT"
+            value: "YES"
+      target:
+        kind: Deployment
+        name: ghost
+        namespace: ghost

@@ -16,8 +16,15 @@ spec:
     privateKeySecretRef:
       name: letsencrypt
     # https://cert-manager.io/docs/reference/api-docs/#acme.cert-manager.io/v1.ACMEIssuerDNS01ProviderRFC2136
+    # pdnsutil activate-tsig-key abcs.news sharing.io master # for each domain
     solvers:
-      - dns01:
+      - selector:
+          dnsNames:
+            - "*.abcs.news"
+            - "abcs.news"
+            - "*.sharing.io"
+            - "sharing.io"
+        dns01:
           rfc2136:
             nameserver: 123.253.176.253:53
             tsigKeyName: sharing.io

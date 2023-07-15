@@ -1,0 +1,12 @@
+#+title:
+https://github.com/bitnami/charts/blob/main/bitnami/mysql/values.yaml#L138-L141
+* Secrets
+#+begin_src shell :proKEYlogue "(\n" :epilogue "\n) 2>&1\n\:\n" :results none
+kubectl create secret generic ghost-passwords -n ghost \
+    --from-literal=ghost-password=$GHOST_PASSWORD \
+    --from-literal=smtp-password=$GHOST_SMTP_PASSWORD \
+    --from-literal=mysql-root-password=$GHOST_MYSQL_ROOT_PASSWORD \
+    --from-literal=mysql-password=$GHOST_MYSQL_ROOT_PASSWORD \
+    -o yaml --dry-run=client > ./ghost-passwords.yaml
+kubectl apply -f ./ghost-passwords.yaml
+#+end_src
