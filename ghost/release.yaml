@@ -10,7 +10,7 @@ spec:
   storageNamespace: flux-system
   install:
     disableWait: true
-    createNamespace: true
+    # createNamespace: true
   upgrade:
     disableWait: true
   chart:
