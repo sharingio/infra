@@ -15,6 +15,19 @@ spec:
     provider: sops
     secretRef:
       name: sops-gpg
+  postBuild:
+    substitute:
+      LOG_LEVEL: DEBUG
+      GHOST_HOST: abcs.news
+      GHOST_BLOG_TITLE: "ABCS of the World"
+      GHOST_USERNAME: "C"
+      GHOST_EMAIL: "chris@mcclimans.net"
+      GHOST_ENABLE_HTTPS: true
+      # We use secrets for passwords
+      GHOST_SMTP_HOST: "smtp.fastmail.com"
+      GHOST_SMTP_USER: "chris@mcclimans.net"
+      GHOST_SMTP_PROTOCOL: "ssl"
+      GHOST_SMTP_PORT_NUMBER: 465
   patches:
     - target:
         kind: Deployment
