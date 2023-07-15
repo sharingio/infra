@@ -46,7 +46,7 @@ spec:
     smtpPort: "465"
     smtpUser: "chris@mcclimans.net"
     smtpProtocol: "ssl"
-    # smtpExistingSecret: "ghost-passwords"
+    smtpExistingSecret: "ghost-passwords"
     # ghostHost: "abcs.news"
     persistence:
       enabled: true
