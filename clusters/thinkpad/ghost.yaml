@@ -16,9 +16,13 @@ spec:
     secretRef:
       name: sops-gpg
   patches:
-    - patch: |
-        - path: /spec/containers/0/env
-          op: add
+    - target:
+        kind: Deployment
+        name: ghost-ghost
+        namespace: ghost
+      patch: |
+        - path: /spec/template/containers/0/env/-
+          op: replace
           value:
             name: "ENV_DEPLOYMENT"
             value: "YES"
@@ -27,10 +31,6 @@ spec:
         #   value:
         #     name: "GHOST_ENABLE_HTTPS"
         #     value: "yes"
-      target:
-        kind: Deployment
-        name: ghost-ghost
-        namespace: ghost
     # - patch: |
     #     - op: add
     #       path: /spec/values/extraEnvVars
