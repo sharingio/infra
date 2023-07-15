@@ -6,3 +6,11 @@ resources:
   - release.yaml
   - passwords.yaml
   - ingress.yaml
+configMapGenerator:
+  - name: ghost-values
+    namespace: ghost
+    files:
+      - values.yaml=values.yaml
+# Do need to learn more about this
+configurations:
+  - kustomizeconfig.yaml
