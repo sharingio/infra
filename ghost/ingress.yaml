@@ -23,8 +23,8 @@ spec:
                 name: ghost
                 port:
                   number: 80
-status:
-  loadBalancer:
-    ingress:
-      # Let's use the same IP as everyone else
-      - ip: 123.253.177.110
+# status:
+#   loadBalancer:
+#     ingress:
+#       # Let's use the same IP as everyone else
+#       - ip: 192.168.1.145

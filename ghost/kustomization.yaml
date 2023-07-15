@@ -5,4 +5,4 @@ resources:
   - cert.yaml
   - release.yaml
   - passwords.yaml
-  # - ingress.yaml
+  - ingress.yaml
