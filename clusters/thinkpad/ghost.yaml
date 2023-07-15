@@ -39,6 +39,7 @@ spec:
           value:
             name: "ENV_DEPLOYMENT"
             value: "YES"
+
         # - path: /spec/containers/0/env
         #   op: add
         #   value:
