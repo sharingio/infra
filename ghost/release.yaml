@@ -13,7 +13,7 @@ spec:
   chart:
     spec:
       chart: "ghost"
-      version: "19.3.24" # 5.54.0" # Current as of Jul 12, 2023
+      version: "19.3.22" # 5.54.0" # Current as of Jul 12, 2023
       sourceRef:
         # bitnami was depoyed with coder
         kind: HelmRepository
