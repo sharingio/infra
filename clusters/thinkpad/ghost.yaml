@@ -21,8 +21,8 @@ spec:
         name: ghost-ghost
         namespace: ghost
       patch: |
-        - path: /spec/template/containers/0/env/-
-          op: replace
+        - path: /spec/template/spec/containers/0/env/-
+          op: add
           value:
             name: "ENV_DEPLOYMENT"
             value: "YES"
