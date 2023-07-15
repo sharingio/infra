@@ -39,8 +39,8 @@ spec:
     provider: sops
     secretRef:
       name: sops-gpg
-  # healthChecks:
-  #   - apiVersion: networking.k8s.io/v1
-  #     kind: Ingress
-  #     name: hubble
-  #     namespace: kube-system
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: StatefulSet
+      name: coder-coder-db-postgresql
+      namespace: coder
