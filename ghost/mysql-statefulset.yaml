@@ -96,51 +96,51 @@ spec:
                   name: ghost-passwords
             - name: MYSQL_DATABASE
               value: bitnami_ghost
-          readinessProbe:
-            exec:
-              command:
-                - /bin/bash
-                - -ec
-                - |
-                  password_aux="${MYSQL_ROOT_PASSWORD:-}"
-                  if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
-                      password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
-                  fi
-                  mysqladmin status -uroot -p"${password_aux}"
-            failureThreshold: 3
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-          livenessProbe:
-            exec:
-              command:
-                - /bin/bash
-                - -ec
-                - |
-                  password_aux="${MYSQL_ROOT_PASSWORD:-}"
-                  if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
-                      password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
-                  fi
-                  mysqladmin status -uroot -p"${password_aux}"
-            failureThreshold: 3
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-          startupProbe:
-            exec:
-              command:
-                - /bin/bash
-                - -ec
-                - |
-                  password_aux="${MYSQL_ROOT_PASSWORD:-}"
-                  if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
-                      password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
-                  fi
-                  mysqladmin status -uroot -p"${password_aux}"
-            failureThreshold: 10
-            initialDelaySeconds: 15
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
+          # readinessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/bash
+          #       - -ec
+          #       - |
+          #         password_aux="${MYSQL_ROOT_PASSWORD:-}"
+          #         if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
+          #             password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
+          #         fi
+          #         mysqladmin status -uroot -p"${password_aux}"
+          #   failureThreshold: 3
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   timeoutSeconds: 1
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/bash
+          #       - -ec
+          #       - |
+          #         password_aux="${MYSQL_ROOT_PASSWORD:-}"
+          #         if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
+          #             password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
+          #         fi
+          #         mysqladmin status -uroot -p"${password_aux}"
+          #   failureThreshold: 3
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   timeoutSeconds: 1
+          # startupProbe:
+          #   exec:
+          #     command:
+          #       - /bin/bash
+          #       - -ec
+          #       - |
+          #         password_aux="${MYSQL_ROOT_PASSWORD:-}"
+          #         if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
+          #             password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
+          #         fi
+          #         mysqladmin status -uroot -p"${password_aux}"
+          #   failureThreshold: 10
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   timeoutSeconds: 1
