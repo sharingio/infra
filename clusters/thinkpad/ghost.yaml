@@ -26,8 +26,6 @@ spec:
       # We use secrets for passwords
       GHOST_SMTP_HOST: "smtp.fastmail.com"
       GHOST_SMTP_USER: "chris@mcclimans.net"
-      GHOST_SMTP_PROTOCOL: "ssl"
-      GHOST_SMTP_PORT_NUMBER: "465"
 # patches:
 #   - patch: |
 #       - path: /spec/template/spec/containers/0/env/

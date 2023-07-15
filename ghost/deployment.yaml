@@ -114,11 +114,11 @@ spec:
             - name: GHOST_SMTP_HOST
               value: ${GHOST_SMTP_HOST:=smtp.fastmail.com}
             - name: GHOST_SMTP_PORT
-              value: ${GHOST_SMTP_PORT:=462}
+              value: "462"
             - name: GHOST_SMTP_USER
               value: ${GHOST_SMTP_USER:=chris@mcclimans.net}
             - name: GHOST_SMTP_PROTOCOL
-              value: ${GHOST_SMTP_PROTOCOL:=ssl}
+              value: "ssl"
             - name: LOG_LEVEL
               value: DEBUG
       securityContext:
