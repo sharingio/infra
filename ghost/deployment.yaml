@@ -119,6 +119,11 @@ spec:
               value: ${GHOST_SMTP_USER:=chris@mcclimans.net}
             - name: GHOST_SMTP_PROTOCOL
               value: "ssl"
+            - name: GHOST_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: smtp-password
+                  name: ghost-passwords
             - name: LOG_LEVEL
               value: DEBUG
       securityContext:
