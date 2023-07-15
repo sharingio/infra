@@ -24,7 +24,6 @@ spec:
                 name: ghost
                 port:
                   number: 80
-  rules:
     - host: "ghost.abcs.news"
       http:
         paths:
