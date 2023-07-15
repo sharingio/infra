@@ -35,6 +35,12 @@ spec:
           secretKeyRef:
             name: ghost-passwords
             key: smtp-password
+      - name: GHOST_ENABLE_HTTPS
+        value: yes
+      - name: GHOST_HOST
+        value: abcs.news
+      - name: ALLOW_EMPTY_PASSWORDS
+        value: no
     image:
       registry: docker.io
       repository: bitnami/ghost
