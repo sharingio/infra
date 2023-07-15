@@ -12,11 +12,23 @@ spec:
     - secretName: "abcs.news-tls"
       hosts:
         - "abcs.news"
+        - "ghost.abcs.news"
   rules:
     - host: "abcs.news"
       http:
         paths:
           - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: ghost
+                port:
+                  number: 80
+  rules:
+    - host: "ghost.abcs.news"
+      http:
+        paths:
+          - path: /ghost/
             pathType: ImplementationSpecific
             backend:
               service:
