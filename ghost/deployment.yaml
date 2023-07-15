@@ -74,7 +74,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: "false"
             - name: ALLOW_EMPTY_PASSWORD
-              value: "yes"
+              value: "no"
             - name: GHOST_DATABASE_HOST
               value: ghost-mysql
             - name: GHOST_DATABASE_PORT_NUMBER
@@ -89,22 +89,22 @@ spec:
                   key: mysql-password
                   name: ghost-passwords
             - name: GHOST_HOST
-              value: abcs.news/
+              value: ${GHOST_HOST:=abcs.news}
             - name: GHOST_PORT_NUMBER
               value: "2368"
             - name: GHOST_USERNAME
-              value: chris
+              value: ${GHOST_USERNAME:=hh}
             - name: GHOST_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: ghost-password
                   name: ghost-passwords
             - name: GHOST_EMAIL
-              value: chris@mcclimans.net
+              value: ${GHOST_EMAIL:=chris@mcclimans.net}
             - name: GHOST_BLOG_TITLE
-              value: ABCS News
+              value: ${GHOST_BLOG_TITLE:=blog_title}
             - name: GHOST_ENABLE_HTTPS
-              value: "no"
+              value: "yes"
             - name: GHOST_EXTERNAL_HTTP_PORT_NUMBER
               value: "80"
             - name: GHOST_EXTERNAL_HTTPS_PORT_NUMBER
@@ -112,13 +112,13 @@ spec:
             - name: GHOST_SKIP_BOOTSTRAP
               value: "no"
             - name: GHOST_SMTP_HOST
-              value: smtp.fastmail.com
+              value: ${GHOST_SMTP_HOST:=smtp.fastmail.com}
             - name: GHOST_SMTP_PORT
-              value: "465"
+              value: ${GHOST_SMTP_PORT:=462}
             - name: GHOST_SMTP_USER
-              value: chris@mcclimans.net
+              value: ${GHOST_SMTP_USER:=chris@mcclimans.net}
             - name: GHOST_SMTP_PROTOCOL
-              value: ssl
+              value: ${GHOST_SMTP_PROTOCOL:=ssl}
             - name: LOG_LEVEL
               value: DEBUG
       securityContext:

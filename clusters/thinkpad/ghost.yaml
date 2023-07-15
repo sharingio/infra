@@ -28,17 +28,17 @@ spec:
       GHOST_SMTP_USER: "chris@mcclimans.net"
       GHOST_SMTP_PROTOCOL: "ssl"
       GHOST_SMTP_PORT_NUMBER: "465"
-  patches:
-    - patch: |
-        - path: /spec/template/spec/containers/0/env/
-          op: add
-          value:
-            name: "ENV_DEPLOYMENT"
-            value: "YES"
-      target:
-        kind: Deployment
-        name: ghost-ghost
-        namespace: ghost
+# patches:
+#   - patch: |
+#       - path: /spec/template/spec/containers/0/env/
+#         op: add
+#         value:
+#           name: "ENV_DEPLOYMENT"
+#           value: "YES"
+#     target:
+#       kind: Deployment
+#       name: ghost-ghost
+#       namespace: ghost
 # Comments
 # - path: /spec/containers/0/env
 #   op: add
