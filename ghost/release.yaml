@@ -68,6 +68,7 @@ spec:
       tls: false
       extraHosts: "ghost.abcs.news"
       ingressClassName: "nginx"
-      secrets: "abcs.news-tls"
+      secrets:
+        - "abcs.news-tls"
     service:
       type: ClusterIP
