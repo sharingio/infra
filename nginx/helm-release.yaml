@@ -28,4 +28,5 @@ spec:
         default-ssl-certificate: "ingress-nginx/wildcard-tls"
       service:
         externalIPs:
-          - 192.168.1.145
+          - 192.168.0.28
+          # - 192.168.1.145
