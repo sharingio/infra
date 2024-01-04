@@ -6,7 +6,7 @@ resources:
   - nginx.yaml # EXTERNAL_IP
   - powerdns.yaml
   - cert-manager.yaml
-  # - coder.yaml
+  - coder.yaml
   - cert-manager-pdns.yaml
   - gitops.yaml
   - authentik.yaml
