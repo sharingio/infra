@@ -2,7 +2,7 @@ module "cloudnative-coop" {
   source = "./terraform/equinix-metal-talos-cluster"
 
   cluster_name             = "cloudnative-coop"
-  kube_apiserver_domain    = "k8s.cloudnative.coop"
+  kube_apiserver_domain    = "${local.k8s_apiserver_subdomain}.cloudnative.coop"
   equinix_metal_project_id = var.equinix_metal_project_id
   equinix_metal_metro      = local.metro
   equinix_metal_auth_token = var.equinix_metal_auth_token
@@ -22,7 +22,7 @@ module "cloudnative-coop-record-apiserver-ip" {
   source = "./terraform/rfc2136-record-assign"
 
   zone      = "cloudnative.coop."
-  name      = "k8s"
+  name      = local.k8s_apiserver_subdomain
   addresses = [module.cloudnative-coop.cluster_apiserver_ip]
 
   providers = {
@@ -138,8 +138,8 @@ module "cloudnative-coop-manifests" {
   ingress_ip               = module.cloudnative-coop.cluster_ingress_ip
   dns_ip                   = module.cloudnative-coop.cluster_dns_ip
   wg_ip                    = module.cloudnative-coop.cluster_wireguard_ip
-  acme_email_address       = "acme@ii.coop"
-  rfc2136_algorithm        = "HMACSHA256"
+  acme_email_address       = local.acme_email_address
+  rfc2136_algorithm        = local.rfc2136_algorithm
   rfc2136_nameserver       = var.rfc2136_nameserver
   rfc2136_tsig_keyname     = var.rfc2136_tsig_keyname
   rfc2136_tsig_key         = var.rfc2136_tsig_key
