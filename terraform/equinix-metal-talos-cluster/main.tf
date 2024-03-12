@@ -67,6 +67,7 @@ resource "talos_machine_configuration_apply" "cp" {
   node                        = each.value.network.0.address
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
+  depends_on                  = [equinix_metal_device.cp, equinix_metal_bgp_session.cp_bgp]
   config_patches = [
     <<-EOT
     machine:
