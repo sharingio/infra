@@ -186,7 +186,7 @@ module "cloudnative-coop-flux-github-webhook" {
     kubernetes = kubernetes.cloudnative-coop
   }
 
-  depends_on = [local_sensitive_file.cloudnative-coop-kubeconfig, module.cloudnative-coop-manifests]
+  depends_on = [local_sensitive_file.cloudnative-coop-kubeconfig, module.cloudnative-coop-manifests, module.cloudnative-coop-flux-bootstrap]
 }
 
 # module "cloudnative-coop-authentik-config" {
