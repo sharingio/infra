@@ -50,6 +50,7 @@ resource "kubernetes_config_map_v1" "powerdns-config" {
   }
 
   data = {
+    postgres_password       = random_string.gpsql_password.result
     PRIMARY_DOMAIN          = var.domain
     TEMPLATE_FILES          = "_api,gpsql,dnsupdate,soa-content"
     PDNS_gpsql_dnssec       = "yes"
