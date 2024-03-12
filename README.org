@@ -41,6 +41,7 @@ equinix_metal_project_id = "82b5c425-8dd4-429e-ae0d-d32f265c63e4"
 init
 
 #+begin_src tmux
+touch ./tmp/cloudnative-coop-kubeconfig
 tofu init -var-file=./values.tfvars -var equinix_metal_auth_token=$METAL_AUTH_TOKEN -var github_token="$(gh auth token)" --upgrade
 #+end_src
 
