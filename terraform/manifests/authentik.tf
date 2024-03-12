@@ -81,7 +81,7 @@ resource "kubernetes_config_map" "authentik-kustomize" {
   }
 
   data = {
-    authentik_host = "sso.sharing.io"
+    authentik_host = "sso.${var.domain}"
   }
   depends_on = [
     kubernetes_namespace.authentik

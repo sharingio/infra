@@ -6,7 +6,7 @@ a Flux + Terraform infrastructure repo
 
 * Todo
 
-- [x] add Flux for sharing-io repo
+- [x] add Flux for cloudnative-coop repo
 - [x] get talosconfig
 - [ ] access Kubernetes APIServer
 - [ ] verify Ceph disk allocation
@@ -33,7 +33,7 @@ keep in values.tfvars (as HCL); example:
 
 #+begin_src hcl :tangle ./values-example.tfvars
 rfc2136_server       = "123.253.176.253"
-rfc2136_tsig_keyname = "sharing.io."
+rfc2136_tsig_keyname = "cloudnative.coop."
 rfc2136_tsig_key     = "[VALUE HERE]"
 equinix_metal_project_id = "82b5c425-8dd4-429e-ae0d-d32f265c63e4"
 #+end_src
@@ -59,14 +59,14 @@ tofu apply -var-file=./values.tfvars -var equinix_metal_auth_token=$METAL_AUTH_T
 get talosconfig
 
 #+begin_src tmux
-CLUSTER_NAME=sharing-io
+CLUSTER_NAME=cloudnative-coop
 tofu output -raw "$CLUSTER_NAME"-talosconfig > ~/.talos/config-"$CLUSTER_NAME"
 #+end_src
 
 get kubeconfig
 
 #+begin_src tmux
-CLUSTER_NAME=sharing-io
+CLUSTER_NAME=cloudnative-coop
 tofu output -raw "$CLUSTER_NAME"-kubeconfig > ~/.kube/config-"$CLUSTER_NAME"
 #+end_src
 
@@ -75,7 +75,7 @@ tofu output -raw "$CLUSTER_NAME"-kubeconfig > ~/.kube/config-"$CLUSTER_NAME"
 force a reconciliation
 
 #+begin_src shell :results silent
-flux --kubeconfig ~/.kube/config-sharing-io reconcile source git flux-system
+flux --kubeconfig ~/.kube/config-cloudnative-coop reconcile source git flux-system
 #+end_src
 
 * Force tear down

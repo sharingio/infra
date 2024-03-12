@@ -42,7 +42,7 @@ terraform {
     }
   }
   backend "kubernetes" {
-    secret_suffix = "state"
+    secret_suffix = "cloudnative-coop-state"
     config_path   = "~/.kube/config-fop"
     namespace     = "tfstate"
   }
@@ -73,33 +73,33 @@ provider "dns" {
   }
 }
 provider "kubernetes" {
-  alias       = "sharing-io"
-  config_path = "./tmp/sharing-io-kubeconfig"
-  # host                   = "https://${module.sharing-io.kubeconfig.node}:6443"
-  # client_certificate     = base64decode(module.sharing-io.kubeconfig.kubernetes_client_configuration.client_certificate)
-  # client_key             = base64decode(module.sharing-io.kubeconfig.kubernetes_client_configuration.client_key)
-  # cluster_ca_certificate = base64decode(module.sharing-io.kubeconfig.kubernetes_client_configuration.ca_certificate)
+  alias       = "cloudnative-coop"
+  config_path = "./tmp/cloudnative-coop-kubeconfig"
+  # host                   = "https://${module.cloudnative-coop.kubeconfig.node}:6443"
+  # client_certificate     = base64decode(module.cloudnative-coop.kubeconfig.kubernetes_client_configuration.client_certificate)
+  # client_key             = base64decode(module.cloudnative-coop.kubeconfig.kubernetes_client_configuration.client_key)
+  # cluster_ca_certificate = base64decode(module.cloudnative-coop.kubeconfig.kubernetes_client_configuration.ca_certificate)
 }
 provider "flux" {
-  alias = "sharing-io"
+  alias = "cloudnative-coop"
   kubernetes = {
-    config_path = "./tmp/sharing-io-kubeconfig"
-    # host                   = "https://${module.sharing-io.kubeconfig.node}:6443"
-    # client_certificate     = base64decode(module.sharing-io.kubeconfig.kubernetes_client_configuration.client_certificate)
-    # client_key             = base64decode(module.sharing-io.kubeconfig.kubernetes_client_configuration.client_key)
-    # cluster_ca_certificate = base64decode(module.sharing-io.kubeconfig.kubernetes_client_configuration.ca_certificate)
+    config_path = "./tmp/cloudnative-coop-kubeconfig"
+    # host                   = "https://${module.cloudnative-coop.kubeconfig.node}:6443"
+    # client_certificate     = base64decode(module.cloudnative-coop.kubeconfig.kubernetes_client_configuration.client_certificate)
+    # client_key             = base64decode(module.cloudnative-coop.kubeconfig.kubernetes_client_configuration.client_key)
+    # cluster_ca_certificate = base64decode(module.cloudnative-coop.kubeconfig.kubernetes_client_configuration.ca_certificate)
   }
   git = {
     url = "ssh://git@github.com/${var.github_org}/${var.github_repository}.git"
     ssh = {
       username    = "git"
-      private_key = module.sharing-io-flux-bootstrap.github_repository_deploy_key
+      private_key = module.cloudnative-coop-flux-bootstrap.github_repository_deploy_key
     }
   }
 }
 provider "authentik" {
-  url   = "https://sso.sharing.io"
-  token = module.sharing-io-manifests.authentik_bootstrap_token
+  url   = "https://sso.cloudnative.coop"
+  token = module.cloudnative-coop-manifests.authentik_bootstrap_token
   # Optionally set insecure to ignore TLS Certificates
   # insecure = true
 }

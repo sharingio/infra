@@ -53,8 +53,8 @@ spec:
       tlsSecret: longhorn-tls
       ingressClassName: nginx
       # tls: true
-      # host: "longhorn.${domain}"
-      host: "longhorn.sharing.io"
+      host: "longhorn.${domain}"
+      # host: "longhorn.sharing.io"
       annotations:
         cert-manager.io/cluster-issuer: "letsencrypt-http01"
     # enablePSP: true
