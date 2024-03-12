@@ -81,7 +81,7 @@ flux --kubeconfig ~/.kube/config-cloudnative-coop reconcile source git flux-syst
 * Force tear down
 
 #+begin_src tmux
-tofu state list | grep -E 'talos|flux' | xargs -I{} tofu state rm {}
+tofu state list | grep -E 'talos|flux|manifests' | xargs -I{} tofu state rm {}
 tofu destroy -var-file=./values.tfvars -var equinix_metal_auth_token=$METAL_AUTH_TOKEN -var github_token="$(gh auth token)"
 #+end_src
 
