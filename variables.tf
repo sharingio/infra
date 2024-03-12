@@ -37,7 +37,7 @@ variable "github_token" {
 variable "github_org" {
   type        = string
   description = "the org for the Flux repo (ii)"
-  default     = "ii"
+  default     = "sharingio"
 }
 
 variable "github_repository" {
