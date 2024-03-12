@@ -164,7 +164,6 @@ module "cloudnative-coop-flux-bootstrap" {
 
   github_org        = var.github_org
   github_repository = var.github_repository
-  cluster_name      = "cloudnative.coop"
   kubeconfig        = module.cloudnative-coop.kubeconfig.kubeconfig_raw
 
   providers = {
