@@ -35,6 +35,7 @@ spec:
           name: coder-config
       - secretRef:
           name: coder-override
+          optional: true
       service:
         type: ClusterIP
         externalTrafficPolicy: Local
