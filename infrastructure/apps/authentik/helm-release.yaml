@@ -39,10 +39,8 @@ spec:
       ingress:
         ingressClassName: "nginx"
         enabled: true
-        annotations:
-          cert-manager.io/cluster-issuer: "letsencrypt-http01"
         tls:
-          - secretName: authentik-tls
+          - secretName: wildcard-ls
             hosts:
               - "${authentik_host}"
         hosts:
