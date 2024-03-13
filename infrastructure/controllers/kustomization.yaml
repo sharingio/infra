@@ -9,3 +9,4 @@ resources:
   - ./cert-manager.yaml
   - ./metallb
   - ./kubevirt-operator.yaml
+  - ./kubevirt.yaml
