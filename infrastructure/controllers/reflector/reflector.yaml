@@ -2,11 +2,11 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: HelmRepository
 metadata:
-  name: reflector
+  name: emberstack
   namespace: flux-system
 spec:
   interval: 1h0m0s
-  url: https://kubernetes.github.io/ingress-nginx
+  url: https://emberstack.github.io/helm-charts
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -22,5 +22,5 @@ spec:
       chart: reflector
       sourceRef:
         kind: HelmRepository
-        name: reflector
+        name: emberstack
         namespace: flux-system
