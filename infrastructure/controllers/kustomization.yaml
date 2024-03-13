@@ -8,4 +8,4 @@ resources:
   - ./longhorn.yaml
   - ./cert-manager.yaml
   - ./metallb
-  - ./kubevirt-operator
+  - ./kubevirt-operator.yaml
