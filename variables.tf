@@ -10,6 +10,18 @@ variable "equinix_metal_auth_token" {
   default     = ""
 }
 
+variable "equinix_metal_metro" {
+  description = "the metro"
+  type        = string
+  default     = "sv"
+}
+
+variable "equinix_metal_plan" {
+  description = "the plan"
+  type        = string
+  default     = "c3.medium.x86"
+}
+
 variable "rfc2136_nameserver" {
   description = "the DNS zone"
   type        = string

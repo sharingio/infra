@@ -7,7 +7,6 @@ locals {
   talos_install_image     = "factory.talos.dev/installer/04e08b65e14d351ab85789fd0b0d73705a29397288ec0b77a13e9dd0ea18d08b:v1.6.6"
   talos_version           = "v1.6.6"
   kubernetes_version      = "v1.29.2"
-  metro                   = "sv"
   acme_email_address      = "acme@ii.coop"
   rfc2136_algorithm       = "HMACSHA256"
   k8s_apiserver_subdomain = "k8s"
