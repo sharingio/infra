@@ -94,7 +94,7 @@ resource "kubernetes_config_map_v1" "powerdns-kustomize" {
 
   data = {
     DNS_IP             = var.dns_ip
-    PDNS_API_INGRESS   = "dns.${var.domain}"
+    PDNS_API_INGRESS   = "pdns.${var.domain}"
     PDNS_ADMIN_INGRESS = "powerdns.${var.domain}"
   }
   depends_on = [
