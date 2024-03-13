@@ -22,4 +22,4 @@ spec:
       chart: reflector
       sourceRef:
         kind: HelmRepository
-        name: reflector
+        name: flux-system
