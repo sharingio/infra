@@ -4,7 +4,7 @@ module "cloudnative-coop" {
   cluster_name             = "cloudnative-coop"
   kube_apiserver_domain    = "${local.k8s_apiserver_subdomain}.cloudnative.coop"
   equinix_metal_project_id = var.equinix_metal_project_id
-  equinix_metal_metro      = var.euqinix_metal_metro
+  equinix_metal_metro      = var.equinix_metal_metro
   equinix_metal_auth_token = var.equinix_metal_auth_token
   equinix_metal_plan       = var.equinix_metal_plan
   talos_version            = local.talos_version
