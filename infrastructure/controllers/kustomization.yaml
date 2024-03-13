@@ -10,3 +10,4 @@ resources:
   - ./metallb
   - ./kubevirt-operator.yaml
   - ./kubevirt.yaml
+  - ./reflector.yaml
