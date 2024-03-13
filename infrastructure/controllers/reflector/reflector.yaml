@@ -15,6 +15,7 @@ metadata:
   namespace: flux-system
 spec:
   releaseName: reflector
+  interval: 30m
   chart:
     spec:
       version: 7.1.262
