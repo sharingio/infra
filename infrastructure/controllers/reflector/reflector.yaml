@@ -16,6 +16,7 @@ metadata:
 spec:
   releaseName: reflector
   interval: 30m
+  targetNamespace: reflector
   chart:
     spec:
       version: 7.1.262
