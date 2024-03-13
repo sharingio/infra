@@ -13,8 +13,6 @@ kind: HelmRelease
 metadata:
   name: reflector
   namespace: flux-system
-  labels:
-    a: a
 spec:
   releaseName: reflector
   interval: 30m
@@ -26,3 +24,11 @@ spec:
         kind: HelmRepository
         name: emberstack
         namespace: flux-system
+  values:
+    cron:
+      securityContext:
+        allowPrivilegeEscalation: false
+    podSecurityContext:
+      allowPrivilegeEscalation: false
+    securityContext:
+      allowPrivilegeEscalation: false
