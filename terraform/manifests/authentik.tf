@@ -111,3 +111,18 @@ resource "random_bytes" "authentik_coder_oidc_client_id" {
 resource "random_bytes" "authentik_coder_oidc_client_secret" {
   length = 32
 }
+
+resource "kubernetes_config_map_v1" "authentik_config_hash" {
+  metadata {
+    name      = "authentik-config-hash"
+    namespace = "flux-system"
+  }
+
+  data = {
+    confighash = sha1(jsonencode(merge(
+      data.kubernetes_secret_v1.authentik_env.data,
+      data.kubernetes_config_map_v1.authentik_env.data,
+    )))
+
+  }
+}

@@ -127,7 +127,7 @@ resource "kubernetes_config_map" "coder_config" {
     CODER_OIDC_USER_ROLE_MAPPING = <<-EOT
             {"authentik Admins": ["owner"]}
             EOT
-    CODER_DISABLE_PASSWORD_AUTH  = "true"
+    # CODER_DISABLE_PASSWORD_AUTH  = "true"
     # CODER_OAUTH2_GITHUB_ALLOW_SIGNUPS = "true"
     CODER_BLOCK_DIRECT = "false"
     CODER_BROWSER_ONLY = "false"
@@ -193,4 +193,19 @@ resource "kubernetes_config_map" "coder_config" {
   depends_on = [
     kubernetes_namespace.coder
   ]
+}
+
+resource "kubernetes_config_map_v1" "coder_config_hash" {
+  metadata {
+    name      = "coder-config-hash"
+    namespace = "flux-system"
+  }
+
+  data = {
+    confighash = sha1(jsonencode(merge(
+      data.kubernetes_secret_v1.coder.data,
+      data.kubernetes_config_map_v1.coder_kustomize.data,
+      data.kubernetes_config_map_v1.coder_config.data,
+    )))
+  }
 }

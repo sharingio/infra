@@ -22,3 +22,16 @@ output "coder_admin_password" {
 output "coder_admin_email" {
   value = "coder@ii.coop" # we may want to set this elsewhere
 }
+output "authentik_config_hash" {
+  value = sha1(jsonencode(merge(
+    data.kubernetes_secret_v1.authentik_env.data,
+    data.kubernetes_config_map_v1.authentik_env.data,
+  )))
+}
+output "coder_config_hash" {
+  value = sha1(jsonencode(merge(
+    data.kubernetes_secret_v1.coder.data,
+    data.kubernetes_config_map_v1.coder_kustomize.data,
+    data.kubernetes_config_map_v1.coder_config.data,
+  )))
+}
