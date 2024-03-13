@@ -13,6 +13,8 @@ kind: HelmRelease
 metadata:
   name: reflector
   namespace: flux-system
+  labels:
+    a: a
 spec:
   releaseName: reflector
   interval: 30m
