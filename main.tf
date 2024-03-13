@@ -12,6 +12,8 @@ module "cloudnative-coop" {
   ipxe_script_url          = local.ipxe_script_url
   controlplane_nodes       = 3
   talos_install_image      = local.talos_install_image
+  talos_install_disk       = var.talos_install_disk
+  longhorn_disk            = var.longhorn_disk
 
   providers = {
     talos   = talos
@@ -134,7 +136,7 @@ module "cloudnative-coop-manifests" {
   source = "./terraform/manifests"
 
   equinix_metal_project_id = var.equinix_metal_project_id
-  equinix_metal_metro      = local.metro
+  equinix_metal_metro      = var.equinix_metal_metro
   equinix_metal_auth_token = var.equinix_metal_auth_token
   ingress_ip               = module.cloudnative-coop.cluster_ingress_ip
   dns_ip                   = module.cloudnative-coop.cluster_dns_ip

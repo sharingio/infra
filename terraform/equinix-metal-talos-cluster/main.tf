@@ -72,7 +72,7 @@ resource "talos_machine_configuration_apply" "cp" {
     <<-EOT
     machine:
        disks:
-         - device: /dev/sdb
+         - device: ${var.longhorn_disk}
            partitions:
              - mountpoint: /var/lib/longhorn
        kubelet:
@@ -90,7 +90,7 @@ resource "talos_machine_configuration_apply" "cp" {
          extraArgs:
            cloud-provider: external
        install:
-         disk: /dev/sda
+         disk: ${var.talos_install_disk}
          extraKernelArgs:
             - console=console=ttyS1,115200n8
             - talos.platform=equinixMetal

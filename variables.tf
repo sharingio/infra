@@ -103,3 +103,15 @@ variable "coder_gitauth_0_client_secret" {
   type        = string
   default     = ""
 }
+
+variable "talos_install_disk" {
+  type        = string
+  default     = "/dev/sda"
+  description = "the disk for Talos to completely claim"
+}
+
+variable "longhorn_disk" {
+  type        = string
+  default     = "/dev/sdb"
+  description = "the disk for Longhorn to completely claim"
+}

@@ -36,6 +36,18 @@ variable "cluster_name" {
   default     = "a-very-cool-cluster"
 }
 
+variable "talos_install_disk" {
+  type        = string
+  default     = "/dev/sda"
+  description = "the disk for Talos to completely claim"
+}
+
+variable "longhorn_disk" {
+  type        = string
+  default     = "/dev/sdb"
+  description = "the disk for Longhorn to completely claim"
+}
+
 variable "talos_version" {
   type        = string
   default     = "v1.6.5"
