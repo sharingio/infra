@@ -28,7 +28,13 @@ spec:
     cron:
       securityContext:
         allowPrivilegeEscalation: false
+        seccompProfile:
+          type: RuntimeDefault
     podSecurityContext:
       allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
     securityContext:
       allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
