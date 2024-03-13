@@ -19,6 +19,6 @@ spec:
             path: /
             pathType: Prefix
   tls:
-    - secretName: "flux-webhook-tls"
+    - secretName: "wildcard-tls"
       hosts:
         - "flux-webhook.${domain}"
