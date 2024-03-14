@@ -9,7 +9,10 @@ spec:
   dnsNames:
     - "*.${domain}"
     - "${domain}"
-    - "www.${domain}"
+    - "*.${CODER_WILDCARD_DOMAIN}"
+    - "${CODER_WILDCARD_DOMAIN}"
+    - "*.${TUNNELD_WILDCARD_DOMAIN}"
+    - "${TUNNELD_WILDCARD_DOMAIN}"
   issuerRef:
     # name: letsencrypt-staging
     name: letsencrypt-rfc2136
@@ -18,6 +21,6 @@ spec:
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "authentik,flux-system,longhorn,powerdns"  # Control destination namespaces
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "authentik,coder,flux-system,longhorn,powerdns"  # Control destination namespaces
       reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true" # Auto create reflection for matching namespaces
-      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "authentik,flux-system,longhorn,powerdns" # Control auto-reflection namespaces
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "authentik,coder,flux-system,longhorn,powerdns" # Control auto-reflection namespaces
