@@ -9,6 +9,7 @@ spec:
   commonName: "*.${TUNNELD_WILDCARD_DOMAIN}"
   secretName: try-wildcard-tls
   dnsNames:
+    - "wg.${TUNNELD_WILDCARD_DOMAIN}"
     - "${TUNNELD_WILDCARD_DOMAIN}"
     - "*.${TUNNELD_WILDCARD_DOMAIN}"
   issuerRef:

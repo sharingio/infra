@@ -7,6 +7,7 @@ metadata:
 spec:
   secretName: coder-wildcard-tls
   dnsNames:
+    - "coder.${CODER_WILDCARD_DOMAIN}"
     - "*.${CODER_WILDCARD_DOMAIN}"
     - "${CODER_WILDCARD_DOMAIN}"
   issuerRef:
