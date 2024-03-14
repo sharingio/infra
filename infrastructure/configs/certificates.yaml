@@ -9,6 +9,7 @@ spec:
   dnsNames:
     - "*.${domain}"
     - "${domain}"
+    - "www.${domain}"
   issuerRef:
     # name: letsencrypt-staging
     name: letsencrypt-rfc2136
