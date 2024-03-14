@@ -4,8 +4,6 @@ kind: Ingress
 metadata:
   name: webhook-receiver
   namespace: flux-system
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-http01"
 spec:
   rules:
     - host: "flux-webhook.${domain}"
