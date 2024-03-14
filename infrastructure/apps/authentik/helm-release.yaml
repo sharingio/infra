@@ -40,7 +40,7 @@ spec:
         ingressClassName: "nginx"
         enabled: true
         tls:
-          - secretName: wildcard-ls
+          - secretName: wildcard-tls
             hosts:
               - "${authentik_host}"
         hosts:
