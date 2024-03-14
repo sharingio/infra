@@ -7,12 +7,10 @@ metadata:
 spec:
   secretName: wildcard-tls
   dnsNames:
-    - "*.${domain}"
     - "${domain}"
+    - "*.${domain}"
     - "*.${CODER_WILDCARD_DOMAIN}"
-    - "${CODER_WILDCARD_DOMAIN}"
     - "*.${TUNNELD_WILDCARD_DOMAIN}"
-    - "${TUNNELD_WILDCARD_DOMAIN}"
   issuerRef:
     # name: letsencrypt-staging
     name: letsencrypt-rfc2136
