@@ -6,7 +6,7 @@ a Flux + Terraform infrastructure repo
 
 * Todo
 
-- [x] add Flux for cloudnative-coop repo
+- [x] add Flux for cluster repo
 - [x] get talosconfig
 - [ ] access Kubernetes APIServer
 - [ ] verify Ceph disk allocation
@@ -39,21 +39,25 @@ equinix_metal_project_id = "82b5c425-8dd4-429e-ae0d-d32f265c63e4"
 #+end_src
 
 init
-
 #+begin_src tmux
-touch ./tmp/cloudnative-coop-kubeconfig
+read METAL_AUTH_TOKEN && export METAL_AUTH_TOKEN
+#+end_src
+#+begin_src tmux :session ":tofu"
+mkdir -p ./tmp/
+CLUSTER_NAME=cloudnative-coop
+touch ./tmp/"$CLUSTER_NAME"-kubeconfig
 tofu init -var-file=./values.tfvars -var equinix_metal_auth_token=$METAL_AUTH_TOKEN -var github_token="$(gh auth token)" --upgrade
 #+end_src
 
 plan
 
-#+begin_src tmux
+#+begin_src tmux :session ":tofu"
 tofu plan -var-file=./values.tfvars -var equinix_metal_auth_token=$METAL_AUTH_TOKEN -var github_token="$(gh auth token)"
 #+end_src
 
 apply
 
-#+begin_src tmux
+#+begin_src tmux :session ":tofu"
 tofu apply -var-file=./values.tfvars -var equinix_metal_auth_token=$METAL_AUTH_TOKEN -var github_token="$(gh auth token)"
 #+end_src
 
@@ -75,14 +79,15 @@ tofu output -raw "$CLUSTER_NAME"-kubeconfig > ~/.kube/config-"$CLUSTER_NAME"
 
 force a reconciliation
 
-#+begin_src shell :results silent
-flux --kubeconfig ~/.kube/config-cloudnative-coop reconcile source git flux-system
+#+begin_src tmux
+CLUSTER_NAME=cloudnative-coop
+flux --kubeconfig ~/.kube/config-"$CLUSTER_NAME" reconcile source git flux-system
 #+end_src
 
 * Force tear down
 
-#+begin_src tmux
-tofu state list | grep -E 'talos|flux|manifests' | xargs -I{} tofu state rm {}
+#+begin_src tmux :session ":tofu"
+tofu state list | grep -E 'talos|flux|manifests|kubernetes_manifest' | xargs -I{} tofu state rm {}
 tofu destroy -var-file=./values.tfvars -var equinix_metal_auth_token=$METAL_AUTH_TOKEN -var github_token="$(gh auth token)"
 #+end_src
 
