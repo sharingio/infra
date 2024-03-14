@@ -102,16 +102,37 @@ resource "talos_machine_configuration_apply" "cp" {
            - interface: lo
              addresses:
                - ${equinix_metal_reserved_ip_block.cluster_apiserver_ip.address}
-           - interface: bond0
+           - interface: ens6f0
+             dhcp: true
              vip:
                ip: ${equinix_metal_reserved_ip_block.cluster_ingress_ip.address}
                equinixMetal:
                  apiToken: ${var.equinix_metal_auth_token}
              routes:
                - network: ${data.equinix_metal_device_bgp_neighbors.bgp_neighbor[each.key].bgp_neighbors[0].peer_ips[0]}/32
-                 gateway: ${[for k in each.value.network : k.gateway if k.public == false && k.family == 4][0]}
+                 gateway: ${[for k in each.value.network : k.address if k.public == false && k.family == 4][0]}
                - network: ${data.equinix_metal_device_bgp_neighbors.bgp_neighbor[each.key].bgp_neighbors[0].peer_ips[1]}/32
-                 gateway: ${[for k in each.value.network : k.gateway if k.public == false && k.family == 4][0]}
+                 gateway: ${[for k in each.value.network : k.address if k.public == false && k.family == 4][0]}
+           # - interface: bond0
+           #   dhcp: true
+           #   bond:
+           #     deviceSelectors:
+           #       - busPath: "00:*"
+           #     mode: 802.3ad
+           #     lacpRate: fast
+           #     xmitHashPolicy: layer3+4
+           #     miimon: 100
+           #     updelay: 200
+           #     downdelay: 200
+           #   vip:
+           #     ip: ${equinix_metal_reserved_ip_block.cluster_ingress_ip.address}
+           #     equinixMetal:
+           #       apiToken: ${var.equinix_metal_auth_token}
+           #   routes:
+           #     - network: ${data.equinix_metal_device_bgp_neighbors.bgp_neighbor[each.key].bgp_neighbors[0].peer_ips[0]}/32
+           #       gateway: ${[for k in each.value.network : k.address if k.public == false && k.family == 4][0]}
+           #     - network: ${data.equinix_metal_device_bgp_neighbors.bgp_neighbor[each.key].bgp_neighbors[0].peer_ips[1]}/32
+           #       gateway: ${[for k in each.value.network : k.address if k.public == false && k.family == 4][0]}
     EOT
     ,
     <<-EOT
