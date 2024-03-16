@@ -32,6 +32,8 @@ spec:
             name: authentik-env
         - secretRef:
             name: authentik-env
+        - secretRef:
+            name: authentik-override
       env:
         - name: AUTHENTIK_ERROR_REPORTING__ENABLED
           value: "true"
