@@ -33,7 +33,7 @@ variable "rfc2136_tsig_key" {
   type        = string
   default     = ""
 }
-variable "rfc2136_algorithm" {
+variable "rfc2136_tsig_algorithm" {
   description = "the algorithm to use for rfc2136"
   type        = string
   default     = ""

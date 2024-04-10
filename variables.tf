@@ -40,6 +40,12 @@ variable "rfc2136_tsig_keyname" {
   default     = ""
 }
 
+variable "rfc2136_tsig_algorithm" {
+  description = "the tsig algorithm for talking to a RFC2136 compliant DNS server"
+  type        = string
+  default     = "HMACSHA256"
+}
+
 variable "rfc2136_tsig_key" {
   description = "the tsig key for talking to a RFC2136 compliant DNS server"
   type        = string

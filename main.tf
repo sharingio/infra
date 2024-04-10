@@ -141,10 +141,10 @@ module "cluster-manifests" {
   ingress_ip               = module.cluster.cluster_ingress_ip
   dns_ip                   = module.cluster.cluster_dns_ip
   wg_ip                    = module.cluster.cluster_wireguard_ip
-  acme_email_address       = local.acme_email_address
-  rfc2136_algorithm        = local.rfc2136_algorithm
+  acme_email_address       = var.acme_email_address
   rfc2136_nameserver       = var.rfc2136_nameserver
   rfc2136_tsig_keyname     = var.rfc2136_tsig_keyname
+  rfc2136_tsig_algorithm   = var.rfc2136_tsig_algorithm
   rfc2136_tsig_key         = var.rfc2136_tsig_key
   domain                   = var.domain
   pdns_host                = var.pdns_host
