@@ -92,7 +92,7 @@ resource "talos_machine_configuration_apply" "cp" {
        install:
          disk: ${var.talos_install_disk}
          extraKernelArgs:
-            - console=console=ttyS1,115200n8
+            - console=ttyS1,115200n8
             - talos.platform=equinixMetal
          wipe: false
          image: ${var.talos_install_image}
