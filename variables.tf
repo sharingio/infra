@@ -22,8 +22,14 @@ variable "equinix_metal_plan" {
   default     = "c3.medium.x86"
 }
 
+variable "domain" {
+  description = "the root DNS zone for this cluster"
+  type        = string
+  default     = ""
+}
+
 variable "rfc2136_nameserver" {
-  description = "the DNS zone"
+  description = "the DNS server for nsupdates"
   type        = string
   default     = ""
 }

@@ -2,7 +2,7 @@ module "cluster" {
   source = "./terraform/equinix-metal-talos-cluster"
 
   cluster_name             = "cluster"
-  kube_apiserver_domain    = "${local.k8s_apiserver_subdomain}.cloudnative.coop"
+  kube_apiserver_domain    = "${local.k8s_apiserver_subdomain}.${var.domain}"
   equinix_metal_project_id = var.equinix_metal_project_id
   equinix_metal_metro      = var.equinix_metal_metro
   equinix_metal_auth_token = var.equinix_metal_auth_token
@@ -24,7 +24,7 @@ module "cluster" {
 module "cluster-record-apiserver-ip" {
   source = "./terraform/rfc2136-record-assign"
 
-  zone      = "cloudnative.coop."
+  zone      = "${var.domain}."
   name      = local.k8s_apiserver_subdomain
   addresses = [module.cluster.cluster_apiserver_ip]
 
@@ -37,7 +37,7 @@ module "cluster-record-apiserver-ip" {
 module "cluster-record-ingress-ip" {
   source = "./terraform/rfc2136-record-assign"
 
-  zone      = "cloudnative.coop."
+  zone      = "${var.domain}."
   name      = "*"
   addresses = [module.cluster.cluster_ingress_ip]
 
@@ -50,7 +50,7 @@ module "cluster-record-ingress-ip" {
 module "cluster-record-dns-ip" {
   source = "./terraform/rfc2136-record-assign"
 
-  zone      = "cloudnative.coop."
+  zone      = "${var.domain}."
   name      = "dns"
   addresses = [module.cluster.cluster_dns_ip]
 
@@ -61,21 +61,21 @@ module "cluster-record-dns-ip" {
   depends_on = [module.cluster]
 }
 resource "powerdns_zone" "try" {
-  name        = "try.cloudnative.coop."
+  name        = "try.${var.domain}."
   kind        = "Native"
-  nameservers = ["ns1.cloudnative.coop.", "ns2.cloudnative.coop."]
+  nameservers = ["ns1.sharing.io.", "ns2.sharing.io."]
 }
 resource "powerdns_record" "try-A" {
-  zone       = "try.cloudnative.coop."
-  name       = "try.cloudnative.coop."
+  zone       = "try.${var.domain}."
+  name       = "try.${var.domain}."
   type       = "A"
   ttl        = 300
   records    = [module.cluster.cluster_ingress_ip]
   depends_on = [powerdns_zone.try]
 }
 resource "powerdns_record" "try-WILDCARD" {
-  zone       = "try.cloudnative.coop."
-  name       = "*.try.cloudnative.coop."
+  zone       = "try.${var.domain}."
+  name       = "*.try.${var.domain}."
   type       = "A"
   ttl        = 300
   records    = [module.cluster.cluster_ingress_ip]
@@ -83,29 +83,29 @@ resource "powerdns_record" "try-WILDCARD" {
 }
 resource "powerdns_record" "wg-A" {
   # TUNNELD_WIREGUARD_ENDPOINT
-  zone       = "cloudnative.coop."
-  name       = "wg.cloudnative.coop."
+  zone       = "${var.domain}."
+  name       = "wg.${var.domain}."
   type       = "A"
   ttl        = 300
   records    = [module.cluster.cluster_wireguard_ip]
   depends_on = [powerdns_zone.try]
 }
 resource "powerdns_zone" "coder" {
-  name        = "coder.cloudnative.coop."
+  name        = "coder.${var.domain}."
   kind        = "Native"
-  nameservers = ["ns1.cloudnative.coop.", "ns2.cloudnative.coop."]
+  nameservers = ["ns1.sharing.io.", "ns2.sharing.io."]
 }
 resource "powerdns_record" "coder-A" {
-  zone       = "coder.cloudnative.coop."
-  name       = "coder.cloudnative.coop."
+  zone       = "coder.${var.domain}."
+  name       = "coder.${var.domain}."
   type       = "A"
   ttl        = 300
   records    = [module.cluster.cluster_ingress_ip]
   depends_on = [powerdns_zone.coder]
 }
 resource "powerdns_record" "coder-WILDCARD" {
-  zone       = "coder.cloudnative.coop."
-  name       = "*.coder.cloudnative.coop."
+  zone       = "coder.${var.domain}."
+  name       = "*.coder.${var.domain}."
   type       = "A"
   ttl        = 300
   records    = [module.cluster.cluster_ingress_ip]
@@ -114,7 +114,7 @@ resource "powerdns_record" "coder-WILDCARD" {
 module "cluster-record-wireguard-ip" {
   source = "./terraform/rfc2136-record-assign"
 
-  zone      = "cloudnative.coop."
+  zone      = "${var.domain}."
   name      = "wireguard"
   addresses = [module.cluster.cluster_wireguard_ip]
 
@@ -146,7 +146,7 @@ module "cluster-manifests" {
   rfc2136_nameserver       = var.rfc2136_nameserver
   rfc2136_tsig_keyname     = var.rfc2136_tsig_keyname
   rfc2136_tsig_key         = var.rfc2136_tsig_key
-  domain                   = "cloudnative.coop"
+  domain                   = var.domain
   pdns_host                = var.pdns_host
   pdns_api_key             = var.pdns_api_key
   # for coder to directly authenticate via github
@@ -181,7 +181,7 @@ module "cluster-flux-github-webhook" {
 
   repo = var.github_repository
   # repo   = "${var.github_org}/${var.github_repository}"
-  domain = "cloudnative.coop"
+  domain = var.domain
   secret = module.cluster-manifests.flux_receiver_token
 
   providers = {
@@ -194,6 +194,7 @@ module "cluster-flux-github-webhook" {
 
 # module "cluster-authentik-config" {
 #   source                             = "./terraform/authentik-config"
+#   domain                             = var.domain
 #   github_oauth_app_id                = var.authentik_github_oauth_app_id
 #   github_oauth_app_secret            = var.authentik_github_oauth_app_secret
 #   authentik_coder_oidc_client_id     = module.cluster-manifests.authentik_coder_oidc_client_id
@@ -201,7 +202,7 @@ module "cluster-flux-github-webhook" {
 #   authentik_bootstrap_token          = module.cluster-manifests.authentik_bootstrap_token
 #   # repo = var.github_repository
 #   # # repo   = "${var.github_org}/${var.github_repository}"
-#   # domain = "cloudnative.coop"
+#   # domain = "${var.domain}"
 #   # secret = module.cluster-manifests.flux_receiver_token
 
 #   providers = {
