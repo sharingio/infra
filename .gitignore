@@ -2,6 +2,7 @@
 .idea
 *.log
 tmp/
+.envrc
 .terraform
 .terraform.lock.hcl
 values.tfvars
