@@ -1,19 +1,18 @@
 module "cluster" {
   source = "./terraform/equinix-metal-talos-cluster"
 
-  cluster_name             = "cluster"
-  kube_apiserver_domain    = "${local.k8s_apiserver_subdomain}.${var.domain}"
-  equinix_metal_project_id = var.equinix_metal_project_id
-  equinix_metal_metro      = var.equinix_metal_metro
-  equinix_metal_auth_token = var.equinix_metal_auth_token
-  equinix_metal_plan       = var.equinix_metal_plan
-  talos_version            = local.talos_version
-  kubernetes_version       = local.kubernetes_version
-  ipxe_script_url          = local.ipxe_script_url
-  controlplane_nodes       = 3
-  talos_install_image      = local.talos_install_image
-  talos_install_disk       = var.talos_install_disk
-  longhorn_disk            = var.longhorn_disk
+  talos_version             = var.talos_version
+  kubernetes_version        = var.kubernetes_version
+  kubernetes_apiserver_fqdn = "k8s.${var.domain}"
+  controlplane_nodes        = var.kubernetes_control_plane_nodes
+  cluster_name              = var.github_org
+  domain                    = var.domain
+  equinix_metal_project_id  = var.equinix_metal_project_id
+  equinix_metal_metro       = var.equinix_metal_metro
+  equinix_metal_auth_token  = var.equinix_metal_auth_token
+  equinix_metal_plan        = var.equinix_metal_plan
+  talos_install_disk        = var.talos_install_disk
+  longhorn_disk             = var.longhorn_disk
 
   providers = {
     talos   = talos
