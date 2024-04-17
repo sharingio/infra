@@ -1,3 +1,39 @@
+variable "kubernetes_version" {
+  type        = string
+  default     = "v1.29.2"
+  description = "the version of Kubernetes to deploy"
+}
+
+variable "kubernetes_control_plane_nodes" {
+  type        = number
+  default     = 3
+  description = "the number of control plane nodes to deploy"
+}
+
+variable "talos_version" {
+  type        = string
+  default     = "v1.7.0-beta.1"
+  description = "the version of Talos to deploy"
+}
+
+variable "talos_install_disk" {
+  type        = string
+  default     = "/dev/sda"
+  description = "the disk for Talos to completely claim"
+}
+
+variable "longhorn_disk" {
+  type        = string
+  default     = "/dev/sdb"
+  description = "the disk for Longhorn to completely claim"
+}
+
+variable "ceph_disk" {
+  type        = string
+  default     = "/dev/X"
+  description = "the disk for Rook/CEPH to completely claim"
+}
+
 variable "equinix_metal_project_id" {
   description = "the project ID for the Equinix Metal project"
   type        = string
@@ -114,16 +150,4 @@ variable "coder_gitauth_0_client_secret" {
   description = "Retrieving a RW token to save prs / commits etc in workspaces"
   type        = string
   default     = ""
-}
-
-variable "talos_install_disk" {
-  type        = string
-  default     = "/dev/sda"
-  description = "the disk for Talos to completely claim"
-}
-
-variable "longhorn_disk" {
-  type        = string
-  default     = "/dev/sdb"
-  description = "the disk for Longhorn to completely claim"
 }
