@@ -61,6 +61,7 @@ resource "talos_machine_configuration_apply" "cp" {
          - ${var.kubernetes_apiserver_fqdn}
          - ${equinix_metal_reserved_ip_block.cluster_apiserver_ip.network}
        kubelet:
+         registerWithFQDN: true
          extraArgs:
            cloud-provider: external
        features:
