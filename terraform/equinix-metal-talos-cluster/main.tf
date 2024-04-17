@@ -7,9 +7,9 @@ resource "talos_machine_secrets" "machine_secrets" {
 #       this must be removed after a future update to the Equinix Metal Cloud Provider controller.
 
 resource "talos_machine_configuration_apply" "cp" {
-  for_each                    = { for idx, val in equinix_metal_device.cp : idx => val }
-  endpoint                    = each.value.network.0.address
-  node                        = each.value.network.0.address
+  for_each = { for idx, val in equinix_metal_device.cp : idx => val }
+  endpoint = each.value.hostname
+  node     = each.value.hostname
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
   depends_on                  = [equinix_metal_device.cp, equinix_metal_bgp_session.cp_bgp]
@@ -40,7 +40,7 @@ resource "talos_machine_configuration_apply" "cp" {
             - console=ttyS1,115200n8
             - talos.platform=equinixMetal
          wipe: false
-         image: ${var.talos_install_image}
+         image: ${local.talos_install_image}
        network:
          hostname: ${each.value.hostname}
          interfaces:
