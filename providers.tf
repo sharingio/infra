@@ -40,6 +40,10 @@ terraform {
       source  = "pan-net/powerdns"
       version = "1.5.0"
     }
+    http = {
+      source  = "hashicorp/http"
+      version = "3.4.2"
+    }
   }
   backend "kubernetes" {
     secret_suffix = "cluster-state"

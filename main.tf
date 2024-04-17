@@ -19,6 +19,8 @@ module "cluster" {
     talos   = talos
     helm    = helm
     equinix = equinix
+    dns     = dns
+    http    = http
   }
 }
 resource "local_sensitive_file" "cluster-kubeconfig" {
