@@ -1,7 +1,8 @@
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints            = [for k, v in equinix_metal_device.cp : v.network.0.address]
+  endpoints            = [[for k, v in equinix_metal_device.cp : v.hostname][0]]
+  nodes                = [[for k, v in equinix_metal_device.cp : split(".", v.hostname)[0]][0]]
 }
 
 data "talos_cluster_kubeconfig" "kubeconfig" {
