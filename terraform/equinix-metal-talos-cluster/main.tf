@@ -58,7 +58,7 @@ resource "talos_machine_configuration_apply" "cp" {
     <<-EOT
     machine:
        certSANs:
-         - ${var.kube_apiserver_domain}
+         - ${var.kubernetes_apiserver_fqdn}
          - ${equinix_metal_reserved_ip_block.cluster_apiserver_ip.network}
        kubelet:
          extraArgs:
@@ -83,7 +83,7 @@ resource "talos_machine_configuration_apply" "cp" {
            cloud-provider: external
            anonymous-auth: true
          certSANs:
-           - ${var.kube_apiserver_domain}
+           - ${var.kubernetes_apiserver_fqdn}
            - ${equinix_metal_reserved_ip_block.cluster_apiserver_ip.network}
        inlineManifests:
          - name: metal-cloud-config
@@ -105,6 +105,7 @@ resource "talos_machine_bootstrap" "bootstrap" {
     talos_machine_configuration_apply.cp
   ]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoint             = [for k, v in equinix_metal_device.cp : v.network.0.address][0]
-  node                 = [for k, v in equinix_metal_device.cp : v.network.0.address][0]
+  endpoint             = [for k, v in equinix_metal_device.cp : v.hostname][0]
+  node                 = [for k, v in equinix_metal_device.cp : v.hostname][0]
 }
+
