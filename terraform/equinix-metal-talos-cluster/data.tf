@@ -16,7 +16,7 @@ data "talos_cluster_kubeconfig" "kubeconfig" {
 
 data "talos_machine_configuration" "controlplane" {
   cluster_name     = var.cluster_name
-  cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
+  cluster_endpoint = "https://${var.kubernetes_apiserver_fqdn}:6443"
 
   machine_type    = "controlplane"
   machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
