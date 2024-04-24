@@ -12,7 +12,7 @@ variable "kubernetes_control_plane_nodes" {
 
 variable "talos_version" {
   type        = string
-  default     = "v1.7.0-beta.1"
+  default     = "v1.7.0"
   description = "the version of Talos to deploy"
 }
 
@@ -150,4 +150,9 @@ variable "coder_gitauth_0_client_secret" {
   description = "Retrieving a RW token to save prs / commits etc in workspaces"
   type        = string
   default     = ""
+}
+variable "coder_version" {
+  description = "Version of coder"
+  type        = string
+  default     = "v2.10.2"
 }

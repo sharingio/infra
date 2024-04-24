@@ -48,6 +48,7 @@ module "cluster-manifests" {
   pdns_host                = var.pdns_host
   pdns_api_key             = var.pdns_api_key
   # for coder to directly authenticate via github
+  coder_version                     = var.version
   coder_oauth2_github_client_id     = var.coder_oauth2_github_client_id
   coder_oauth2_github_client_secret = var.coder_oauth2_github_client_secret
   # for coder to create gh tokens for rw within workspaces

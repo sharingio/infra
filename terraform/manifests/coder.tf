@@ -45,7 +45,7 @@ resource "kubernetes_config_map" "coder_kustomize" {
     CODER_HOST              = "coder.${var.domain}"
     CODER_ACCESS_URL        = "https://coder.${var.domain}"
     CODER_WILDCARD_DOMAIN   = "coder.${var.domain}"
-    CODER_VERSION           = "2.9.1" # Lastest as of March 20th 2024
+    CODER_VERSION           = var.coder_version
     TUNNELD_WILDCARD_DOMAIN = "try.${var.domain}"
     wg_ip                   = var.wg_ip
   }

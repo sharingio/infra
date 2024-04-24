@@ -92,6 +92,10 @@ variable "cluster_name" {
   type        = string
   default     = "a-very-cool-cluster"
 }
+variable "coder_version" {
+  description = "Version of Coder to deploy"
+  type        = string
+}
 variable "coder_oauth2_github_client_id" {
   description = "Authenticating Coder directly to github (bypassing authentik)"
   type        = string
@@ -108,3 +112,4 @@ variable "coder_gitauth_0_client_secret" {
   description = "Retrieving a RW token to save prs / commits etc in workspaces"
   type        = string
 }
+
