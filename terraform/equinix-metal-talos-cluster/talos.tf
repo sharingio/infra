@@ -80,6 +80,8 @@ resource "talos_machine_configuration_apply" "cp" {
          image: ${local.talos_install_image}
        network:
          hostname: ${each.value.hostname}
+         # defaults to false, causes issues when using wildcard DNS
+         disableSearchDomain: true
          interfaces:
            - interface: lo
              addresses:
