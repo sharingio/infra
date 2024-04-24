@@ -1,3 +1,40 @@
+locals {
+  talos_schematic      = jsondecode(data.http.talos_schematic.response_body).id
+  talos_latest_version = element(jsondecode(data.http.talos_versions.response_body), length(jsondecode(data.http.talos_versions.response_body)) - 1)
+  ipxe_script_url      = "https://pxe.factory.talos.dev/pxe/${local.talos_schematic}/${var.talos_version}/equinixMetal-amd64"
+  talos_install_image  = "factory.talos.dev/installer/${local.talos_schematic}:${var.talos_version}"
+  # ipxe_script_url      = "https://pxe.factory.talos.dev/pxe/${local.talos_schematic}/${talos_latest_version}/equinixMetal-amd64"
+  # talos_install_image  = "factory.talos.dev/installer/${local.talos_schematic}:${local.talos_latest_version}"
+}
+
+
+# https://github.com/siderolabs/image-factory?tab=readme-ov-file#get-versions
+
+data "http" "talos_versions" {
+  url = "https://factory.talos.dev/versions"
+  request_headers = {
+    Accept = "application/json"
+  }
+}
+
+# https://github.com/siderolabs/image-factory?tab=readme-ov-file#http-frontend-api
+
+data "http" "talos_schematic" {
+  url    = "https://factory.talos.dev/schematics"
+  method = "POST"
+  request_headers = {
+    Accept       = "application/json"
+    Content-type = "text/x-yaml"
+  }
+  request_body = <<-EOT
+    customization:
+        systemExtensions:
+            officialExtensions:
+                - siderolabs/gvisor
+                - siderolabs/iscsi-tools
+                - siderolabs/mdadm
+   EOT
+}
 resource "talos_machine_secrets" "machine_secrets" {
   talos_version = var.talos_version
 }
@@ -7,9 +44,9 @@ resource "talos_machine_secrets" "machine_secrets" {
 #       this must be removed after a future update to the Equinix Metal Cloud Provider controller.
 
 resource "talos_machine_configuration_apply" "cp" {
-  for_each = { for idx, val in equinix_metal_device.cp : idx => val }
-  endpoint = each.value.hostname
-  node     = each.value.hostname
+  for_each                    = { for idx, val in equinix_metal_device.cp : idx => val }
+  endpoint                    = each.value.hostname
+  node                        = each.value.hostname
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
   depends_on                  = [equinix_metal_device.cp, equinix_metal_bgp_session.cp_bgp]
@@ -70,7 +107,6 @@ resource "talos_machine_configuration_apply" "cp" {
            port: 7445
     cluster:
        allowSchedulingOnMasters: true
-       # The rest of this is for cilium
        #  https://www.talos.dev/v1.3/kubernetes-guides/network/deploying-cilium/
        externalCloudProvider:
          enabled: true
@@ -110,3 +146,30 @@ resource "talos_machine_bootstrap" "bootstrap" {
   node                 = [for k, v in equinix_metal_device.cp : v.hostname][0]
 }
 
+
+data "talos_client_configuration" "talosconfig" {
+  cluster_name         = var.cluster_name
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  endpoints            = [[for k, v in equinix_metal_device.cp : v.hostname][0]]
+  nodes                = [[for k, v in equinix_metal_device.cp : split(".", v.hostname)[0]][0]]
+}
+
+data "talos_cluster_kubeconfig" "kubeconfig" {
+  depends_on = [
+    talos_machine_bootstrap.bootstrap
+  ]
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  endpoint             = [for k, v in equinix_metal_device.cp : v.network.0.address][0]
+  node                 = [for k, v in equinix_metal_device.cp : v.network.0.address][0]
+}
+
+data "talos_machine_configuration" "controlplane" {
+  cluster_name     = var.cluster_name
+  cluster_endpoint = "https://${var.kubernetes_apiserver_fqdn}:6443"
+
+  machine_type    = "controlplane"
+  machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
+
+  talos_version      = var.talos_version
+  kubernetes_version = var.kubernetes_version
+}
