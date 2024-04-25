@@ -155,4 +155,11 @@ variable "coder_version" {
   description = "Version of coder"
   type        = string
   default     = "v2.10.2"
+  # https://github.com/coder/coder/releases/tag/v2.10.2
+}
+variable "authentik_version" {
+  description = "Version of authentik"
+  type        = string
+  default     = "2024.4.0"
+  # https://github.com/goauthentik/authentik/releases/tag/version%2F2024.2.3
 }

@@ -112,4 +112,7 @@ variable "coder_gitauth_0_client_secret" {
   description = "Retrieving a RW token to save prs / commits etc in workspaces"
   type        = string
 }
-
+variable "authentik_version" {
+  description = "Version of Authentik to deploy"
+  type        = string
+}

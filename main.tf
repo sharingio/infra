@@ -58,7 +58,8 @@ module "cluster-manifests" {
     kubernetes = kubernetes.cluster
     random     = random
   }
-  depends_on = [local_sensitive_file.cluster-kubeconfig, module.cluster]
+  authentik_version = var.authentik_version
+  depends_on        = [local_sensitive_file.cluster-kubeconfig, module.cluster]
 }
 
 module "cluster-flux-bootstrap" {
