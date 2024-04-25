@@ -61,14 +61,36 @@ resource "kubernetes_secret_v1" "authentik_env" {
   ]
 }
 
+resource "kubernetes_secret_v1" "authentik_override" {
+  metadata {
+    name      = "authentik-override"
+    namespace = "authentik"
+  }
+
+  data = {
+    AUTHENTIK_OVERRIDES = "edit this manually within the cluster for temporary overrides"
+  }
+  depends_on = [
+    kubernetes_namespace.authentik
+  ]
+  lifecycle {
+    ignore_changes = [
+      # Ignore any changes to the secret data
+      # This should let us edit it cluster without the iteration loop
+      data,
+    ]
+  }
+}
 resource "kubernetes_config_map" "authentik_env" {
   metadata {
     name      = "authentik-env"
     namespace = "authentik"
   }
-
+  # https://docs.goauthentik.io/docs/installation/configuration#authentik-settings
   data = {
     AUTHENTIK_BOOTSTRAP_EMAIL = "sharing.io@ii.coop"
+    # AUTHENTIK_LOG_LEVEL       = "debug"
+    # AUTHENTIK_DEBUG           = "true"
   }
   depends_on = [
     kubernetes_namespace.authentik
@@ -81,7 +103,8 @@ resource "kubernetes_config_map" "authentik-kustomize" {
   }
 
   data = {
-    authentik_host = "sso.${var.domain}"
+    authentik_host    = "sso.${var.domain}"
+    AUTHENTIK_VERSION = "${var.authentik_version}"
   }
   depends_on = [
     kubernetes_namespace.authentik

@@ -101,7 +101,7 @@ provider "flux" {
   }
 }
 provider "authentik" {
-  url   = "https://sso.cloudnative.coop"
+  url   = "https://sso.${var.domain}"
   token = module.cluster-manifests.authentik_bootstrap_token
   # Optionally set insecure to ignore TLS Certificates
   # insecure = true
