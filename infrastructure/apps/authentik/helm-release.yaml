@@ -32,6 +32,8 @@ spec:
             name: authentik-env
         - secretRef:
             name: authentik-env
+        - configMapRef:
+            name: authentik-override
         - secretRef:
             name: authentik-override
       env:

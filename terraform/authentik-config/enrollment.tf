@@ -1,3 +1,10 @@
+# I did try to create our own ii-source-enrollment-flow
+# but I got errors and tracebacks. Loop back another time
+# Just use the default one for now. It works.
+
+data "authentik_flow" "default-source-enrollment" {
+  slug = "default-source-enrollment"
+}
 resource "authentik_flow" "ii-source-enrollment-flow" {
   name               = "Welcome to ii! Please select a username."
   title              = "It's a great day to choose a user"

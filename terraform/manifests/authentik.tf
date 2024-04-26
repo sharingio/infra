@@ -81,6 +81,27 @@ resource "kubernetes_secret_v1" "authentik_override" {
     ]
   }
 }
+resource "kubernetes_config_map" "authentik_override" {
+  metadata {
+    name      = "authentik-override"
+    namespace = "authentik"
+  }
+  # https://docs.goauthentik.io/docs/installation/configuration#authentik-settings
+  data = {
+    AUTHENTIK_LOG_LEVEL = "debug"
+    AUTHENTIK_DEBUG     = "true"
+  }
+  depends_on = [
+    kubernetes_namespace.authentik
+  ]
+  lifecycle {
+    ignore_changes = [
+      # Ignore any changes to the secret data
+      # This should let us edit it cluster without the iteration loop
+      data,
+    ]
+  }
+}
 resource "kubernetes_config_map" "authentik_env" {
   metadata {
     name      = "authentik-env"

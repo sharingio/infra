@@ -3,8 +3,8 @@ data "authentik_source" "built-in" {
 }
 
 resource "authentik_flow" "ii-authentication-flow" {
-  name               = "Welcome to ii!"
-  title              = "ii Authentication"
+  name               = "Our name is SSO.${var.domain}"
+  title              = "Click Github Icon or Signup Below"
   slug               = "ii-authentication-flow"
   designation        = "authentication"
   authentication     = "none"
