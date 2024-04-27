@@ -68,8 +68,8 @@ resource "kubernetes_secret_v1" "coder" {
     PDNS_TSIG_KEY                     = var.rfc2136_tsig_key
     PDNS_API_KEY                      = var.pdns_api_key
     CODER_FIRST_USER_PASSWORD         = random_string.coder_first_user_password.result
-    CODER_OIDC_CLIENT_ID              = random_bytes.authentik_coder_oidc_client_id.hex
-    CODER_OIDC_CLIENT_SECRET          = random_bytes.authentik_coder_oidc_client_secret.hex
+    CODER_OIDC_CLIENT_ID              = random_password.authentik_coder_oidc_client_id.result
+    CODER_OIDC_CLIENT_SECRET          = random_password.authentik_coder_oidc_client_secret.result
     METAL_AUTH_TOKEN                  = var.equinix_metal_auth_token
     TF_VAR_metal_project              = var.equinix_metal_project_id
     CODER_OAUTH2_GITHUB_CLIENT_ID     = var.coder_oauth2_github_client_id

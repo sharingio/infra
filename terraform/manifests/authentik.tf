@@ -148,12 +148,14 @@ resource "kubernetes_config_map" "authentik_blueprints" {
   ]
 }
 
-resource "random_bytes" "authentik_coder_oidc_client_id" {
-  length = 32
+resource "random_password" "authentik_coder_oidc_client_id" {
+  length  = 64
+  special = false
 }
 
-resource "random_bytes" "authentik_coder_oidc_client_secret" {
-  length = 32
+resource "random_password" "authentik_coder_oidc_client_secret" {
+  length  = 64
+  special = false
 }
 
 resource "kubernetes_config_map_v1" "authentik_config_hash" {
