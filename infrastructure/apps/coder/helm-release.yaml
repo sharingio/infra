@@ -35,6 +35,8 @@ spec:
           name: coder-config
       - secretRef:
           name: coder-config
+      - configMapRef:
+          name: coder-override
       - secretRef:
           name: coder-override
           optional: true
