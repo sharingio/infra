@@ -34,8 +34,10 @@ spec:
             name: authentik-env
         - configMapRef:
             name: authentik-override
+            optional: true
         - secretRef:
             name: authentik-override
+            optional: true
       env:
         - name: AUTHENTIK_ERROR_REPORTING__ENABLED
           value: "true"

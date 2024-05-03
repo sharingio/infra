@@ -31,6 +31,13 @@ resource "authentik_stage_identification" "ii-identification-stage" {
   show_source_labels = false
   enrollment_flow    = authentik_flow.ii-enrollment-flow.uuid
   # passwordless_low = ""
+  lifecycle {
+    ignore_changes = [
+      # Ignore any changes to the secret data
+      # This should let us edit it cluster without the iteration loop
+      sources,
+    ]
+  }
 }
 
 resource "authentik_flow_stage_binding" "ii-authentication-identification" {
