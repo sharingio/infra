@@ -3,5 +3,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./kubevirt.yaml
-  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.58.1/cdi-operator.yaml
-  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.58.1/cdi-cr.yaml
+  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.59.0/cdi-operator.yaml
+  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.59.0/cdi-cr.yaml
+  - https://raw.githubusercontent.com/kubevirt-manager/kubevirt-manager/main/kubernetes/bundled.yaml
