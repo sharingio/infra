@@ -11,15 +11,20 @@ data "authentik_flow" "default-enrollment-flow" {
 resource "authentik_source_oauth" "github" {
   name                = "github"
   slug                = "github"
+  provider_type       = "github"
+  user_path_template  = "goauthentik.io/sources/%(slug)s"
   authentication_flow = resource.authentik_flow.ii-source-authentication-flow.uuid
   enrollment_flow     = resource.authentik_flow.ii-source-enrollment-flow.uuid
-  provider_type       = "github"
   consumer_key        = var.github_oauth_app_id
   consumer_secret     = var.github_oauth_app_secret
   oidc_jwks_url       = "https://token.actions.githubusercontent.com/.well-known/jwks"
   # additional_scopes   = ""
-  policy_engine_mode = "any"
-  user_matching_mode = "identifier" #
+  policy_engine_mode  = "any"
+  user_matching_mode  = "identifier" #
+  access_token_url    = "https://github.com/login/oauth/access_token"
+  authorization_url   = "https://github.com/login/oauth/authorize"
+  profile_url         = "https://api.github.com/user"
+  oidc_well_known_url = "https://token.actions.githubusercontent.com/.well-known/openid-configuration"
 }
 
 # resource "authentik_provider_oauth2" "coder" {
