@@ -14,7 +14,7 @@ spec:
   chart:
     spec:
       chart: cluster-api-operator
-      version: "0.10.0"
+      version: "0.10.1"
       sourceRef:
         kind: HelmRepository
         name: capi-operator
@@ -26,7 +26,7 @@ spec:
     image:
       manager:
         image: registry.k8s.io/cluster-api/cluster-api-controller
-        tag: v1.7.1
+        tag: v0.10.1
     manager:
       featureGates:
         ClusterResourceSet: true # https://kubevirt-manager.io/get_started.html
