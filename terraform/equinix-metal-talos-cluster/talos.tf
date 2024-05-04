@@ -110,6 +110,13 @@ resource "talos_machine_configuration_apply" "cp" {
     cluster:
        allowSchedulingOnMasters: true
        #  https://www.talos.dev/v1.3/kubernetes-guides/network/deploying-cilium/
+       # The rest of this is for cilium
+       #  https://www.talos.dev/v1.3/kubernetes-guides/network/deploying-cilium/
+       proxy:
+         disabled: true
+       network:
+         cni:
+           name: none
        externalCloudProvider:
          enabled: true
          manifests:
@@ -135,7 +142,24 @@ resource "talos_machine_configuration_apply" "cp" {
              metadata:
                name: metal-cloud-config
                namespace: kube-system
-    EOT
+         - name: kube-system-namespace-podsecurity
+           contents: |
+             apiVersion: v1
+             kind: Namespace
+             metadata:
+               name: kube-system
+               labels:
+                 pod-security.kubernetes.io/enforce: privileged
+         - name: cilium
+     EOT
+    ,
+    yamlencode([
+      {
+        "op" : "replace",
+        "path" : "/cluster/inlineManifests/2/contents",
+        "value" : data.helm_template.cilium.manifest
+      }
+    ])
   ]
 }
 
