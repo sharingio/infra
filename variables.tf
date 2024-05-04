@@ -1,6 +1,6 @@
 variable "kubernetes_version" {
   type        = string
-  default     = "v1.29.2"
+  default     = "v1.30.0"
   description = "the version of Kubernetes to deploy"
 }
 
