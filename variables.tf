@@ -12,7 +12,7 @@ variable "kubernetes_control_plane_nodes" {
 
 variable "talos_version" {
   type        = string
-  default     = "v1.7.0"
+  default     = "v1.7.1"
   description = "the version of Talos to deploy"
 }
 
