@@ -194,6 +194,24 @@ resource "kubernetes_config_map" "coder_config" {
   ]
 }
 
+resource "kubernetes_config_map" "coder_override" {
+  metadata {
+    name      = "coder-override"
+    namespace = "coder"
+  }
+
+  data = {
+    CODER_VERBOSE    = "true"
+    CODER_LOG_FILTER = ".*userauth.*|.*groups returned.*"
+  }
+  lifecycle {
+    ignore_changes = [
+      # Ignore any changes to the configmap data
+      # This should let us edit it cluster without the iteration loop
+      data,
+    ]
+  }
+}
 resource "kubernetes_config_map_v1" "coder_config_hash" {
   metadata {
     name      = "coder-config-hash"
