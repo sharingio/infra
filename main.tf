@@ -48,7 +48,7 @@ module "cluster-manifests" {
   pdns_host                = var.pdns_host
   pdns_api_key             = var.pdns_api_key
   # for coder to directly authenticate via github
-  coder_version                     = var.version
+  coder_version                     = var.coder_version
   coder_oauth2_github_client_id     = var.coder_oauth2_github_client_id
   coder_oauth2_github_client_secret = var.coder_oauth2_github_client_secret
   # for coder to create gh tokens for rw within workspaces
@@ -76,40 +76,19 @@ module "cluster-flux-bootstrap" {
   depends_on = [local_sensitive_file.cluster-kubeconfig, module.cluster-manifests]
 }
 
-module "cluster-flux-github-webhook" {
-  source = "./terraform/flux-github-webhook"
+# module "cluster-flux-github-webhook" {
+#   source = "./terraform/flux-github-webhook"
 
-  repo = var.github_repository
-  # repo   = "${var.github_org}/${var.github_repository}"
-  domain = var.domain
-  secret = module.cluster-manifests.flux_receiver_token
-
-  providers = {
-    github     = github
-    kubernetes = kubernetes.cluster
-  }
-
-  depends_on = [local_sensitive_file.cluster-kubeconfig, module.cluster-manifests, module.cluster-flux-bootstrap]
-}
-
-# module "cluster-authentik-config" {
-#   source                             = "./terraform/authentik-config"
-#   domain                             = var.domain
-#   github_oauth_app_id                = var.authentik_github_oauth_app_id
-#   github_oauth_app_secret            = var.authentik_github_oauth_app_secret
-#   authentik_coder_oidc_client_id     = module.cluster-manifests.authentik_coder_oidc_client_id
-#   authentik_coder_oidc_client_secret = module.cluster-manifests.authentik_coder_oidc_client_secret
-#   authentik_bootstrap_token          = module.cluster-manifests.authentik_bootstrap_token
-#   # repo = var.github_repository
-#   # # repo   = "${var.github_org}/${var.github_repository}"
-#   # domain = "${var.domain}"
-#   # secret = module.cluster-manifests.flux_receiver_token
+#   repo = var.github_repository
+#   # repo   = "${var.github_org}/${var.github_repository}"
+#   domain = var.domain
+#   secret = module.cluster-manifests.flux_receiver_token
 
 #   providers = {
-#     authentik  = authentik
-#     flux       = flux
+#     github     = github
 #     kubernetes = kubernetes.cluster
 #   }
 
-#   depends_on = [module.cluster-manifests]
+#   depends_on = [local_sensitive_file.cluster-kubeconfig, module.cluster-manifests, module.cluster-flux-bootstrap]
 # }
+

@@ -76,21 +76,26 @@ provider "dns" {
   }
 }
 provider "kubernetes" {
-  alias       = "cluster"
-  config_path = "./tmp/cluster-kubeconfig"
+  alias = "cluster"
+  # config_path = "./tmp/cluster-kubeconfig"
+  # config_path = "./tmp/kubeconfig"
   # host                   = "https://${module.cluster.kubeconfig.node}:6443"
-  # client_certificate     = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.client_certificate)
-  # client_key             = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.client_key)
-  # cluster_ca_certificate = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.ca_certificate)
+  # We use an IP here to speed things up, the first nome name might work as well
+  host                   = "https://${module.cluster.cluster_node0_ip}:6443"
+  client_certificate     = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.client_certificate)
+  client_key             = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.client_key)
+  cluster_ca_certificate = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.ca_certificate)
 }
 provider "flux" {
   alias = "cluster"
   kubernetes = {
-    config_path = "./tmp/cluster-kubeconfig"
+    # config_path = "./tmp/cluster-kubeconfig"
     # host                   = "https://${module.cluster.kubeconfig.node}:6443"
-    # client_certificate     = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.client_certificate)
-    # client_key             = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.client_key)
-    # cluster_ca_certificate = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.ca_certificate)
+    # We use an IP here to speed things up, the first nome name might work as well
+    host                   = "https://${module.cluster.cluster_node0_ip}:6443"
+    client_certificate     = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.client_certificate)
+    client_key             = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.client_key)
+    cluster_ca_certificate = base64decode(module.cluster.kubeconfig.kubernetes_client_configuration.ca_certificate)
   }
   git = {
     url = "ssh://git@github.com/${var.github_org}/${var.github_repository}.git"
