@@ -6,7 +6,8 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
-  createNamespace: true
+  install:
+    createNamespace: true
   targetNamespace: cluster-api
   releaseName: capi-operator
   storageNamespace: flux-system
