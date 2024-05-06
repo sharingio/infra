@@ -107,6 +107,8 @@ resource "talos_machine_configuration_apply" "cp" {
          kubePrism:
            enabled: true
            port: 7445
+       sysctls:
+         user.max_user_namespaces: "11255"
     cluster:
        allowSchedulingOnMasters: true
        #  https://www.talos.dev/v1.3/kubernetes-guides/network/deploying-cilium/
