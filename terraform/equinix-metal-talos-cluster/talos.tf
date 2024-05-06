@@ -134,6 +134,11 @@ resource "talos_machine_configuration_apply" "cp" {
            - ${var.kubernetes_apiserver_fqdn}
            - ${equinix_metal_reserved_ip_block.cluster_apiserver_ip.network}
        inlineManifests:
+         - apiVersion: node.k8s.io/v1
+           kind: RuntimeClass
+           metadata:
+             name: gvisor
+           handler: runsc
          - name: metal-cloud-config
            contents: |
              apiVersion: v1
