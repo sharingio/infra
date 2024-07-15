@@ -31,6 +31,7 @@ data "http" "talos_schematic" {
         systemExtensions:
             officialExtensions:
                 - siderolabs/gvisor
+                - siderolabs/kata-containers
                 - siderolabs/iscsi-tools
                 - siderolabs/mdadm
    EOT
@@ -78,6 +79,11 @@ resource "talos_machine_configuration_apply" "cp" {
             - talos.platform=equinixMetal
          wipe: false
          image: ${local.talos_install_image}
+         extensions:
+           - image: ghcr.io/siderolabs/gvisor:20240325.0
+           - image: ghcr.io/siderolabs/kata-containers:3.3.0
+           - image: ghcr.io/siderolabs/iscsi-tools:v0.1.4
+           - image: ghcr.io/siderolabs/mdadm:v4.2-v1.6.7
        network:
          hostname: ${each.value.hostname}
          # defaults to false, causes issues when using wildcard DNS
@@ -134,11 +140,57 @@ resource "talos_machine_configuration_apply" "cp" {
            - ${var.kubernetes_apiserver_fqdn}
            - ${equinix_metal_reserved_ip_block.cluster_apiserver_ip.network}
        inlineManifests:
-         - apiVersion: node.k8s.io/v1
-           kind: RuntimeClass
-           metadata:
-             name: gvisor
-           handler: runsc
+         - name: kata-runtime-class
+           contents: |
+             apiVersion: node.k8s.io/v1
+             kind: RuntimeClass
+             metadata:
+               name: kata
+             handler: kata
+             overhead:
+               podFixed:
+                 memory: "130Mi"
+                 cpu: "250m"
+         - name: gvisor-runtime-class
+           contents: |
+             apiVersion: node.k8s.io/v1
+             kind: RuntimeClass
+             metadata:
+               name: gvisor
+             handler: runsc
+         - name: fuse-device-plugin
+           contents: |
+             apiVersion: apps/v1
+             kind: DaemonSet
+             metadata:
+               name: fuse-device-plugin-daemonset
+               namespace: kube-system
+             spec:
+               selector:
+                 matchLabels:
+                   name: fuse-device-plugin-ds
+               template:
+                 metadata:
+                   labels:
+                     name: fuse-device-plugin-ds
+                 spec:
+                   hostNetwork: true
+                   containers:
+                   - image: soolaugust/fuse-device-plugin:v1.0
+                     name: fuse-device-plugin-ctr
+                     securityContext:
+                       allowPrivilegeEscalation: false
+                       capabilities:
+                         drop: ["ALL"]
+                     volumeMounts:
+                       - name: device-plugin
+                         mountPath: /var/lib/kubelet/device-plugins
+                   volumes:
+                     - name: device-plugin
+                       hostPath:
+                         path: /var/lib/kubelet/device-plugins
+                   imagePullSecrets:
+                     - name: registry-secret
          - name: metal-cloud-config
            contents: |
              apiVersion: v1

@@ -68,7 +68,7 @@ variable "longhorn_disk" {
 # }
 variable "kubernetes_version" {
   type        = string
-  default     = "v1.29.2"
+  default     = "v1.30.0"
   description = "Version of Kubernetes to deploy"
 }
 # variable "ipxe_script_url" {
