@@ -3,3 +3,18 @@
 #+begin_quote
 deploy a Talos Cluster on Oracle Cloud
 #+end_quote
+
+* Required provider values
+
+to instantiate the oci provider, set the following:
+
+#+begin_src hcl
+tenancy_ocid     = ""
+user_ocid        = ""
+fingerprint      = ""
+private_key_path = ""
+region           = ""
+compartment_ocid = ""
+#+end_src
+
+see: https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
