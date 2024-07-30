@@ -10,7 +10,7 @@ variable "user_ocid" {
 variable "fingerprint" {
   sensitive = true
 }
-variable "key_file" {
+variable "private_key_path" {
   default   = "~/.oci/oci_main_terraform.pem"
   sensitive = true
 }

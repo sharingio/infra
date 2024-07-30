@@ -31,15 +31,6 @@ data "talos_client_configuration" "talosconfig" {
   endpoints            = [for k, v in oci_core_instance.cp : v.public_ip]
 }
 
-data "talos_cluster_kubeconfig" "kubeconfig" {
-  depends_on = [
-    talos_machine_bootstrap.bootstrap
-  ]
-  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoint             = [for k, v in oci_core_instance.cp : v.public_ip][0]
-  node                 = [for k, v in oci_core_instance.cp : v.public_ip][0]
-}
-
 data "talos_machine_configuration" "controlplane" {
   cluster_name     = var.cluster_name
   cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"

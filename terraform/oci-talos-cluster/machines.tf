@@ -11,10 +11,13 @@ resource "oci_core_instance" "cp" {
     memory_in_gbs = "128"
   }
 
+  create_vnic_details {
+    hostname_label = "${var.cluster_name}-control-plane"
+  }
+
   #Optional
-  display_name   = "${var.cluster_name}-control-plane"
-  freeform_tags  = local.common_labels
-  hostname_label = "${var.cluster_name}-control-plane"
+  display_name  = "${var.cluster_name}-control-plane"
+  freeform_tags = local.common_labels
   launch_options {
     #Optional
     network_type = local.image_launch_mode

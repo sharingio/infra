@@ -19,3 +19,12 @@ resource "talos_image_factory_schematic" "this" {
     }
   )
 }
+
+resource "talos_cluster_kubeconfig" "kubeconfig" {
+  depends_on = [
+    talos_machine_bootstrap.bootstrap
+  ]
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  endpoint             = [for k, v in oci_core_instance.cp : v.public_ip][0]
+  node                 = [for k, v in oci_core_instance.cp : v.public_ip][0]
+}

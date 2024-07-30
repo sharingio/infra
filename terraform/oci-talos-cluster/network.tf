@@ -108,7 +108,7 @@ resource "oci_load_balancer_listener" "controlplane_listener" {
 }
 
 resource "oci_network_load_balancer_backend" "talos_backend" {
-  for_each = oci_core_instance.cp
+  for_each = { for idx, val in oci_core_instance.cp : idx => val }
   #Required
   backend_set_name         = "talos"
   network_load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
@@ -119,7 +119,7 @@ resource "oci_network_load_balancer_backend" "talos_backend" {
 }
 
 resource "oci_network_load_balancer_backend" "controlplane_backend" {
-  for_each = oci_core_instance.cp
+  for_each = { for idx, val in oci_core_instance.cp : idx => val }
   #Required
   backend_set_name         = "controlplane"
   network_load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
