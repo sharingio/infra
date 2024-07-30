@@ -3,9 +3,6 @@ resource "talos_machine_secrets" "machine_secrets" {
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {
-  depends_on = [
-    talos_machine_configuration_apply.cp
-  ]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   endpoint             = [for k, v in oci_core_instance.cp : v.public_ip][0]
   node                 = [for k, v in oci_core_instance.cp : v.public_ip][0]

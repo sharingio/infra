@@ -1,20 +1,18 @@
 resource "oci_core_vcn" "vcn" {
   #Required
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
 
   #Optional
-  cidr_blocks                      = var.cidr_blocks
-  display_name                     = "${var.cluster_name}-vcn"
-  dns_label                        = var.vcn_dns_label
-  freeform_tags                    = local.common_labels
-  ipv6private_cidr_blocks          = var.vcn_ipv6private_cidr_blocks
-  is_ipv6enabled                   = var.vcn_is_ipv6enabled
-  is_oracle_gua_allocation_enabled = var.vcn_is_oracle_gua_allocation_enabled
+  cidr_blocks   = split(var.cidr_blocks, ",")
+  display_name  = "${var.cluster_name}-vcn"
+  freeform_tags = local.common_labels
+
+  # TODO ipv6
 }
 resource "oci_core_subnet" "subnet" {
   #Required
   cidr_block     = var.subnet_block
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.vcn.id
 
   #Optional
@@ -23,7 +21,7 @@ resource "oci_core_subnet" "subnet" {
 }
 resource "oci_core_route_table" "route_table" {
   #Required
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.vcn.id
 
   #Optional
@@ -39,7 +37,7 @@ resource "oci_core_route_table" "route_table" {
 }
 resource "oci_core_internet_gateway" "internet_gateway" {
   #Required
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.vcn.id
 
   #Optional
@@ -52,7 +50,7 @@ resource "oci_core_internet_gateway" "internet_gateway" {
 
 resource "oci_load_balancer_load_balancer" "cp_load_balancer" {
   #Required
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
   display_name   = "${var.cluster_name}-cp-load-balancer"
   shape          = "Flexible"
   subnet_ids     = [oci_core_subnet.subnet.id]
@@ -84,7 +82,7 @@ resource "oci_load_balancer_listener" "talos_listener" {
   port                     = 50000
   protocol                 = "TCP"
 }
-resource "oci_load_balancer_backend_set" "kubernetes_backend_set" {
+resource "oci_load_balancer_backend_set" "controlplane_backend_set" {
   #Required
   health_checker {
     #Required
@@ -96,35 +94,37 @@ resource "oci_load_balancer_backend_set" "kubernetes_backend_set" {
     url_path    = "/readyz"
   }
   load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
-  name             = "${var.cluster_name}-kubernetes"
+  name             = "${var.cluster_name}-controlplane"
   policy           = "TWO_TUPLE"
   # TODO where is this option? --is-preserve-source false
 }
-resource "oci_load_balancer_listener" "talos_listener" {
+resource "oci_load_balancer_listener" "controlplane_listener" {
   #Required
   default_backend_set_name = oci_load_balancer_backend_set.talos_backend_set.name
   load_balancer_id         = oci_load_balancer_load_balancer.cp_load_balancer.id
-  name                     = "${var.cluster_name}-kubernetes"
+  name                     = "${var.cluster_name}-controlplane"
   port                     = 6443
   protocol                 = "TCP"
 }
 
 resource "oci_network_load_balancer_backend" "talos_backend" {
+  for_each = oci_core_instance.cp
   #Required
   backend_set_name         = "talos"
   network_load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
   port                     = 50000
 
   #Optional
-  target_id = oci_core_instance.cp.id
+  target_id = oci_core_instance.cp[each.key].id
 }
 
 resource "oci_network_load_balancer_backend" "controlplane_backend" {
+  for_each = oci_core_instance.cp
   #Required
   backend_set_name         = "controlplane"
   network_load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
   port                     = 6443
 
   #Optional
-  target_id = oci_core_instance.cp.id
+  target_id = oci_core_instance.cp[each.key].id
 }

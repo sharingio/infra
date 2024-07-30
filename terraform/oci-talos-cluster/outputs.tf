@@ -1,5 +1,5 @@
 output "load_balancer_ip" {
-  value = oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details.ip_address
+  value = oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address
 }
 
 output "talosconfig" {
@@ -8,6 +8,6 @@ output "talosconfig" {
 }
 
 output "kubeconfig" {
-  value     = data.talos_cluster_kubeconfig.kubeconfig.kubeconfig
+  value     = data.talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   sensitive = true
 }

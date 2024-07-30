@@ -1,16 +1,18 @@
-variable "compartment_ocid" {}
-variable "tenancy_ocid" {}
-variable "user_ocid" {}
+variable "compartment_ocid" {
+  sensitive = true
+}
+variable "tenancy_ocid" {
+  sensitive = true
+}
+variable "user_ocid" {
+  sensitive = true
+}
 variable "fingerprint" {
   sensitive = true
 }
 variable "key_file" {
   default   = "~/.oci/oci_main_terraform.pem"
   sensitive = true
-}
-variable "project" {
-  type    = string
-  default = "main"
 }
 variable "instance_availability_domain" {
   default = "bzBe:US-SANJOSE-1-AD-1"
@@ -36,10 +38,6 @@ variable "subnet_block" {
   type    = string
   default = "10.0.0.0/24"
 }
-variable "compartment_id" {
-  type     = string
-  nullable = false
-}
 variable "talos_version" {
   type    = string
   default = "v1.7.5"
@@ -50,4 +48,7 @@ variable "kubernetes_version" {
 }
 variable "instance_shape" {
   default = "VM.Standard.A1.Flex"
+}
+variable "oracle_cloud_ccm_version" {
+  default = "v1.29.0"
 }

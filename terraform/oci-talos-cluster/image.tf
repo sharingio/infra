@@ -1,6 +1,6 @@
 resource "oci_core_image" "talos_image" {
   #Required
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
 
   #Optional
   display_name  = "Talos ${var.talos_version}"

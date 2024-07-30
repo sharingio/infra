@@ -1,5 +1,5 @@
 data "oci_identity_compartment" "this" {
-  id = var.compartment_id
+  id = var.compartment_ocid
 }
 
 data "talos_image_factory_extensions_versions" "this" {
@@ -14,6 +14,7 @@ data "talos_image_factory_urls" "this" {
   talos_version = var.talos_version
   schematic_id  = talos_image_factory_schematic.this.id
   platform      = "oracle"
+  architecture  = local.architecture
 }
 
 data "talos_machine_disks" "this" {
@@ -40,7 +41,6 @@ data "talos_cluster_kubeconfig" "kubeconfig" {
 }
 
 data "talos_machine_configuration" "controlplane" {
-  for_each         = oci_core_instance.controlplane
   cluster_name     = var.cluster_name
   cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
 
@@ -54,9 +54,6 @@ data "talos_machine_configuration" "controlplane" {
     <<-EOT
     machine:
        kubelet:
-         nodeIP:
-           validSubnets:
-             - ${each.value.network.0.address}/32
          extraArgs:
            cloud-provider: external
        install:
@@ -65,16 +62,15 @@ data "talos_machine_configuration" "controlplane" {
             - console=console=ttyS1,115200n8
             - talos.platform=oracle
          wipe: false
-         image: ${var.talos_install_image}
+         image: ${local.talos_install_image}
        network:
-         hostname: ${each.value.hostname}
          interfaces:
            - interface: lo
              addresses:
-               - ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details.ip_address}
+               - ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address}
            - interface: bond0
              vip:
-               ip: ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details.ip_address}
+               ip: ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address}
     EOT
     ,
     <<-EOT
@@ -84,7 +80,7 @@ data "talos_machine_configuration" "controlplane" {
            - 169.254.169.254
        certSANs:
          - ${var.kube_apiserver_domain}
-         - ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details.ip_address}
+         - ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address}
        kubelet:
          extraArgs:
            cloud-provider: external
@@ -111,7 +107,7 @@ data "talos_machine_configuration" "controlplane" {
            anonymous-auth: true
          certSANs:
            - ${var.kube_apiserver_domain}
-           - ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details.ip_address}
+           - ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address}
     EOT
   ]
 }

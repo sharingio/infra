@@ -1,8 +1,12 @@
 terraform {
   required_providers {
     oci = {
-      source = "hashicorp/oci"
-      # version = "^6.4.0" # TODO include version in project root providers
+      source  = "oracle/oci"
+      version = "6.4.0" # TODO include version in project root providers
+    }
+    talos = {
+      source  = "siderolabs/talos"
+      version = "0.6.0-alpha.1" # TODO include version in project root providers
     }
   }
   required_version = ">= 1.2"
