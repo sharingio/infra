@@ -79,6 +79,9 @@ data "talos_machine_configuration" "controlplane" {
     ,
     <<-EOT
     machine:
+       time:
+         servers:
+           - 169.254.169.254
        certSANs:
          - ${var.kube_apiserver_domain}
          - ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details.ip_address}
