@@ -1,9 +1,12 @@
 variable "compartment_ocid" {}
 variable "tenancy_ocid" {}
 variable "user_ocid" {}
-variable "fingerprint" {}
+variable "fingerprint" {
+  sensitive = true
+}
 variable "key_file" {
-  default = "~/.oci/oci_main_terraform.pem"
+  default   = "~/.oci/oci_main_terraform.pem"
+  sensitive = true
 }
 variable "project" {
   type    = string
