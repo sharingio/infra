@@ -1,3 +1,7 @@
+data "http" "talos_image_raw" {
+  url = local.talos_disk_image_url
+}
+
 resource "oci_core_image" "talos_image" {
   #Required
   compartment_id = var.compartment_ocid
@@ -9,7 +13,7 @@ resource "oci_core_image" "talos_image" {
 
   image_source_details {
     source_type = "objectStorageUri"
-    source_uri  = local.talos_disk_image_url
+    source_uri  = oci_objectstorage_object.talos_image_object.source
 
     #Optional
     operating_system         = "Talos Linux"

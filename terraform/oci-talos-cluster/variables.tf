@@ -31,8 +31,8 @@ variable "kube_apiserver_domain" {
   default = "kube-cncfoci.sharing.io"
 }
 variable "cidr_blocks" {
-  type    = string
-  default = "10.0.0.0/16"
+  type    = set(string)
+  default = ["10.0.0.0/16"]
 }
 variable "subnet_block" {
   type    = string

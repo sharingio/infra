@@ -3,7 +3,7 @@ resource "oci_core_vcn" "vcn" {
   compartment_id = var.compartment_ocid
 
   #Optional
-  cidr_blocks   = split(var.cidr_blocks, ",")
+  cidr_blocks   = var.cidr_blocks
   display_name  = "${var.cluster_name}-vcn"
   freeform_tags = local.common_labels
 
@@ -32,7 +32,7 @@ resource "oci_core_route_table" "route_table" {
     network_entity_id = oci_core_internet_gateway.internet_gateway.id
 
     #Optional
-    cidr_block = "0.0.0.0/0"
+    destination = "0.0.0.0/0"
   }
 }
 resource "oci_core_internet_gateway" "internet_gateway" {
@@ -52,8 +52,12 @@ resource "oci_load_balancer_load_balancer" "cp_load_balancer" {
   #Required
   compartment_id = var.compartment_ocid
   display_name   = "${var.cluster_name}-cp-load-balancer"
-  shape          = "Flexible"
-  subnet_ids     = [oci_core_subnet.subnet.id]
+  shape          = "flexible"
+  shape_details {
+    maximum_bandwidth_in_mbps = "1500"
+    minimum_bandwidth_in_mbps = "150"
+  }
+  subnet_ids = [oci_core_subnet.subnet.id]
 
   #Optional
   freeform_tags = local.common_labels
