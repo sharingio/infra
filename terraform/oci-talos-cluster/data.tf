@@ -2,6 +2,11 @@ data "oci_identity_compartment" "this" {
   id = var.compartment_ocid
 }
 
+data "oci_identity_availability_domains" "availability_domains" {
+  #Required
+  compartment_id = var.tenancy_ocid
+}
+
 data "talos_image_factory_extensions_versions" "this" {
   # get the latest talos version
   talos_version = var.talos_version
@@ -18,6 +23,7 @@ data "talos_image_factory_urls" "this" {
 }
 
 data "talos_machine_disks" "this" {
+  depends_on           = [oci_core_security_list.security_list]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   node                 = [for k, v in oci_core_instance.cp : v.public_ip][0]
   filters = {
@@ -40,6 +46,9 @@ data "talos_machine_configuration" "controlplane" {
 
   talos_version      = var.talos_version
   kubernetes_version = var.kubernetes_version
+
+  docs     = false
+  examples = false
 
   config_patches = [
     <<-EOT

@@ -1,4 +1,5 @@
 resource "oci_objectstorage_bucket" "custom_image_bucket" {
+  count = 0
   #Required
   compartment_id = var.compartment_ocid
   name           = "${var.cluster_name}-custom-image-bucket"

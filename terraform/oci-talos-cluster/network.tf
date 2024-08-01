@@ -16,8 +16,10 @@ resource "oci_core_subnet" "subnet" {
   vcn_id         = oci_core_vcn.vcn.id
 
   #Optional
-  display_name  = "${var.cluster_name}-subnet"
-  freeform_tags = local.common_labels
+  display_name      = "${var.cluster_name}-subnet"
+  freeform_tags     = local.common_labels
+  security_list_ids = [oci_core_security_list.security_list.id]
+  route_table_id    = oci_core_route_table.route_table.id
 }
 resource "oci_core_route_table" "route_table" {
   #Required
@@ -35,6 +37,7 @@ resource "oci_core_route_table" "route_table" {
     destination = "0.0.0.0/0"
   }
 }
+
 resource "oci_core_internet_gateway" "internet_gateway" {
   #Required
   compartment_id = var.compartment_ocid
@@ -46,9 +49,43 @@ resource "oci_core_internet_gateway" "internet_gateway" {
   freeform_tags = local.common_labels
 }
 
-# TODO security-list?
+resource "oci_core_network_security_group" "network_security_group" {
+  #Required
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_vcn.vcn.id
+
+  #Optional
+  display_name  = "${var.cluster_name}-security-group"
+  freeform_tags = local.common_labels
+}
+
+resource "oci_core_security_list" "security_list" {
+  #Required
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_vcn.vcn.id
+
+  #Optional
+  display_name = "${var.cluster_name}-security-list"
+  egress_security_rules {
+    #Required
+    destination = "0.0.0.0/0"
+    protocol    = "all"
+
+    stateless = true
+  }
+  freeform_tags = local.common_labels
+  ingress_security_rules {
+    #Required
+    protocol = "all"
+    source   = "0.0.0.0/0"
+
+    stateless = true
+  }
+}
 
 resource "oci_load_balancer_load_balancer" "cp_load_balancer" {
+  depends_on = [oci_core_security_list.security_list]
+
   #Required
   compartment_id = var.compartment_ocid
   display_name   = "${var.cluster_name}-cp-load-balancer"

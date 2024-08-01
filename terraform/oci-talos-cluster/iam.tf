@@ -1,4 +1,5 @@
 resource "oci_identity_dynamic_group" "instance_dynamic_group" {
+  count = 0
   #Required
   compartment_id = var.tenancy_ocid
   description    = "Instance access"

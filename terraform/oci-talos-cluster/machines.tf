@@ -3,7 +3,7 @@
 resource "oci_core_instance" "cp" {
   count = 1
   #Required
-  availability_domain = var.instance_availability_domain
+  availability_domain = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[0].name : var.instance_availability_domain
   compartment_id      = var.compartment_ocid
   shape               = var.instance_shape == null ? data.oci_core_image_shapes.image_shapes.image_shape_compatibilities[0].shape : var.instance_shape
   shape_config {
@@ -12,8 +12,9 @@ resource "oci_core_instance" "cp" {
   }
 
   create_vnic_details {
-    hostname_label = "${var.cluster_name}-control-plane"
-    subnet_id      = oci_core_subnet.subnet.id
+    assign_public_ip = true
+    subnet_id        = oci_core_subnet.subnet.id
+    nsg_ids          = [oci_core_network_security_group.network_security_group.id]
   }
 
   #Optional

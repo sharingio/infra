@@ -15,7 +15,7 @@ variable "private_key_path" {
   sensitive = true
 }
 variable "instance_availability_domain" {
-  default = "bzBe:US-SANJOSE-1-AD-1"
+  default = null
 }
 variable "region" {
   description = "the OCI region where resources will be created"
@@ -47,7 +47,7 @@ variable "kubernetes_version" {
   default = "v1.30.0"
 }
 variable "instance_shape" {
-  default = null
+  default = "VM.Standard.A1.Flex"
 }
 variable "oracle_cloud_ccm_version" {
   default = "v1.29.0"
