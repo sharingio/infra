@@ -11,6 +11,10 @@ resource "oci_core_instance" "cp" {
     memory_in_gbs = "128"
   }
 
+  metadata = {
+    user_data = base64encode(data.talos_machine_configuration.controlplane.machine_configuration)
+  }
+
   create_vnic_details {
     assign_public_ip = true
     subnet_id        = oci_core_subnet.subnet.id
