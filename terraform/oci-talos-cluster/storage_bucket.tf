@@ -11,11 +11,3 @@ resource "oci_objectstorage_bucket" "custom_image_bucket" {
   storage_tier  = "Standard"
   versioning    = "Disabled"
 }
-
-resource "oci_objectstorage_object" "talos_image_object" {
-  #Required
-  bucket    = oci_objectstorage_bucket.custom_image_bucket.name
-  content   = data.http.talos_image_raw.response_body
-  namespace = oci_objectstorage_bucket.custom_image_bucket.namespace
-  object    = local.image_bucket_object
-}

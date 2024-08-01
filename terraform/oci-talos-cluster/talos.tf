@@ -28,3 +28,11 @@ resource "talos_cluster_kubeconfig" "kubeconfig" {
   endpoint             = [for k, v in oci_core_instance.cp : v.public_ip][0]
   node                 = [for k, v in oci_core_instance.cp : v.public_ip][0]
 }
+
+resource "talos_machine_configuration_apply" "cp" {
+  for_each                    = { for idx, val in oci_core_instance.cp : idx => val }
+  endpoint                    = each.value.public_ip
+  node                        = each.value.public_ip
+  client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
+  machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
+}

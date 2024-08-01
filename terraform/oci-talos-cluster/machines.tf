@@ -5,7 +5,7 @@ resource "oci_core_instance" "cp" {
   #Required
   availability_domain = var.instance_availability_domain
   compartment_id      = var.compartment_ocid
-  shape               = var.instance_shape
+  shape               = var.instance_shape == null ? data.oci_core_image_shapes.image_shapes.image_shape_compatibilities[0].shape : var.instance_shape
   shape_config {
     ocpus         = 8
     memory_in_gbs = "128"
@@ -13,6 +13,7 @@ resource "oci_core_instance" "cp" {
 
   create_vnic_details {
     hostname_label = "${var.cluster_name}-control-plane"
+    subnet_id      = oci_core_subnet.subnet.id
   }
 
   #Optional
@@ -21,9 +22,6 @@ resource "oci_core_instance" "cp" {
   launch_options {
     #Optional
     network_type = local.image_launch_mode
-  }
-  metadata = {
-    "user_data" = data.talos_machine_configuration.controlplane.machine_configuration
   }
   source_details {
     #Required

@@ -47,7 +47,7 @@ variable "kubernetes_version" {
   default = "v1.30.0"
 }
 variable "instance_shape" {
-  default = "VM.Standard.A1.Flex"
+  default = null
 }
 variable "oracle_cloud_ccm_version" {
   default = "v1.29.0"

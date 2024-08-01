@@ -75,7 +75,7 @@ resource "oci_load_balancer_backend_set" "talos_backend_set" {
   }
   load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
   name             = "${var.cluster_name}-talos"
-  policy           = "TWO_TUPLE"
+  policy           = "LEAST_CONNECTIONS"
   # TODO where is this option? --is-preserve-source false
 }
 resource "oci_load_balancer_listener" "talos_listener" {
@@ -90,7 +90,7 @@ resource "oci_load_balancer_backend_set" "controlplane_backend_set" {
   #Required
   health_checker {
     #Required
-    protocol = "HTTPS"
+    protocol = "HTTP"
     #Optional
     interval_ms = 10000
     port        = 6443
@@ -99,7 +99,7 @@ resource "oci_load_balancer_backend_set" "controlplane_backend_set" {
   }
   load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
   name             = "${var.cluster_name}-controlplane"
-  policy           = "TWO_TUPLE"
+  policy           = "LEAST_CONNECTIONS"
   # TODO where is this option? --is-preserve-source false
 }
 resource "oci_load_balancer_listener" "controlplane_listener" {
