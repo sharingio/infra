@@ -3,17 +3,19 @@ resource "oci_core_vcn" "vcn" {
   compartment_id = var.compartment_ocid
 
   #Optional
-  cidr_blocks   = var.cidr_blocks
-  display_name  = "${var.cluster_name}-vcn"
-  freeform_tags = local.common_labels
-
-  # TODO ipv6
+  cidr_blocks    = var.cidr_blocks
+  display_name   = "${var.cluster_name}-vcn"
+  freeform_tags  = local.common_labels
+  is_ipv6enabled = true
 }
 resource "oci_core_subnet" "subnet" {
   #Required
-  cidr_block     = var.subnet_block
-  compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.vcn.id
+  cidr_block                 = cidrsubnet(oci_core_vcn.vcn.cidr_block, 10, 0)
+  compartment_id             = var.compartment_ocid
+  vcn_id                     = oci_core_vcn.vcn.id
+  prohibit_internet_ingress  = false
+  prohibit_public_ip_on_vnic = false
+  availability_domain        = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[0].name : var.instance_availability_domain
 
   #Optional
   display_name      = "${var.cluster_name}-subnet"
@@ -57,6 +59,38 @@ resource "oci_core_network_security_group" "network_security_group" {
   #Optional
   display_name  = "${var.cluster_name}-security-group"
   freeform_tags = local.common_labels
+}
+resource "oci_core_network_security_group_security_rule" "talos" {
+  for_each = toset([oci_core_vcn.vcn.cidr_block])
+
+  network_security_group_id = oci_core_network_security_group.network_security_group.id
+  protocol                  = "6"
+  direction                 = "INGRESS"
+  source                    = each.value
+  stateless                 = false
+
+  tcp_options {
+    destination_port_range {
+      min = 50000
+      max = 50001
+    }
+  }
+}
+resource "oci_core_network_security_group_security_rule" "contolplane_kubernetes" {
+  for_each = toset([oci_core_vcn.vcn.cidr_block])
+
+  network_security_group_id = oci_core_network_security_group.network_security_group.id
+  protocol                  = "6"
+  direction                 = "INGRESS"
+  source                    = each.value
+  stateless                 = false
+
+  tcp_options {
+    destination_port_range {
+      min = 6443
+      max = 6443
+    }
+  }
 }
 
 resource "oci_core_security_list" "security_list" {
