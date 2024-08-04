@@ -22,15 +22,6 @@ data "talos_image_factory_urls" "this" {
   architecture  = local.architecture
 }
 
-data "talos_machine_disks" "this" {
-  depends_on           = [oci_core_security_list.security_list]
-  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = [for k, v in oci_core_instance.cp : v.public_ip][0]
-  filters = {
-    size = "> 100GB"
-  }
-}
-
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
