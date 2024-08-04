@@ -60,37 +60,13 @@ resource "oci_core_network_security_group" "network_security_group" {
   display_name  = "${var.cluster_name}-security-group"
   freeform_tags = local.common_labels
 }
-resource "oci_core_network_security_group_security_rule" "talos" {
-  for_each = toset([oci_core_vcn.vcn.cidr_block])
-
+resource "oci_core_network_security_group_security_rule" "allow_all" {
   network_security_group_id = oci_core_network_security_group.network_security_group.id
-  protocol                  = "6"
-  direction                 = "INGRESS"
-  source                    = each.value
+  destination_type          = "CIDR_BLOCK"
+  destination               = "0.0.0.0/0"
+  protocol                  = "all"
+  direction                 = "EGRESS"
   stateless                 = false
-
-  tcp_options {
-    destination_port_range {
-      min = 50000
-      max = 50001
-    }
-  }
-}
-resource "oci_core_network_security_group_security_rule" "contolplane_kubernetes" {
-  for_each = toset([oci_core_vcn.vcn.cidr_block])
-
-  network_security_group_id = oci_core_network_security_group.network_security_group.id
-  protocol                  = "6"
-  direction                 = "INGRESS"
-  source                    = each.value
-  stateless                 = false
-
-  tcp_options {
-    destination_port_range {
-      min = 6443
-      max = 6443
-    }
-  }
 }
 
 resource "oci_core_security_list" "security_list" {
@@ -110,8 +86,8 @@ resource "oci_core_security_list" "security_list" {
   freeform_tags = local.common_labels
   ingress_security_rules {
     #Required
-    protocol = "all"
     source   = "0.0.0.0/0"
+    protocol = "all"
 
     stateless = true
   }
