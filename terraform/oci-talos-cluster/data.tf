@@ -50,7 +50,7 @@ data "talos_machine_configuration" "controlplane" {
        install:
          disk: /dev/sda
          extraKernelArgs:
-            - console=console=ttyS1,115200n8
+            - console=console=ttyS0,115200
             - talos.platform=oracle
          wipe: false
          image: ${local.talos_install_image}
