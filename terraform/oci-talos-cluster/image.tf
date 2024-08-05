@@ -19,6 +19,14 @@ resource "oci_core_image" "talos_image" {
 }
 
 data "oci_core_image_shapes" "image_shapes" {
+  depends_on = [oci_core_shape_management.image_shape]
   #Required
   image_id = oci_core_image.talos_image.id
+}
+
+resource "oci_core_shape_management" "image_shape" {
+  #Required
+  compartment_id = var.compartment_ocid
+  image_id       = oci_core_image.talos_image.id
+  shape_name     = var.instance_shape
 }

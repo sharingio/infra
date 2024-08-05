@@ -9,8 +9,8 @@ resource "oci_core_instance" "cp" {
   compartment_id      = var.compartment_ocid
   shape               = var.instance_shape == null ? data.oci_core_image_shapes.image_shapes.image_shape_compatibilities[0].shape : var.instance_shape
   shape_config {
-    ocpus         = 8
-    memory_in_gbs = "128"
+    ocpus         = local.instance_ocpus
+    memory_in_gbs = local.instance_memory_in_gbs
   }
 
   metadata = {

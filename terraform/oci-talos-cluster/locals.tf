@@ -17,4 +17,6 @@ locals {
   image_bucket_namespace = "custom_image"
   image_bucket_object    = "talos-${local.architecture}-${var.talos_version}.raw.xz"
   image_source_uri       = "https://axtwf1hkrwcy.objectstorage.us-sanjose-1.oci.customer-oci.com/n/axtwf1hkrwcy/b/talos/o/talos-oracle-arm64-v1.7.5.raw.xzoracle-arm64.raw.xz"
+  instance_ocpus         = 8
+  instance_memory_in_gbs = "128"
 }
