@@ -7,6 +7,8 @@ data "oci_identity_availability_domains" "availability_domains" {
   compartment_id = var.tenancy_ocid
 }
 
+data "oci_core_services" "services" {}
+
 data "talos_image_factory_extensions_versions" "this" {
   # get the latest talos version
   talos_version = var.talos_version
@@ -50,7 +52,7 @@ data "talos_machine_configuration" "controlplane" {
        install:
          disk: /dev/sda
          extraKernelArgs:
-            - console=console=ttyS0,115200
+            - console=console=${local.instance_kernel_arg_console}
             - talos.platform=oracle
          wipe: false
          image: ${local.talos_install_image}

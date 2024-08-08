@@ -28,7 +28,7 @@ resource "oci_core_instance" "cp" {
   freeform_tags = local.common_labels
   launch_options {
     #Optional
-    network_type = local.image_launch_mode
+    network_type = local.instance_launch_network_type
   }
   source_details {
     #Required

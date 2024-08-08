@@ -1,3 +1,11 @@
+resource "oci_core_drg" "drg" {
+  #Required
+  compartment_id = var.compartment_ocid
+
+  #Optional
+  display_name  = "${var.cluster_name}-drg"
+  freeform_tags = local.common_labels
+}
 resource "oci_core_vcn" "vcn" {
   #Required
   compartment_id = var.compartment_ocid
@@ -36,8 +44,21 @@ resource "oci_core_route_table" "route_table" {
     network_entity_id = oci_core_internet_gateway.internet_gateway.id
 
     #Optional
-    destination = "0.0.0.0/0"
+    destination_type = "CIDR_BLOCK"
+    destination      = "0.0.0.0/0"
   }
+}
+
+resource "oci_core_nat_gateway" "nat_gateway" {
+  #Required
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_vcn.vcn.id
+
+  #Optional
+  block_traffic  = false
+  display_name   = "${var.cluster_name}-nat-gateway"
+  freeform_tags  = local.common_labels
+  route_table_id = oci_core_route_table.route_table.id
 }
 
 resource "oci_core_internet_gateway" "internet_gateway" {
