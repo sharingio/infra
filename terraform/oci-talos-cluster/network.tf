@@ -49,18 +49,6 @@ resource "oci_core_route_table" "route_table" {
   }
 }
 
-resource "oci_core_nat_gateway" "nat_gateway" {
-  #Required
-  compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.vcn.id
-
-  #Optional
-  block_traffic  = false
-  display_name   = "${var.cluster_name}-nat-gateway"
-  freeform_tags  = local.common_labels
-  route_table_id = oci_core_route_table.route_table.id
-}
-
 resource "oci_core_internet_gateway" "internet_gateway" {
   #Required
   compartment_id = var.compartment_ocid
@@ -172,31 +160,27 @@ resource "oci_load_balancer_backend_set" "controlplane_backend_set" {
 }
 resource "oci_load_balancer_listener" "controlplane_listener" {
   #Required
-  default_backend_set_name = oci_load_balancer_backend_set.talos_backend_set.name
+  default_backend_set_name = oci_load_balancer_backend_set.controlplane_backend_set.name
   load_balancer_id         = oci_load_balancer_load_balancer.cp_load_balancer.id
   name                     = "${var.cluster_name}-controlplane"
   port                     = 6443
   protocol                 = "TCP"
 }
 
-resource "oci_network_load_balancer_backend" "talos_backend" {
+resource "oci_load_balancer_backend" "talos_backend" {
   for_each = { for idx, val in oci_core_instance.cp : idx => val }
   #Required
-  backend_set_name         = "talos"
-  network_load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
-  port                     = 50000
-
-  #Optional
-  target_id = oci_core_instance.cp[each.key].id
+  backendset_name  = oci_load_balancer_backend_set.talos_backend_set.name
+  ip_address       = oci_core_instance.cp[each.key].public_ip
+  load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
+  port             = 50000
 }
 
-resource "oci_network_load_balancer_backend" "controlplane_backend" {
+resource "oci_load_balancer_backend" "controlplane_backend" {
   for_each = { for idx, val in oci_core_instance.cp : idx => val }
   #Required
-  backend_set_name         = "controlplane"
-  network_load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
-  port                     = 6443
-
-  #Optional
-  target_id = oci_core_instance.cp[each.key].id
+  backendset_name  = oci_load_balancer_backend_set.controlplane_backend_set.name
+  ip_address       = oci_core_instance.cp[each.key].public_ip
+  load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
+  port             = 6443
 }

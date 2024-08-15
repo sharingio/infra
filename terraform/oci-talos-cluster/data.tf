@@ -31,8 +31,9 @@ data "talos_client_configuration" "talosconfig" {
 }
 
 data "talos_machine_configuration" "controlplane" {
-  cluster_name     = var.cluster_name
-  cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
+  cluster_name = var.cluster_name
+  # cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
+  cluster_endpoint = "https://${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address}:6443"
 
   machine_type    = "controlplane"
   machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
@@ -87,10 +88,10 @@ data "talos_machine_configuration" "controlplane" {
        #  https://www.talos.dev/v1.3/kubernetes-guides/network/deploying-cilium/
        externalCloudProvider:
          enabled: true
-         manifests:
-           - https://raw.githubusercontent.com/oracle/oci-cloud-controller-manager/${var.oracle_cloud_ccm_version}/manifests/provider-config-instance-principals-example.yaml
-           - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager-rbac.yaml
-           - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager.yaml
+         # manifests:
+         #   - https://raw.githubusercontent.com/oracle/oci-cloud-controller-manager/${var.oracle_cloud_ccm_version}/manifests/provider-config-instance-principals-example.yaml
+         #   - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager-rbac.yaml
+         #   - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager.yaml
        controllerManager:
          extraArgs:
            cloud-provider: external
