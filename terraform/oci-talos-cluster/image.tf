@@ -4,8 +4,8 @@ resource "oci_core_image" "talos_image" {
 
   #Optional
   display_name  = "Talos ${var.talos_version}"
-  launch_mode   = local.image_launch_mode
   freeform_tags = local.common_labels
+  launch_mode   = local.image_launch_mode
 
   image_source_details {
     source_type = "objectStorageUri"

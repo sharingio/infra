@@ -22,18 +22,33 @@ resource "oci_core_instance" "cp" {
     subnet_id        = oci_core_subnet.subnet.id
     nsg_ids          = [oci_core_network_security_group.network_security_group.id]
   }
-
+  agent_config {
+    are_all_plugins_disabled = true
+    is_management_disabled   = true
+    is_monitoring_disabled   = true
+  }
+  availability_config {
+    is_live_migration_preferred = true
+    recovery_action             = "RESTORE_INSTANCE"
+  }
   #Optional
   display_name  = "${var.cluster_name}-control-plane"
   freeform_tags = local.common_labels
   launch_options {
     #Optional
-    network_type = local.instance_launch_network_type
+    network_type            = local.instance_launch_network_type
+    remote_data_volume_type = local.instance_launch_network_type
+    boot_volume_type        = local.instance_launch_network_type
+    firmware                = "UEFI_64"
+  }
+  instance_options {
+    are_legacy_imds_endpoints_disabled = true
   }
   source_details {
     #Required
-    source_id   = oci_core_image.talos_image.id
-    source_type = "image"
+    source_type             = "image"
+    source_id               = oci_core_image.talos_image.id
+    boot_volume_size_in_gbs = "50"
   }
   preserve_boot_volume = false
 }

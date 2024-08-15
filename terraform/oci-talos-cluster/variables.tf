@@ -40,11 +40,11 @@ variable "subnet_block" {
 }
 variable "talos_version" {
   type    = string
-  default = "v1.7.5"
+  default = "v1.7.6"
 }
 variable "kubernetes_version" {
   type    = string
-  default = "v1.30.0"
+  default = "v1.30.3"
 }
 variable "instance_shape" {
   default = "VM.Standard.A1.Flex"
