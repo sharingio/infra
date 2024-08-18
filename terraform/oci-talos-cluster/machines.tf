@@ -1,8 +1,6 @@
 // TODO use instance pool?
 
 resource "oci_core_instance" "cp" {
-  depends_on = [data.talos_machine_configuration.controlplane]
-
   count = 1
   #Required
   availability_domain = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[0].name : var.instance_availability_domain
@@ -11,10 +9,6 @@ resource "oci_core_instance" "cp" {
   shape_config {
     ocpus         = local.instance_ocpus
     memory_in_gbs = local.instance_memory_in_gbs
-  }
-
-  metadata = {
-    user_data = base64encode(data.talos_machine_configuration.controlplane.machine_configuration)
   }
 
   create_vnic_details {

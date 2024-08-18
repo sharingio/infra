@@ -28,12 +28,13 @@ data "talos_client_configuration" "talosconfig" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   endpoints            = [for k, v in oci_core_instance.cp : v.public_ip]
+  nodes                = [for k, v in oci_core_instance.cp : v.public_ip]
 }
 
 data "talos_machine_configuration" "controlplane" {
   cluster_name = var.cluster_name
   # cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
-  cluster_endpoint = "https://${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address}:6443"
+  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}:6443"
 
   machine_type    = "controlplane"
   machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
@@ -61,10 +62,10 @@ data "talos_machine_configuration" "controlplane" {
          interfaces:
            - interface: lo
              addresses:
-               - ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address}
+               - ${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}
            - interface: bond0
              vip:
-               ip: ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address}
+               ip: ${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}
     EOT
     ,
     <<-EOT
@@ -72,9 +73,6 @@ data "talos_machine_configuration" "controlplane" {
        time:
          servers:
            - 169.254.169.254
-       certSANs:
-         - ${var.kube_apiserver_domain}
-         - ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address}
        kubelet:
          extraArgs:
            cloud-provider: external
@@ -99,9 +97,23 @@ data "talos_machine_configuration" "controlplane" {
          extraArgs:
            cloud-provider: external
            anonymous-auth: true
-         certSANs:
-           - ${var.kube_apiserver_domain}
-           - ${oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address}
     EOT
+    ,
+    yamlencode({
+      machine = {
+        certSANs = concat([
+          var.kube_apiserver_domain,
+          oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address,
+        ], [for k, v in oci_core_instance.cp : v.public_ip])
+      }
+      cluster = {
+        apiServer = {
+          certSANs = concat([
+            var.kube_apiserver_domain,
+            oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address,
+          ], [for k, v in oci_core_instance.cp : v.public_ip])
+        }
+      }
+    }),
   ]
 }

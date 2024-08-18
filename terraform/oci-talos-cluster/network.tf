@@ -102,85 +102,93 @@ resource "oci_core_security_list" "security_list" {
   }
 }
 
-resource "oci_load_balancer_load_balancer" "cp_load_balancer" {
+resource "oci_network_load_balancer_network_load_balancer" "cp_load_balancer" {
   depends_on = [oci_core_security_list.security_list]
 
   #Required
-  compartment_id = var.compartment_ocid
-  display_name   = "${var.cluster_name}-cp-load-balancer"
-  shape          = "flexible"
-  shape_details {
-    maximum_bandwidth_in_mbps = "1500"
-    minimum_bandwidth_in_mbps = "150"
-  }
-  subnet_ids = [oci_core_subnet.subnet.id]
+  compartment_id             = var.compartment_ocid
+  display_name               = "${var.cluster_name}-cp-load-balancer"
+  subnet_id                  = oci_core_subnet.subnet.id
+  network_security_group_ids = [oci_core_network_security_group.network_security_group.id]
 
   #Optional
-  freeform_tags = local.common_labels
-  is_private    = false
-  # TODO where is this option? --is-preserve-source-destination false
+  freeform_tags                  = local.common_labels
+  is_preserve_source_destination = false
+  is_private                     = false
+
+  lifecycle {
+    ignore_changes = [
+      defined_tags,
+    ]
+  }
 }
-resource "oci_load_balancer_backend_set" "talos_backend_set" {
+resource "oci_network_load_balancer_backend_set" "talos_backend_set" {
   #Required
+  name                     = "${var.cluster_name}-talos"
+  policy                   = "FIVE_TUPLE"
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.cp_load_balancer.id
   health_checker {
     #Required
     protocol = "TCP"
     #Optional
-    interval_ms = 10000
-    port        = 50000
+    interval_in_millis = 10000
+    port               = 30000
   }
-  load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
-  name             = "${var.cluster_name}-talos"
-  policy           = "LEAST_CONNECTIONS"
-  # TODO where is this option? --is-preserve-source false
+  #Optional
+  is_preserve_source = false
 }
-resource "oci_load_balancer_listener" "talos_listener" {
+resource "oci_network_load_balancer_listener" "talos_listener" {
   #Required
-  default_backend_set_name = oci_load_balancer_backend_set.talos_backend_set.name
-  load_balancer_id         = oci_load_balancer_load_balancer.cp_load_balancer.id
+  default_backend_set_name = oci_network_load_balancer_backend_set.talos_backend_set.name
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.cp_load_balancer.id
   name                     = "${var.cluster_name}-talos"
   port                     = 50000
   protocol                 = "TCP"
 }
-resource "oci_load_balancer_backend_set" "controlplane_backend_set" {
+resource "oci_network_load_balancer_backend_set" "controlplane_backend_set" {
   #Required
+  name                     = "${var.cluster_name}-controlplane"
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.cp_load_balancer.id
+  policy                   = "FIVE_TUPLE"
   health_checker {
     #Required
-    protocol = "HTTP"
+    protocol = "HTTPS"
     #Optional
-    interval_ms = 10000
-    port        = 6443
-    return_code = 401
-    url_path    = "/readyz"
+    interval_in_millis = 10000
+    port               = 6443
+    return_code        = 401
+    url_path           = "/readyz"
   }
-  load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
-  name             = "${var.cluster_name}-controlplane"
-  policy           = "LEAST_CONNECTIONS"
-  # TODO where is this option? --is-preserve-source false
+  #Optional
+  is_preserve_source = false
 }
-resource "oci_load_balancer_listener" "controlplane_listener" {
+resource "oci_network_load_balancer_listener" "controlplane_listener" {
   #Required
-  default_backend_set_name = oci_load_balancer_backend_set.controlplane_backend_set.name
-  load_balancer_id         = oci_load_balancer_load_balancer.cp_load_balancer.id
+  default_backend_set_name = oci_network_load_balancer_backend_set.controlplane_backend_set.name
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.cp_load_balancer.id
   name                     = "${var.cluster_name}-controlplane"
   port                     = 6443
   protocol                 = "TCP"
 }
 
-resource "oci_load_balancer_backend" "talos_backend" {
+resource "oci_network_load_balancer_backend" "controlplane_backend" {
   for_each = { for idx, val in oci_core_instance.cp : idx => val }
   #Required
-  backendset_name  = oci_load_balancer_backend_set.talos_backend_set.name
-  ip_address       = oci_core_instance.cp[each.key].public_ip
-  load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
-  port             = 50000
+  backend_set_name         = oci_network_load_balancer_backend_set.controlplane_backend_set.name
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.cp_load_balancer.id
+  port                     = 6443
+
+  #Optional
+  ip_address = each.value.public_ip
 }
 
-resource "oci_load_balancer_backend" "controlplane_backend" {
+resource "oci_network_load_balancer_backend" "talos_backend" {
   for_each = { for idx, val in oci_core_instance.cp : idx => val }
   #Required
-  backendset_name  = oci_load_balancer_backend_set.controlplane_backend_set.name
-  ip_address       = oci_core_instance.cp[each.key].public_ip
-  load_balancer_id = oci_load_balancer_load_balancer.cp_load_balancer.id
-  port             = 6443
+  backend_set_name         = oci_network_load_balancer_backend_set.controlplane_backend_set.name
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.cp_load_balancer.id
+  port                     = 50000
+
+  #Optional
+  ip_address = each.value.public_ip
 }

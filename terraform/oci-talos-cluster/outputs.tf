@@ -1,5 +1,5 @@
 output "load_balancer_ip" {
-  value = oci_load_balancer_load_balancer.cp_load_balancer.ip_address_details[0].ip_address
+  value = oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address
 }
 
 output "talosconfig" {
