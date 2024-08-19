@@ -1,7 +1,14 @@
 // TODO use instance pool?
 
+resource "random_pet" "random" {
+  count     = 1
+  length    = 2
+  separator = "-"
+}
+
 resource "oci_core_instance" "cp" {
-  count = 1
+  for_each = { for idx, val in random_pet.random : idx => val }
+  # count = 1
   #Required
   availability_domain = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[0].name : var.instance_availability_domain
   compartment_id      = var.compartment_ocid
@@ -26,7 +33,7 @@ resource "oci_core_instance" "cp" {
     recovery_action             = "RESTORE_INSTANCE"
   }
   #Optional
-  display_name  = "${var.cluster_name}-control-plane"
+  display_name  = "${var.cluster_name}-control-plane-${each.value.id}"
   freeform_tags = local.common_labels
   launch_options {
     #Optional
