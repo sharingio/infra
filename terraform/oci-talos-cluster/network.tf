@@ -152,12 +152,10 @@ resource "oci_network_load_balancer_backend_set" "controlplane_backend_set" {
   policy                   = "FIVE_TUPLE"
   health_checker {
     #Required
-    protocol = "HTTPS"
+    protocol = "TCP"
     #Optional
     interval_in_millis = 10000
     port               = 6443
-    return_code        = 200
-    url_path           = "/readyz"
   }
   #Optional
   is_preserve_source = false
