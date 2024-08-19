@@ -8,6 +8,7 @@ locals {
   common_labels = {
     "TalosCluster" = var.cluster_name
   }
+  controlplane_instance_count  = 3
   talos_schematic              = talos_image_factory_schematic.this.id
   architecture                 = "arm64"
   talos_disk_image_url         = data.talos_image_factory_urls.this.urls.disk_image

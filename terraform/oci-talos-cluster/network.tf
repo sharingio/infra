@@ -130,9 +130,9 @@ resource "oci_network_load_balancer_backend_set" "talos_backend_set" {
   health_checker {
     #Required
     protocol = "TCP"
+    port     = 50000
     #Optional
     interval_in_millis = 10000
-    port               = 50000
   }
   #Optional
   is_preserve_source = false
@@ -153,9 +153,9 @@ resource "oci_network_load_balancer_backend_set" "controlplane_backend_set" {
   health_checker {
     #Required
     protocol = "TCP"
+    port     = 6443
     #Optional
     interval_in_millis = 10000
-    port               = 6443
   }
   #Optional
   is_preserve_source = false

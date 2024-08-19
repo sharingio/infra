@@ -1,7 +1,7 @@
 // TODO use instance pool?
 
 resource "random_pet" "random" {
-  count     = 1
+  count     = 3
   length    = 2
   separator = "-"
 }

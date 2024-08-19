@@ -66,14 +66,6 @@ data "talos_machine_configuration" "controlplane" {
             - talos.platform=oracle
          wipe: false
          image: ${local.talos_install_image}
-       network:
-         interfaces:
-           - interface: lo
-             addresses:
-               - ${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}
-           - interface: bond0
-             vip:
-               ip: ${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}
     cluster:
        allowSchedulingOnMasters: true
        # The rest of this is for cilium
