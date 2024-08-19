@@ -132,7 +132,7 @@ resource "oci_network_load_balancer_backend_set" "talos_backend_set" {
     protocol = "TCP"
     #Optional
     interval_in_millis = 10000
-    port               = 30000
+    port               = 50000
   }
   #Optional
   is_preserve_source = false
@@ -179,16 +179,16 @@ resource "oci_network_load_balancer_backend" "controlplane_backend" {
   port                     = 6443
 
   #Optional
-  ip_address = each.value.public_ip
+  target_id = each.value.id
 }
 
 resource "oci_network_load_balancer_backend" "talos_backend" {
   for_each = { for idx, val in oci_core_instance.cp : idx => val }
   #Required
-  backend_set_name         = oci_network_load_balancer_backend_set.controlplane_backend_set.name
+  backend_set_name         = oci_network_load_balancer_backend_set.talos_backend_set.name
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.cp_load_balancer.id
   port                     = 50000
 
   #Optional
-  ip_address = each.value.public_ip
+  target_id = each.value.id
 }
