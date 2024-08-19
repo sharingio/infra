@@ -44,7 +44,6 @@ resource "talos_machine_configuration_apply" "this" {
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {
-  count      = 0
   depends_on = [talos_machine_configuration_apply.this]
 
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
