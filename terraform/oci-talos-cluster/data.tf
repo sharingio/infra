@@ -48,9 +48,17 @@ data "talos_machine_configuration" "controlplane" {
   config_patches = [
     <<-EOT
     machine:
+       time:
+         servers:
+           - 169.254.169.254
        kubelet:
          extraArgs:
            cloud-provider: external
+           rotate-server-certificates: true
+       features:
+         kubePrism:
+           enabled: true
+           port: 7445
        install:
          disk: /dev/sda
          extraKernelArgs:
@@ -66,20 +74,6 @@ data "talos_machine_configuration" "controlplane" {
            - interface: bond0
              vip:
                ip: ${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}
-    EOT
-    ,
-    <<-EOT
-    machine:
-       time:
-         servers:
-           - 169.254.169.254
-       kubelet:
-         extraArgs:
-           cloud-provider: external
-       features:
-         kubePrism:
-           enabled: true
-           port: 7445
     cluster:
        allowSchedulingOnMasters: true
        # The rest of this is for cilium
