@@ -18,7 +18,7 @@ resource "oci_core_vcn" "vcn" {
 }
 resource "oci_core_subnet" "subnet" {
   #Required
-  cidr_block                 = cidrsubnet(oci_core_vcn.vcn.cidr_block, 10, 0)
+  cidr_block                 = var.subnet_block
   compartment_id             = var.compartment_ocid
   vcn_id                     = oci_core_vcn.vcn.id
   prohibit_internet_ingress  = false

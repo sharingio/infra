@@ -55,10 +55,30 @@ data "talos_machine_configuration" "controlplane" {
          extraArgs:
            cloud-provider: external
            rotate-server-certificates: true
+       systemDiskEncryption:
+         state:
+           provider: luks2
+           keys:
+             - nodeID: {}
+               slot: 0
+         ephemeral:
+           provider: luks2
+           keys:
+             - nodeID: {}
+               slot: 0
+           options:
+             - no_read_workqueue
+             - no_write_workqueue
        features:
          kubePrism:
            enabled: true
            port: 7445
+         kubernetesTalosAPIAccess:
+           enabled: true
+           allowedRoles:
+             - os:reader
+           allowedKubernetesNamespaces:
+             - kube-system
        install:
          disk: /dev/sda
          extraKernelArgs:
@@ -67,15 +87,22 @@ data "talos_machine_configuration" "controlplane" {
          wipe: false
          image: ${local.talos_install_image}
     cluster:
+       discovery:
+         enabled: true
+       network:
+         podSubnets:
+           - ${var.pod_subnet_block}
+         serviceSubnets:
+           - ${var.service_subnet_block}
        allowSchedulingOnMasters: true
        # The rest of this is for cilium
        #  https://www.talos.dev/v1.3/kubernetes-guides/network/deploying-cilium/
        externalCloudProvider:
          enabled: true
-         # manifests:
-         #   - https://raw.githubusercontent.com/oracle/oci-cloud-controller-manager/${var.oracle_cloud_ccm_version}/manifests/provider-config-instance-principals-example.yaml
-         #   - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager-rbac.yaml
-         #   - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager.yaml
+         manifests:
+           - https://raw.githubusercontent.com/siderolabs/talos-cloud-controller-manager/${var.talos_ccm_version}/docs/deploy/cloud-controller-manager.yml
+           - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager-rbac.yaml
+           - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager.yaml
        controllerManager:
          extraArgs:
            cloud-provider: external
@@ -83,6 +110,17 @@ data "talos_machine_configuration" "controlplane" {
          extraArgs:
            cloud-provider: external
            anonymous-auth: true
+       inlineManifests:
+         - name: metal-cloud-config
+           contents: |
+             apiVersion: v1
+             data:
+               cloud-provider.yaml: ${base64encode(local.oci_cloud_provider_config)}
+               config.ini: ${base64encode(local.oci_config_ini)}
+             kind: Secret
+             metadata:
+               name: oci-cloud-controller-manager
+               namespace: kube-system
     EOT
     ,
     yamlencode({

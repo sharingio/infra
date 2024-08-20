@@ -52,3 +52,19 @@ variable "instance_shape" {
 variable "oracle_cloud_ccm_version" {
   default = "v1.29.0"
 }
+variable "talos_ccm_version" {
+  type    = string
+  default = "v1.6.0"
+}
+variable "pod_subnet_block" {
+  type    = string
+  default = "10.32.0.0/12"
+}
+variable "service_subnet_block" {
+  type    = string
+  default = "10.200.0.0/22"
+}
+variable "node_subnet_block" {
+  type    = string
+  default = "192.168.0.0/16"
+}
