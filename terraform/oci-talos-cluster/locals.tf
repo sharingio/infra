@@ -38,7 +38,5 @@ vcn: ${oci_core_vcn.vcn.id}
 loadBalancer:
   subnet1: ${oci_core_subnet.subnet.id}
   securityListManagementMode: All
-  securityLists:
-    ${oci_core_subnet.subnet.id}: ${oci_core_security_list.security_list.id}
 EOF
 }
