@@ -28,6 +28,18 @@ resource "talos_machine_configuration_apply" "this" {
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
   node                        = each.value.public_ip
+
+  config_patches = [
+    yamlencode({
+      machine = {
+        kubelet = {
+          extraArgs = {
+            "provider-id" = each.value.id
+          }
+        }
+      }
+    })
+  ]
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {
