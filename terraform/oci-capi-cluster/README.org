@@ -1,0 +1,155 @@
+#+title: OCI CAPI cluster
+
+Bring up Kubernetes locally
+
+#+begin_src bash
+kind create cluster
+#+end_src
+
+#+begin_src bash :tangle .envrc
+[ ! -f priv.env ] || . priv.env
+# export OCI_TENANCY_ID=
+# export OCI_USER_ID=
+# export OCI_CREDENTIALS_FINGERPRINT=
+# export OCI_CREDENTIALS_KEY_B64= # $(base64 < path/to/a/key.pem | tr -d '\n')
+export OCI_REGION=us-sanjose-1
+
+export OCI_TENANCY_ID_B64="$(echo -n "$OCI_TENANCY_ID" | base64 | tr -d '\n')"
+export OCI_CREDENTIALS_FINGERPRINT_B64="$(echo -n "$OCI_CREDENTIALS_FINGERPRINT" | base64 | tr -d '\n')"
+export OCI_USER_ID_B64="$(echo -n "$OCI_USER_ID" | base64 | tr -d '\n')"
+export OCI_REGION_B64="$(echo -n "$OCI_REGION" | base64 | tr -d '\n')"
+
+# if bootstraping from inside OCI
+export USE_INSTANCE_PRINCIPAL="false"
+export USE_INSTANCE_PRINCIPAL_B64="$(echo -n "$USE_INSTANCE_PRINCIPAL" | base64 | tr -d '\n')"
+#+end_src
+
+allow env from .envrc
+
+#+begin_src bash
+direnv allow
+#+end_src
+
+bootstrap capi with oci
+
+#+begin_src bash
+clusterctl init -b talos:v0.6.5 -c talos:v0.5.6 --infrastructure oci:v0.16.0
+#+end_src
+
+create a namespace
+
+#+begin_src bash
+kubectl create ns sharingio
+#+end_src
+
+#+RESULTS:
+#+begin_example
+namespace/sharingio created
+#+end_example
+
+Generate a cluster config
+
+#+begin_src bash :tangle .envrc
+# export OCI_COMPARTMENT_ID=
+# export OCI_IMAGE_ID=ocid1.image.oc1.us-sanjose-1.aaaaaaaazpwpyk7kh6mbu2g6yihups2zf5uwt7moehbafxsu4idaew6nggxq # NOTE Oracle 8
+export OCI_IMAGE_ID=ocid1.image.oc1.us-sanjose-1.aaaaaaaaqemyxu4dnhuapt6dfzuhq6rp5h3f7ld3yqh3crwiu5qtzlk6woma
+export OCI_CONTROL_PLANE_MACHINE_TYPE=VM.Standard.A1.Flex
+export OCI_CONTROL_PLANE_MACHINE_TYPE_OCPUS=4
+export OCI_NODE_MACHINE_TYPE=VM.Standard.A1.Flex
+export OCI_NODE_MACHINE_TYPE_OCPUS=8
+export OCI_SSH_KEY=
+export OCI_CONTROL_PLANE_PV_TRANSIT_ENCRYPTION=true
+export OCI_NODE_PV_TRANSIT_ENCRYPTION=true
+
+export TALOS_INSTALL_IMAGE=factory.talos.dev/installer/d01e4eb407f9a242831748cab07de55550fdcfe8be65ce4defd258a93d94562f:v1.7.6
+export CLUSTER_NAME=sharingio
+export CONTROL_PLANE_MACHINE_COUNT=3
+export KUBERNETES_VERSION=v1.30.1
+export NAMESPACE=sharingio
+export POD_CIDR=192.168.0.0/16
+export SERVICE_CIDR=10.128.0.0/12
+export NODE_MACHINE_COUNT=6
+
+#+end_src
+
+generate a cluster config
+
+#+begin_src bash
+clusterctl -n sharingio generate cluster "$CLUSTER_NAME" --from ./cluster-template.yaml --write-to ./cluster.yaml
+#+end_src
+
+#+RESULTS:
+#+begin_example
+#+end_example
+
+apply the cluster
+
+#+begin_src bash
+kubectl -n sharingio apply -f ./cluster.yaml
+#+end_src
+
+#+RESULTS:
+#+begin_example
+cluster.cluster.x-k8s.io/sharingio created
+ocicluster.infrastructure.cluster.x-k8s.io/sharingio created
+taloscontrolplane.controlplane.cluster.x-k8s.io/sharingio-control-plane created
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/sharingio-control-plane created
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/sharingio-md-0 created
+talosconfigtemplate.bootstrap.cluster.x-k8s.io/sharingio-md-0 created
+machinedeployment.cluster.x-k8s.io/sharingio-md-0 created
+#+end_example
+
+view the world
+
+#+begin_src shell
+kubectl -n sharingio get $(kubectl -n sharingio api-resources | grep x-k8s | awk '{print $1}' | tr '\n' ',' | sed 's/,$//g')
+#+end_src
+
+#+RESULTS:
+#+begin_example
+NAME                                                                AGE
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-2zps4   50s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-8ts94   50s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-frc97   50s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-j77b6   50s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-mbcs8   50s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-w847p   50s
+
+NAME                                                            AGE
+talosconfigtemplate.bootstrap.cluster.x-k8s.io/sharingio-md-0   85s
+
+NAME                                 CLUSTERCLASS   PHASE         AGE   VERSION
+cluster.cluster.x-k8s.io/sharingio                  Provisioned   72s
+
+NAME                                                CLUSTER     REPLICAS   READY   UPDATED   UNAVAILABLE   PHASE       AGE   VERSION
+machinedeployment.cluster.x-k8s.io/sharingio-md-0   sharingio   6                  6         6             ScalingUp   71s   v1.30.1
+
+NAME                                                  CLUSTER     NODENAME   PROVIDERID   PHASE     AGE   VERSION
+machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-2zps4   sharingio                           Pending   50s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-8ts94   sharingio                           Pending   50s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-frc97   sharingio                           Pending   50s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-j77b6   sharingio                           Pending   50s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-mbcs8   sharingio                           Pending   50s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-w847p   sharingio                           Pending   50s   v1.30.1
+
+NAME                                               CLUSTER     REPLICAS   READY   AVAILABLE   AGE   VERSION
+machineset.cluster.x-k8s.io/sharingio-md-0-gjmhg   sharingio   6                              50s   v1.30.1
+
+NAME                                                                      READY   INITIALIZED   REPLICAS   READY REPLICAS   UNAVAILABLE REPLICAS
+taloscontrolplane.controlplane.cluster.x-k8s.io/sharingio-control-plane
+
+NAME                                                   AGE
+ocicluster.infrastructure.cluster.x-k8s.io/sharingio   56s
+
+NAME                                                                    AGE
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-2zps4   50s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-8ts94   50s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-frc97   50s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-j77b6   50s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-mbcs8   50s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-w847p   50s
+
+NAME                                                                         AGE
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/sharingio-control-plane   56s
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/sharingio-md-0            56s
+#+end_example

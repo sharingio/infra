@@ -1,0 +1,156 @@
+---
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: Cluster
+metadata:
+  labels:
+    cluster.x-k8s.io/cluster-name: ${CLUSTER_NAME}
+  name: ${CLUSTER_NAME}
+  namespace: sharingio
+spec:
+  clusterNetwork:
+    pods:
+      cidrBlocks:
+      - ${POD_CIDR}
+    serviceDomain: cluster.local
+    services:
+      cidrBlocks:
+      - ${SERVICE_CIDR}
+  controlPlaneRef:
+    apiVersion: controlplane.cluster.x-k8s.io/v1alpha3
+    kind: TalosControlPlane
+    name: ${CLUSTER_NAME}-control-plane
+    namespace: sharingio
+  infrastructureRef:
+    apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+    kind: OCICluster
+    name: ${CLUSTER_NAME}
+    namespace: sharingio
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+kind: OCICluster
+metadata:
+  labels:
+    cluster.x-k8s.io/cluster-name: ${CLUSTER_NAME}
+  name: ${CLUSTER_NAME}
+  namespace: sharingio
+spec:
+  compartmentId: ${OCI_COMPARTMENT_ID}
+---
+kind: TalosControlPlane
+apiVersion: controlplane.cluster.x-k8s.io/v1alpha3
+metadata:
+  name: "${CLUSTER_NAME}-control-plane"
+  namespace: sharingio
+spec:
+  version: ${KUBERNETES_VERSION}
+  replicas: ${CONTROL_PLANE_MACHINE_COUNT}
+  infrastructureTemplate:
+    apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+    kind: OCIMachineTemplate
+    name: "${CLUSTER_NAME}-control-plane"
+  controlPlaneConfig:
+    controlplane:
+      generateType: controlplane
+      configPatches:
+        - op: replace
+          path: /machine/install
+          value:
+            disk: /dev/sda
+            image: ${TALOS_INSTALL_IMAGE}
+            bootloader: true
+            wipe: false
+        - op: add
+          path: /machine/kubelet/extraArgs
+          value:
+            cloud-provider: external
+            provider-id: oci://{{ ds["id"] }}
+        - op: add
+          path: /cluster/apiServer/extraArgs
+          value:
+            cloud-provider: external
+        - op: add
+          path: /cluster/controllerManager/extraArgs
+          value:
+            cloud-provider: external
+        - op: add
+          path: /cluster/allowSchedulingOnMasters
+          value: true
+        # - op: add
+        #   path: /cluster/extraManifests
+        #   value: []
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+kind: OCIMachineTemplate
+metadata:
+  name: ${CLUSTER_NAME}-control-plane
+  namespace: sharingio
+spec:
+  template:
+    spec:
+      compartmentId: ${OCI_COMPARTMENT_ID}
+      # imageId: ocid1.image.oc1.us-sanjose-1.aaaaaaaazpwpyk7kh6mbu2g6yihups2zf5uwt7moehbafxsu4idaew6nggxq # NOTE Oracle 8
+      imageId: ${OCI_IMAGE_ID}
+      isPvEncryptionInTransitEnabled: ${OCI_CONTROL_PLANE_PV_TRANSIT_ENCRYPTION}
+      metadata:
+        ssh_authorized_keys: ""
+      shape: ${OCI_CONTROL_PLANE_MACHINE_TYPE}
+      shapeConfig:
+        ocpus: "${OCI_CONTROL_PLANE_MACHINE_TYPE_OCPUS}"
+      networkDetails:
+        assignPublicIp: true
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+kind: OCIMachineTemplate
+metadata:
+  name: ${CLUSTER_NAME}-md-0
+  namespace: sharingio
+spec:
+  template:
+    spec:
+      compartmentId: ${OCI_COMPARTMENT_ID}
+      # imageId: ocid1.image.oc1.us-sanjose-1.aaaaaaaazpwpyk7kh6mbu2g6yihups2zf5uwt7moehbafxsu4idaew6nggxq # NOTE Oracle 8
+      imageId: ${OCI_IMAGE_ID}
+      isPvEncryptionInTransitEnabled: ${OCI_NODE_PV_TRANSIT_ENCRYPTION}
+      metadata:
+        ssh_authorized_keys: ""
+      shape: ${OCI_NODE_MACHINE_TYPE}
+      shapeConfig:
+        ocpus: "${OCI_NODE_MACHINE_TYPE_OCPUS}"
+      networkDetails:
+        assignPublicIp: true
+---
+apiVersion: bootstrap.cluster.x-k8s.io/v1alpha3
+kind: TalosConfigTemplate
+metadata:
+  name: ${CLUSTER_NAME}-md-0
+  namespace: sharingio
+  labels:
+    cluster.x-k8s.io/cluster-name: ${CLUSTER_NAME}
+spec:
+  template:
+    spec:
+      generateType: join
+---
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: MachineDeployment
+metadata:
+  name: ${CLUSTER_NAME}-md-0
+  namespace: sharingio
+spec:
+  clusterName: ${CLUSTER_NAME}
+  replicas: ${NODE_MACHINE_COUNT}
+  selector:
+    matchLabels: null
+  template:
+    spec:
+      bootstrap:
+        configRef:
+          apiVersion: bootstrap.cluster.x-k8s.io/v1alpha3
+          kind: TalosConfigTemplate
+          name: ${CLUSTER_NAME}-md-0
+      clusterName: ${CLUSTER_NAME}
+      infrastructureRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+        kind: OCIMachineTemplate
+        name: ${CLUSTER_NAME}-md-0
+      version: ${KUBERNETES_VERSION}
