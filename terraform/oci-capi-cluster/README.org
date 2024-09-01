@@ -1,5 +1,22 @@
 #+title: OCI CAPI cluster
 
+Write a tfvars file
+
+#+begin_src hcl
+tenancy_ocid     = "TENANCY OCID"
+user_ocid        = "YOUR USER OCID"
+private_key_path = "YOUR PRIVATE KEY PATH"
+fingerprint      = "THE FINGERPRINT FOR YOUR PRIVATE KEY"
+region           = "us-sanjose-1"
+compartment_ocid = "YOUR COMPARTMENT OCID"
+#+end_src
+
+Provision network resources
+
+#+begin_src shell
+tofu apply --var-file ./.tfvars
+#+end_src
+
 Bring up Kubernetes locally
 
 #+begin_src bash
@@ -43,9 +60,9 @@ kubectl create ns sharingio
 #+end_src
 
 #+RESULTS:
-#+begin_example
+#+begin_src bash
 namespace/sharingio created
-#+end_example
+#+end_src
 
 Generate a cluster config
 
@@ -70,11 +87,13 @@ export POD_CIDR=192.168.0.0/16
 export SERVICE_CIDR=10.128.0.0/12
 export NODE_MACHINE_COUNT=6
 
+export OCI_NETWORK_SECURITY_GROUP_ID="$(tofu output --raw oci_network_security_group_id || false)"
+export OCI_NETWORK_SUBNET_ID="$(tofu output --raw oci_network_subnet_id)"
 #+end_src
 
 generate a cluster config
 
-#+begin_src bash
+#+begin_src bash :epilogue ". .envrc ; \n"
 clusterctl -n sharingio generate cluster "$CLUSTER_NAME" --from ./cluster-template.yaml --write-to ./cluster.yaml
 #+end_src
 
@@ -107,49 +126,75 @@ kubectl -n sharingio get $(kubectl -n sharingio api-resources | grep x-k8s | awk
 
 #+RESULTS:
 #+begin_example
-NAME                                                                AGE
-talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-2zps4   50s
-talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-8ts94   50s
-talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-frc97   50s
-talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-j77b6   50s
-talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-mbcs8   50s
-talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-gjmhg-w847p   50s
+NAME                                                                   AGE
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-control-plane-54xzg   3m59s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-control-plane-pb4kn   3m59s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-control-plane-zzqh4   3m59s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-hbnp8-89rtk      4m55s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-hbnp8-9cj4h      4m55s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-hbnp8-cwjqj      4m55s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-hbnp8-k2q95      4m55s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-hbnp8-pwcpr      4m55s
+talosconfig.bootstrap.cluster.x-k8s.io/sharingio-md-0-hbnp8-tf5sz      4m55s
 
 NAME                                                            AGE
-talosconfigtemplate.bootstrap.cluster.x-k8s.io/sharingio-md-0   85s
+talosconfigtemplate.bootstrap.cluster.x-k8s.io/sharingio-md-0   4m55s
 
-NAME                                 CLUSTERCLASS   PHASE         AGE   VERSION
-cluster.cluster.x-k8s.io/sharingio                  Provisioned   72s
+NAME                                 CLUSTERCLASS   PHASE         AGE     VERSION
+cluster.cluster.x-k8s.io/sharingio                  Provisioned   4m56s
 
-NAME                                                CLUSTER     REPLICAS   READY   UPDATED   UNAVAILABLE   PHASE       AGE   VERSION
-machinedeployment.cluster.x-k8s.io/sharingio-md-0   sharingio   6                  6         6             ScalingUp   71s   v1.30.1
+NAME                                                CLUSTER     REPLICAS   READY   UPDATED   UNAVAILABLE   PHASE       AGE     VERSION
+machinedeployment.cluster.x-k8s.io/sharingio-md-0   sharingio   6                  6         6             ScalingUp   4m55s   v1.30.1
 
-NAME                                                  CLUSTER     NODENAME   PROVIDERID   PHASE     AGE   VERSION
-machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-2zps4   sharingio                           Pending   50s   v1.30.1
-machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-8ts94   sharingio                           Pending   50s   v1.30.1
-machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-frc97   sharingio                           Pending   50s   v1.30.1
-machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-j77b6   sharingio                           Pending   50s   v1.30.1
-machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-mbcs8   sharingio                           Pending   50s   v1.30.1
-machine.cluster.x-k8s.io/sharingio-md-0-gjmhg-w847p   sharingio                           Pending   50s   v1.30.1
+NAME                                                     CLUSTER     NODENAME   PROVIDERID                                                                                           PHASE         AGE     VERSION
+machine.cluster.x-k8s.io/sharingio-control-plane-49xdq   sharingio              oci://ocid1.instance.oc1.us-sanjose-1.anzwuljr2lro64icvam6pkgfs2qtfkrtvwxubduivaq5lsx7s3wemcukihwq   Provisioned   3m59s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-control-plane-7vhcm   sharingio              oci://ocid1.instance.oc1.us-sanjose-1.anzwuljr2lro64icfmmfof6cpvas5pb6qnyz5pwc2afk4p3vnuxouwxwrmqa   Provisioned   3m59s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-control-plane-sdd4h   sharingio              oci://ocid1.instance.oc1.us-sanjose-1.anzwuljr2lro64iccmt7zj6sbj3ov7nmsi53demqdybwn7hp57gcohpokyuq   Provisioned   3m59s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-hbnp8-89rtk      sharingio                                                                                                                   Pending       4m55s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-hbnp8-9cj4h      sharingio                                                                                                                   Pending       4m55s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-hbnp8-cwjqj      sharingio                                                                                                                   Pending       4m55s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-hbnp8-k2q95      sharingio                                                                                                                   Pending       4m55s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-hbnp8-pwcpr      sharingio                                                                                                                   Pending       4m55s   v1.30.1
+machine.cluster.x-k8s.io/sharingio-md-0-hbnp8-tf5sz      sharingio                                                                                                                   Pending       4m55s   v1.30.1
 
-NAME                                               CLUSTER     REPLICAS   READY   AVAILABLE   AGE   VERSION
-machineset.cluster.x-k8s.io/sharingio-md-0-gjmhg   sharingio   6                              50s   v1.30.1
+NAME                                               CLUSTER     REPLICAS   READY   AVAILABLE   AGE     VERSION
+machineset.cluster.x-k8s.io/sharingio-md-0-hbnp8   sharingio   6                              4m55s   v1.30.1
 
 NAME                                                                      READY   INITIALIZED   REPLICAS   READY REPLICAS   UNAVAILABLE REPLICAS
-taloscontrolplane.controlplane.cluster.x-k8s.io/sharingio-control-plane
+taloscontrolplane.controlplane.cluster.x-k8s.io/sharingio-control-plane                         3                           3
 
 NAME                                                   AGE
-ocicluster.infrastructure.cluster.x-k8s.io/sharingio   56s
+ocicluster.infrastructure.cluster.x-k8s.io/sharingio   4m56s
 
-NAME                                                                    AGE
-ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-2zps4   50s
-ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-8ts94   50s
-ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-frc97   50s
-ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-j77b6   50s
-ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-mbcs8   50s
-ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-gjmhg-w847p   50s
+NAME                                                                       AGE
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-control-plane-95b4h   3m59s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-control-plane-968kw   3m59s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-control-plane-fjxgw   3m59s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-hbnp8-89rtk      4m55s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-hbnp8-9cj4h      4m55s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-hbnp8-cwjqj      4m55s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-hbnp8-k2q95      4m55s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-hbnp8-pwcpr      4m55s
+ocimachine.infrastructure.cluster.x-k8s.io/sharingio-md-0-hbnp8-tf5sz      4m55s
 
 NAME                                                                         AGE
-ocimachinetemplate.infrastructure.cluster.x-k8s.io/sharingio-control-plane   56s
-ocimachinetemplate.infrastructure.cluster.x-k8s.io/sharingio-md-0            56s
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/sharingio-control-plane   4m56s
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/sharingio-md-0            4m55s
+#+end_example
+
+Tear down
+
+#+begin_src shell
+kubectl -n sharingio delete -f ./cluster.yaml 2>&1
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Error from server (NotFound): error when deleting "./cluster.yaml": clusters.cluster.x-k8s.io "sharingio" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": ociclusters.infrastructure.cluster.x-k8s.io "sharingio" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": taloscontrolplanes.controlplane.cluster.x-k8s.io "sharingio-control-plane" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": ocimachinetemplates.infrastructure.cluster.x-k8s.io "sharingio-control-plane" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": ocimachinetemplates.infrastructure.cluster.x-k8s.io "sharingio-md-0" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": talosconfigtemplates.bootstrap.cluster.x-k8s.io "sharingio-md-0" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": machinedeployments.cluster.x-k8s.io "sharingio-md-0" not found
 #+end_example
