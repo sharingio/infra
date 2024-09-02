@@ -105,10 +105,6 @@ spec:
         nsgIds:
           - ${OCI_NETWORK_SECURITY_GROUP_ID}
         subnetId: ${OCI_NETWORK_SUBNET_ID}
-      vnicAttachments:
-        - displayName: primary
-          assignPublicIp: true
-          subnetName: ${OCI_NETWORK_SUBNET_NAME}
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
 kind: OCIMachineTemplate
@@ -134,10 +130,6 @@ spec:
         nsgIds:
           - ${OCI_NETWORK_SECURITY_GROUP_ID}
         subnetId: ${OCI_NETWORK_SUBNET_ID}
-      vnicAttachments:
-        - displayName: primary
-          assignPublicIp: true
-          subnetName: ${OCI_NETWORK_SUBNET_NAME}
 ---
 apiVersion: bootstrap.cluster.x-k8s.io/v1alpha3
 kind: TalosConfigTemplate
