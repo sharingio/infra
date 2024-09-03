@@ -124,76 +124,67 @@ machinedeployment.cluster.x-k8s.io/cncfocicapi-md-0 created
 view the world
 
 #+begin_src shell
-kubectl -n sharingio get $(kubectl -n sharingio api-resources | grep x-k8s | awk '{print $1}' | tr '\n' ',' | sed 's/,$//g')
+(
+kubectl -n sharingio get "$(kubectl -n sharingio api-resources | grep x-k8s | awk '{print $1}' | tr '\n' ',' | sed 's/,$//g')"
+) 2>&1 ; :
 #+end_src
 
 #+RESULTS:
 #+begin_example
 NAME                                                                     AGE
-talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-control-plane-9798j   5m32s
-talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-control-plane-fkrbr   5m33s
-talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-control-plane-tjv2n   5m32s
-talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-6pk7x      6m56s
-talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-fb8zn      6m57s
-talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-gvn2c      6m56s
-talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-h2kv2      6m56s
-talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-r5cws      6m56s
-talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-vlhqc      6m56s
-talosconfig.bootstrap.cluster.x-k8s.io/sharingio-control-plane-c7qpb     26m
-talosconfig.bootstrap.cluster.x-k8s.io/sharingio-control-plane-z7j4r     26m
-talosconfig.bootstrap.cluster.x-k8s.io/sharingio-control-plane-zj9g5     26m
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-control-plane-2zmxv   2m53s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-control-plane-6ntpr   2m53s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-control-plane-zc7jw   2m53s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-8lpll      4m13s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-cv7jd      4m13s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-kzjq5      4m13s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-p4smf      4m13s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-rmjb6      4m13s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-s67hr      4m13s
 
 NAME                                                              AGE
-talosconfigtemplate.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0   6m57s
+talosconfigtemplate.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0   4m13s
 
 NAME                                   CLUSTERCLASS   PHASE         AGE     VERSION
-cluster.cluster.x-k8s.io/cncfocicapi                  Provisioned   6m57s
-cluster.cluster.x-k8s.io/sharingio                    Deleting      27m
+cluster.cluster.x-k8s.io/cncfocicapi                  Provisioned   4m14s
 
 NAME                                                  CLUSTER       REPLICAS   READY   UPDATED   UNAVAILABLE   PHASE       AGE     VERSION
-machinedeployment.cluster.x-k8s.io/cncfocicapi-md-0   cncfocicapi   6                  6         6             ScalingUp   6m57s   v1.30.1
+machinedeployment.cluster.x-k8s.io/cncfocicapi-md-0   cncfocicapi   6                  6         6             ScalingUp   4m13s   v1.30.1
 
 NAME                                                       CLUSTER       NODENAME   PROVIDERID   PHASE          AGE     VERSION
-machine.cluster.x-k8s.io/cncfocicapi-control-plane-phr6z   cncfocicapi                           Provisioning   5m32s   v1.30.1
-machine.cluster.x-k8s.io/cncfocicapi-control-plane-qq5zq   cncfocicapi                           Provisioning   5m32s   v1.30.1
-machine.cluster.x-k8s.io/cncfocicapi-control-plane-rg2xt   cncfocicapi                           Provisioning   5m32s   v1.30.1
-machine.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-6pk7x      cncfocicapi                           Pending        6m56s   v1.30.1
-machine.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-fb8zn      cncfocicapi                           Pending        6m56s   v1.30.1
-machine.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-gvn2c      cncfocicapi                           Pending        6m56s   v1.30.1
-machine.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-h2kv2      cncfocicapi                           Pending        6m56s   v1.30.1
-machine.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-r5cws      cncfocicapi                           Pending        6m56s   v1.30.1
-machine.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-vlhqc      cncfocicapi                           Pending        6m56s   v1.30.1
-machine.cluster.x-k8s.io/sharingio-control-plane-6kn5v     sharingio                             Deleting       26m     v1.30.1
-machine.cluster.x-k8s.io/sharingio-control-plane-8ntmx     sharingio                             Deleting       26m     v1.30.1
-machine.cluster.x-k8s.io/sharingio-control-plane-bfv5k     sharingio                             Deleting       26m     v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-control-plane-h59cd   cncfocicapi                           Provisioning   2m53s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-control-plane-mrmqj   cncfocicapi                           Provisioning   2m53s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-control-plane-st9j6   cncfocicapi                           Provisioning   2m53s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-8lpll      cncfocicapi                           Pending        4m13s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-cv7jd      cncfocicapi                           Pending        4m13s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-kzjq5      cncfocicapi                           Pending        4m13s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-p4smf      cncfocicapi                           Pending        4m13s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-rmjb6      cncfocicapi                           Pending        4m13s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-s67hr      cncfocicapi                           Pending        4m13s   v1.30.1
 
 NAME                                                 CLUSTER       REPLICAS   READY   AVAILABLE   AGE     VERSION
-machineset.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn   cncfocicapi   6                              6m57s   v1.30.1
+machineset.cluster.x-k8s.io/cncfocicapi-md-0-h68x6   cncfocicapi   6                              4m13s   v1.30.1
 
 NAME                                                                        READY   INITIALIZED   REPLICAS   READY REPLICAS   UNAVAILABLE REPLICAS
 taloscontrolplane.controlplane.cluster.x-k8s.io/cncfocicapi-control-plane                         3                           3
-taloscontrolplane.controlplane.cluster.x-k8s.io/sharingio-control-plane                           3                           3
 
 NAME                                                     AGE
-ocicluster.infrastructure.cluster.x-k8s.io/cncfocicapi   6m57s
+ocicluster.infrastructure.cluster.x-k8s.io/cncfocicapi   4m14s
 
 NAME                                                                         AGE
-ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane-5m2ln   5m33s
-ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane-phxbg   5m32s
-ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane-vkrjc   5m32s
-ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-6pk7x      6m56s
-ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-fb8zn      6m57s
-ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-gvn2c      6m56s
-ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-h2kv2      6m56s
-ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-r5cws      6m56s
-ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-hd9wn-vlhqc      6m56s
-ocimachine.infrastructure.cluster.x-k8s.io/sharingio-control-plane-247f4     26m
-ocimachine.infrastructure.cluster.x-k8s.io/sharingio-control-plane-4j9h6     26m
-ocimachine.infrastructure.cluster.x-k8s.io/sharingio-control-plane-rjqwb     26m
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane-4wq9n   2m53s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane-g8jqg   2m53s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane-jkhnf   2m53s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-8lpll      4m13s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-cv7jd      4m13s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-kzjq5      4m13s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-p4smf      4m13s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-rmjb6      4m13s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-s67hr      4m13s
 
 NAME                                                                           AGE
-ocimachinetemplate.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane   6m57s
-ocimachinetemplate.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0            6m57s
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane   4m13s
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0            4m13s
 #+end_example
 
 Get the Talosconfig
@@ -219,16 +210,16 @@ kubectl -n sharingio get secret sharingio-kubeconfig -o go-template='{{ .data.va
 Tear down
 
 #+begin_src shell
-kubectl -n sharingio delete -f ./cluster.yaml 2>&1
+kubectl -n sharingio delete cluster cncfocicapi
 #+end_src
 
 #+RESULTS:
 #+begin_example
 cluster.cluster.x-k8s.io "cncfocicapi" deleted
-ocicluster.infrastructure.cluster.x-k8s.io "cncfocicapi" deleted
 taloscontrolplane.controlplane.cluster.x-k8s.io "cncfocicapi-control-plane" deleted
-ocimachinetemplate.infrastructure.cluster.x-k8s.io "cncfocicapi-control-plane" deleted
-ocimachinetemplate.infrastructure.cluster.x-k8s.io "cncfocicapi-md-0" deleted
-talosconfigtemplate.bootstrap.cluster.x-k8s.io "cncfocicapi-md-0" deleted
+Error from server (NotFound): error when deleting "./cluster.yaml": ociclusters.infrastructure.cluster.x-k8s.io "cncfocicapi" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": ocimachinetemplates.infrastructure.cluster.x-k8s.io "cncfocicapi-control-plane" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": ocimachinetemplates.infrastructure.cluster.x-k8s.io "cncfocicapi-md-0" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": talosconfigtemplates.bootstrap.cluster.x-k8s.io "cncfocicapi-md-0" not found
 Error from server (NotFound): error when deleting "./cluster.yaml": machinedeployments.cluster.x-k8s.io "cncfocicapi-md-0" not found
 #+end_example
