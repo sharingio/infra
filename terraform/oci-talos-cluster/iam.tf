@@ -1,7 +1,7 @@
 resource "oci_identity_dynamic_group" "oci-ccm" {
   #Required
   name           = "${var.cluster_name}-oci-ccm"
-  compartment_id = var.tenancy_ocid
+  compartment_id = var.tenancy_ocid # tenancy_ocid, compartment_ocid and domain_ocid doesn't work
   description    = "Instance access"
   matching_rule  = <<EOF
 ALL {instance.compartment.id = '${var.compartment_ocid}'}
@@ -14,7 +14,7 @@ EOF
 resource "oci_identity_policy" "oci-ccm" {
   #Required
   name           = "${var.cluster_name}-oci-ccm"
-  compartment_id = var.tenancy_ocid
+  compartment_id = var.compartment_ocid # tenancy_ocid doesn't work
   description    = "Instance access"
   statements = [
     // LoadBalancer Services
