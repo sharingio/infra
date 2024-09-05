@@ -8,6 +8,10 @@ terraform {
       source  = "siderolabs/talos"
       version = "0.6.0-alpha.1" # TODO include version in project root providers
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "> 0.0.0"
+    }
   }
   required_version = ">= 1.2"
 }
