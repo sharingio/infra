@@ -4,13 +4,6 @@
 a Flux + Terraform infrastructure repo
 #+end_quote
 
-* Todo
-
-- [x] add Flux for cluster repo
-- [x] get talosconfig
-- [ ] access Kubernetes APIServer
-- [ ] verify Ceph disk allocation
-
 * Prerequisites
 
 Install OpenTofu
@@ -21,59 +14,48 @@ brew install opentofu
 
 #+RESULTS:
 
+Create a .tfvars file
+
+#+begin_src hcl
+tenancy_ocid     = "TENANCY OCID                         : https://cloud.oracle.com/tenancy"
+user_ocid        = "YOUR USER OCID                       : https://cloud.oracle.com/identity/domains/my-profile"
+private_key_path = "YOUR PRIVATE KEY PATH                : https://cloud.oracle.com/identity/domains/my-profile/api-keys"
+fingerprint      = "THE FINGERPRINT FOR YOUR PRIVATE KEY : ^^"
+region           = "us-sanjose-1"
+compartment_ocid = "YOUR COMPARTMENT OCID                : https://cloud.oracle.com/identity/compartments # cloudnative.coop"
+#+end_src
+
 * Usage
 
-You'll need .tfvar files, currently we create those via org files.
+init
 
-#+begin_src tmux :session ":tofu"
-cd ~/infra
-mkdir -p ./tmp/
-touch ./tmp/cluster-kubeconfig
-tofu init -var-file=./config.tfvars -var-file=./secrets.tfvars -var github_token="$(gh auth token)" --upgrade
+#+begin_src shell
+tofu init --var-file=./.tfvars
 #+end_src
+
 
 plan
 
 #+begin_src tmux :session ":tofu"
-tofu plan -var-file=./config.tfvars -var-file=./secrets.tfvars -var github_token="$(gh auth token)"
+tofu plan --var-file=./.tfvars
 #+end_src
 
 apply
 
 #+begin_src tmux :session ":tofu"
-tofu apply -var-file=./config.tfvars -var-file=./secrets.tfvars -var github_token="$(gh auth token)"
-#+end_src
-
-get talosconfig
-
-#+begin_src tmux :session ":talos"
-mkdir -p ~/.talos
-tofu output -raw talosconfig > ~/.talos/config
+tofu apply --var-file=./.tfvars
 #+end_src
 
 get kubeconfig
 
 #+begin_src tmux
 mkdir -p ~/.kube
-tofu output -raw kubeconfig > ~/.kube/config
-#+end_src
-
-* Flux usage
-
-force a reconciliation
-
-#+begin_src tmux
-CLUSTER_NAME=cloudnative-coop
-flux --kubeconfig ~/.kube/config-"$CLUSTER_NAME" reconcile source git flux-system
+tofu output -raw cluster-sharingio-oke-kubeconfig > ~/.kube/config
 #+end_src
 
 * Force tear down
 
 #+begin_src tmux :session ":tofu"
 tofu state list | grep -E 'talos|flux|manifests|kubernetes_manifest' | xargs -I{} tofu state rm {}
-tofu destroy -var-file=./config.tfvars -var-file=./secrets.tfvars -var github_token="$(gh auth token)"
+tofu destroy -var-file=./.tfvars
 #+end_src
-
-* Notes
-
-- Equinix Metal Cloud Provider 401 error regarding IP allocation and assigning
