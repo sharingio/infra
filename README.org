@@ -9,7 +9,7 @@ a Flux + Terraform infrastructure repo
 Install OpenTofu
 
 #+begin_src tmux :session ":tofu "
-brew install opentofu
+brew install opentofu oci-cli
 #+end_src
 
 #+RESULTS:
@@ -24,6 +24,14 @@ fingerprint      = "THE FINGERPRINT FOR YOUR PRIVATE KEY : ^^"
 region           = "us-sanjose-1"
 compartment_ocid = "YOUR COMPARTMENT OCID                : https://cloud.oracle.com/identity/compartments # cloudnative.coop"
 #+end_src
+
+Log into ~oci-cli~, using the links provided in the hcl file above to get keys and other data.
+
+#+begin_src shell
+oci setup bootstrap
+#+end_src
+
+A kubeconfig must be at ~~/.kube/config-fop~ for using shared tfstate.
 
 * Usage
 
