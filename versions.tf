@@ -1,11 +1,14 @@
-module "cluster-sharingio-oke" {
-  source = "./terraform/oci-oke-cluster"
-
-  providers = {
-    oci = oci
+terraform {
+  required_providers {
+    oci = {
+      source  = "oracle/oci"
+      version = "6.7.0"
+    }
   }
+  required_version = ">= 1.2"
+}
 
-  compartment_ocid = var.compartment_ocid
+provider "oci" {
   tenancy_ocid     = var.tenancy_ocid
   user_ocid        = var.user_ocid
   private_key_path = var.private_key_path

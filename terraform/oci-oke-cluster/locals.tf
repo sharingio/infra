@@ -1,5 +1,5 @@
 locals {
   common_labels = {
-    "TalosCluster" = var.cluster_name
+    "okeCluster" = var.cluster_name
   }
 }
