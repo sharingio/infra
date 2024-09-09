@@ -31,16 +31,14 @@ use-instance-principals = true
 EOF
   oci_cloud_provider_config = <<EOF
 auth:
-  region: ${var.region}
-  tenancy: ${var.tenancy_ocid}
-  user: ${oci_identity_user.cluster_ccm_user.id}
-  key: ${tls_private_key.ccm_user_key.private_key_pem}
-  fingerprint: ${oci_identity_api_key.ccm_user_api_key.fingerprint}
-  useInstancePrincipals: false
+  useInstancePrincipals: true
 compartment: ${var.compartment_ocid}
 vcn: ${oci_core_vcn.vcn.id}
 loadBalancer:
   subnet1: ${oci_core_subnet.subnet.id}
-  securityListManagementMode: All
+  subnet2: ${oci_core_subnet.subnet.id}
+  securityListManagementMode: None
+  securityLists:
+    ${oci_core_subnet.subnet.id}: ${oci_core_security_list.security_list.id}
 EOF
 }

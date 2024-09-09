@@ -11,3 +11,8 @@ output "kubeconfig" {
   value     = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   sensitive = true
 }
+
+output "oci_cloud_provider_config" {
+  value     = local.oci_cloud_provider_config
+  sensitive = true
+}
