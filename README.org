@@ -31,7 +31,7 @@ Log into ~oci-cli~, using the links provided in the hcl file above to get keys a
 oci setup bootstrap
 #+end_src
 
-A kubeconfig must be at ~~/.kube/config-fop~ for using shared tfstate.
+A kubeconfig must be at =~/.kube/config-fop= for using shared tfstate.
 
 * Usage
 
