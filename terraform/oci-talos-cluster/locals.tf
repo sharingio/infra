@@ -9,6 +9,7 @@ locals {
     "TalosCluster" = var.cluster_name
   }
   controlplane_instance_count  = 3
+  worker_instance_count        = 3
   architecture                 = "arm64"
   talos_install_image          = data.talos_image_factory_urls.this.urls.installer
   image_launch_mode            = "PARAVIRTUALIZED"
@@ -18,10 +19,12 @@ locals {
   # image_bucket_object          = "talos-${local.architecture}-${var.talos_version}.raw.xz"
   # image_source_uri = "https://axtwf1hkrwcy.objectstorage.us-sanjose-1.oci.customer-oci.com/n/axtwf1hkrwcy/b/talos/o/talos-v1.6.7-oracle-arm64.oci"
   # image_source_uri            = "https://axtwf1hkrwcy.objectstorage.us-sanjose-1.oci.customer-oci.com/n/axtwf1hkrwcy/b/talos/o/talos-v1.7.6-oracle-arm64.oci"
-  image_source_uri            = "https://axtwf1hkrwcy.objectstorage.us-sanjose-1.oci.customer-oci.com/n/axtwf1hkrwcy/b/talos/o/talos-v1.7.6-oracle-arm64.oci"
-  instance_ocpus              = 8
-  instance_memory_in_gbs      = "128"
-  instance_kernel_arg_console = "ttyAMA0"
+  image_source_uri                    = "https://axtwf1hkrwcy.objectstorage.us-sanjose-1.oci.customer-oci.com/n/axtwf1hkrwcy/b/talos/o/talos-v1.7.6-oracle-arm64.oci"
+  controlplane_instance_ocpus         = 4
+  controlplane_instance_memory_in_gbs = "8"
+  instance_ocpus                      = 8
+  instance_memory_in_gbs              = "128"
+  instance_kernel_arg_console         = "ttyAMA0"
   # Example: https://raw.githubusercontent.com/oracle/oci-cloud-controller-manager/v1.26.0/manifests/provider-config-instance-principals-example.yaml
   oci_config_ini            = <<EOF
 [Global]

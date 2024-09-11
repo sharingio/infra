@@ -29,22 +29,8 @@ data "talos_client_configuration" "talosconfig" {
   nodes                = [for k, v in oci_core_instance.cp : v.public_ip]
 }
 
-data "talos_machine_configuration" "controlplane" {
-  cluster_name = var.cluster_name
-  # cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
-  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}:6443"
-
-  machine_type    = "controlplane"
-  machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
-
-  talos_version      = var.talos_version
-  kubernetes_version = var.kubernetes_version
-
-  docs     = false
-  examples = false
-
-  config_patches = [
-    <<-EOT
+locals {
+  talos_base_configuration = <<-EOT
     machine:
        time:
          servers:
@@ -71,12 +57,6 @@ data "talos_machine_configuration" "controlplane" {
          kubePrism:
            enabled: true
            port: 7445
-         kubernetesTalosAPIAccess:
-           enabled: true
-           allowedRoles:
-             - os:reader
-           allowedKubernetesNamespaces:
-             - kube-system
        install:
          disk: ${local.talos_install_disk}
          extraKernelArgs:
@@ -92,9 +72,7 @@ data "talos_machine_configuration" "controlplane" {
            - ${var.pod_subnet_block}
          serviceSubnets:
            - ${var.service_subnet_block}
-       allowSchedulingOnMasters: true
-       # The rest of this is for cilium
-       #  https://www.talos.dev/v1.3/kubernetes-guides/network/deploying-cilium/
+       allowSchedulingOnMasters: false
        externalCloudProvider:
          enabled: true
          manifests:
@@ -120,7 +98,70 @@ data "talos_machine_configuration" "controlplane" {
                name: oci-cloud-controller-manager
                namespace: kube-system
     EOT
+}
+
+data "talos_machine_configuration" "controlplane" {
+  cluster_name = var.cluster_name
+  # cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
+  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}:6443"
+
+  machine_type    = "controlplane"
+  machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
+
+  talos_version      = var.talos_version
+  kubernetes_version = var.kubernetes_version
+
+  docs     = false
+  examples = false
+
+  config_patches = [
+    local.talos_base_configuration,
+    <<-EOT
+    machine:
+      features:
+        kubernetesTalosAPIAccess:
+          enabled: true
+          allowedRoles:
+            - os:reader
+          allowedKubernetesNamespaces:
+            - kube-system
+    EOT
     ,
+    yamlencode({
+      machine = {
+        certSANs = concat([
+          var.kube_apiserver_domain,
+          oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address,
+        ], [for k, v in oci_core_instance.cp : v.public_ip])
+      }
+      cluster = {
+        apiServer = {
+          certSANs = concat([
+            var.kube_apiserver_domain,
+            oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address,
+          ], [for k, v in oci_core_instance.cp : v.public_ip])
+        }
+      }
+    }),
+  ]
+}
+
+data "talos_machine_configuration" "worker" {
+  cluster_name = var.cluster_name
+  # cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
+  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}:6443"
+
+  machine_type    = "worker"
+  machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
+
+  talos_version      = var.talos_version
+  kubernetes_version = var.kubernetes_version
+
+  docs     = false
+  examples = false
+
+  config_patches = [
+    local.talos_base_configuration,
     yamlencode({
       machine = {
         certSANs = concat([
