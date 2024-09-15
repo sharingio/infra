@@ -1,5 +1,3 @@
-// TODO use instance pool?
-
 resource "random_pet" "random" {
   count     = local.controlplane_instance_count
   length    = 2
