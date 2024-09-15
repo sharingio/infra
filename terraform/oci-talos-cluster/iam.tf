@@ -12,7 +12,8 @@ EOF
 }
 
 locals {
-  ns_type_name = strcontains(var.compartment_ocid, ".tenancy.") ? "tenancy" : "compartment"
+  ns_type_name   = strcontains(var.compartment_ocid, ".tenancy.") ? "tenancy" : "compartment"
+  ns_select_name = strcontains(var.compartment_ocid, ".compartment.") ? data.oci_identity_compartment.this.name : ""
 }
 
 resource "oci_identity_policy" "oci-ccm" {
@@ -22,11 +23,11 @@ resource "oci_identity_policy" "oci-ccm" {
   description    = "Instance access"
   statements = [
     // LoadBalancer Services
-    "allow dynamic-group '${data.oci_identity_tenancy.this.name}'/'${oci_identity_dynamic_group.oci-ccm.name}' to read instance-family in ${local.ns_type_name} ${data.oci_identity_compartment.this.name}",
-    "allow dynamic-group '${data.oci_identity_tenancy.this.name}'/'${oci_identity_dynamic_group.oci-ccm.name}' to use virtual-network-family in ${local.ns_type_name} ${data.oci_identity_compartment.this.name}",
-    "allow dynamic-group '${data.oci_identity_tenancy.this.name}'/'${oci_identity_dynamic_group.oci-ccm.name}' to manage load-balancers in ${local.ns_type_name} ${data.oci_identity_compartment.this.name}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.oci-ccm.name} to read instance-family in ${local.ns_type_name} ${local.ns_select_name}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.oci-ccm.name} to use virtual-network-family in ${local.ns_type_name} ${local.ns_select_name}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.oci-ccm.name} to manage load-balancers in ${local.ns_type_name} ${local.ns_select_name}",
     // CSI
-    "allow dynamic-group '${data.oci_identity_tenancy.this.name}'/'${oci_identity_dynamic_group.oci-ccm.name}' to manage volume-family in ${local.ns_type_name} ${data.oci_identity_compartment.this.name}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.oci-ccm.name} to manage volume-family in ${local.ns_type_name} ${local.ns_select_name}",
   ]
 
   #Optional
