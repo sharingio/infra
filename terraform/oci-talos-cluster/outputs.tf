@@ -1,3 +1,7 @@
+output "factory_disk_image" {
+  value = data.talos_image_factory_urls.this.urls.disk_image
+}
+
 output "load_balancer_ip" {
   value = oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address
 }
