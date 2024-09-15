@@ -18,3 +18,7 @@ compartment_ocid = ""
 #+end_src
 
 see: https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+* Images
+
+**IMPORTANT**: see: [[./images][./images]]
