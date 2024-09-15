@@ -40,7 +40,6 @@ compartment: ${var.compartment_ocid}
 vcn: ${oci_core_vcn.vcn.id}
 loadBalancer:
   subnet1: ${oci_core_subnet.subnet.id}
-  subnet2: ${oci_core_subnet.subnet.id}
   securityListManagementMode: None
   securityLists:
     ${oci_core_subnet.subnet.id}: ${oci_core_security_list.security_list.id}
