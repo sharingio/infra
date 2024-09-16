@@ -31,6 +31,20 @@ resource "oci_core_subnet" "subnet" {
   security_list_ids = [oci_core_security_list.security_list.id]
   route_table_id    = oci_core_route_table.route_table.id
 }
+resource "oci_core_subnet" "subnet_regional" {
+  #Required
+  cidr_block                 = var.subnet_block_regional
+  compartment_id             = var.compartment_ocid
+  vcn_id                     = oci_core_vcn.vcn.id
+  prohibit_internet_ingress  = false
+  prohibit_public_ip_on_vnic = false
+
+  #Optional
+  display_name      = "${var.cluster_name}-subnet-regional"
+  freeform_tags     = local.common_labels
+  security_list_ids = [oci_core_security_list.security_list.id]
+  route_table_id    = oci_core_route_table.route_table.id
+}
 resource "oci_core_route_table" "route_table" {
   #Required
   compartment_id = var.compartment_ocid
