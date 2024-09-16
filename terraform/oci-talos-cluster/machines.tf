@@ -8,7 +8,8 @@ resource "oci_core_instance" "cp" {
   for_each = { for idx, val in random_pet.random : idx => val }
   # count = 1
   #Required
-  availability_domain = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[0].name : var.instance_availability_domain
+  # choose the next availability domain which wasn't last
+  availability_domain = data.oci_identity_availability_domains.availability_domains.availability_domains[each.key % length(data.oci_identity_availability_domains.availability_domains.availability_domains)].name
   compartment_id      = var.compartment_ocid
   shape               = var.instance_shape == null ? data.oci_core_image_shapes.image_shapes.image_shape_compatibilities[0].shape : var.instance_shape
   shape_config {
@@ -69,7 +70,15 @@ resource "oci_core_instance_pool" "worker" {
 
   placement_configurations {
     availability_domain = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[0].name : var.instance_availability_domain
-    primary_subnet_id   = oci_core_subnet.subnet.id
+    primary_subnet_id   = oci_core_subnet.subnet_regional.id
+  }
+  placement_configurations {
+    availability_domain = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[1].name : var.instance_availability_domain
+    primary_subnet_id   = oci_core_subnet.subnet_regional.id
+  }
+  placement_configurations {
+    availability_domain = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[2].name : var.instance_availability_domain
+    primary_subnet_id   = oci_core_subnet.subnet_regional.id
   }
 
   lifecycle {
