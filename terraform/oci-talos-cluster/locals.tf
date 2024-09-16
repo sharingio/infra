@@ -39,9 +39,9 @@ auth:
 compartment: ${var.compartment_ocid}
 vcn: ${oci_core_vcn.vcn.id}
 loadBalancer:
-  subnet1: ${oci_core_subnet.subnet.id}
+  subnet1: ${oci_core_subnet.subnet_regional.id}
   securityListManagementMode: None
   securityLists:
-    ${oci_core_subnet.subnet.id}: ${oci_core_security_list.security_list.id}
+    ${oci_core_subnet.subnet_regional.id}: ${oci_core_security_list.security_list.id}
 EOF
 }
