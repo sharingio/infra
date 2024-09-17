@@ -60,6 +60,10 @@ variable "instance_shape" {
   type    = string
   default = "VM.Standard.A1.Flex"
 }
+variable "kubernetes_csi_external_snapshotter_version" {
+  type    = string
+  default = "v8.1.0"
+}
 variable "oracle_cloud_ccm_version" {
   type    = string
   default = "v1.29.0"
