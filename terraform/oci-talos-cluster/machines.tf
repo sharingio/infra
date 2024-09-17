@@ -95,7 +95,7 @@ locals {
 
 resource "oci_core_instance_configuration" "worker" {
   compartment_id = var.compartment_ocid
-  display_name   = "${var.cluster_name}-worker-${local.worker_config_hash}"
+  display_name   = "${var.cluster_name}-worker"
   freeform_tags  = local.common_labels
 
   instance_details {
@@ -103,7 +103,7 @@ resource "oci_core_instance_configuration" "worker" {
 
     launch_details {
       compartment_id                      = var.compartment_ocid
-      display_name                        = "${var.cluster_name}-worker-${local.worker_config_hash}"
+      display_name                        = "${var.cluster_name}-worker"
       is_pv_encryption_in_transit_enabled = true
       preferred_maintenance_action        = "LIVE_MIGRATE"
       launch_mode                         = local.instance_launch_network_type
