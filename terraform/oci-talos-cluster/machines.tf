@@ -19,7 +19,7 @@ resource "oci_core_instance" "cp" {
 
   create_vnic_details {
     assign_public_ip = true
-    subnet_id        = oci_core_subnet.subnet.id
+    subnet_id        = oci_core_subnet.subnet_regional.id
     nsg_ids          = [oci_core_network_security_group.network_security_group.id]
   }
   agent_config {
@@ -129,7 +129,7 @@ resource "oci_core_instance_configuration" "worker" {
         assign_private_dns_record = false
         assign_public_ip          = true
         nsg_ids                   = [oci_core_network_security_group.network_security_group.id]
-        subnet_id                 = oci_core_subnet.subnet.id
+        subnet_id                 = oci_core_subnet.subnet_regional.id
         skip_source_dest_check    = true
       }
 
