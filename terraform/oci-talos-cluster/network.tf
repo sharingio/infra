@@ -117,7 +117,7 @@ resource "oci_core_security_list" "security_list" {
 }
 
 resource "oci_network_load_balancer_network_load_balancer" "cp_load_balancer" {
-  depends_on = [oci_core_security_list.security_list]
+  depends_on = [oci_core_security_list.security_list, oci_core_vcn.vcn]
 
   #Required
   compartment_id             = var.compartment_ocid
