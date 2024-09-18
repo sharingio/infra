@@ -68,17 +68,12 @@ resource "oci_core_instance_pool" "worker" {
   display_name              = "${var.cluster_name}-worker"
   freeform_tags             = local.common_labels
 
-  placement_configurations {
-    availability_domain = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[0].name : var.instance_availability_domain
-    primary_subnet_id   = oci_core_subnet.subnet_regional.id
-  }
-  placement_configurations {
-    availability_domain = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[1].name : var.instance_availability_domain
-    primary_subnet_id   = oci_core_subnet.subnet_regional.id
-  }
-  placement_configurations {
-    availability_domain = var.instance_availability_domain == null ? data.oci_identity_availability_domains.availability_domains.availability_domains[2].name : var.instance_availability_domain
-    primary_subnet_id   = oci_core_subnet.subnet_regional.id
+  dynamic "placement_configurations" {
+    for_each = data.oci_identity_availability_domains.availability_domains.availability_domains
+    content {
+      availability_domain = placement_configurations.value.name
+      primary_subnet_id   = oci_core_subnet.subnet_regional.id
+    }
   }
 
   lifecycle {
@@ -87,6 +82,8 @@ resource "oci_core_instance_pool" "worker" {
       defined_tags
     ]
   }
+
+  depends_on = [talos_machine_bootstrap.bootstrap]
 }
 
 locals {
