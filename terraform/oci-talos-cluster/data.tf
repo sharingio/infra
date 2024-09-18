@@ -35,6 +35,8 @@ data "talos_client_configuration" "talosconfig" {
 locals {
   talos_base_configuration = <<-EOT
     machine:
+       sysctls:
+         user.max_user_namespaces: "11255"
        time:
          servers:
            - 169.254.169.254
