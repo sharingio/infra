@@ -1,23 +1,12 @@
 ---
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: oci-high
-provisioner: blockvolume.csi.oraclecloud.com
-parameters:
-  vpusPerGB: "20"
-reclaimPolicy: Delete
-volumeBindingMode: WaitForFirstConsumer
-allowVolumeExpansion: true
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: oci-pvc-high
+  name: oci-bv-claim
 spec:
-  storageClassName: oci-high
   accessModes:
     - ReadWriteOnce
+  storageClassName: oci-bv
   resources:
     requests:
       storage: 50Gi
@@ -38,4 +27,4 @@ spec:
   volumes:
     - name: persistent-storage
       persistentVolumeClaim:
-        claimName: oci-pvc-high
+        claimName: oci-bv-claim
