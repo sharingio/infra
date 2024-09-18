@@ -97,7 +97,7 @@ locals {
            cloud-provider: external
            anonymous-auth: true
        inlineManifests:
-         - name: metal-cloud-config
+         - name: oci-cloud-controller-manager
            contents: |
              apiVersion: v1
              data:
@@ -106,6 +106,16 @@ locals {
              kind: Secret
              metadata:
                name: oci-cloud-controller-manager
+               namespace: kube-system
+         - name: oci-volume-provisioner
+           contents: |
+             apiVersion: v1
+             data:
+               config.yaml: ${base64encode(local.oci_cloud_provider_config)}
+               config.ini: ${base64encode(local.oci_config_ini)}
+             kind: Secret
+             metadata:
+               name: oci-volume-provisioner
                namespace: kube-system
     EOT
 }
