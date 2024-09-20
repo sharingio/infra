@@ -28,6 +28,7 @@ resource "oci_identity_policy" "oci-ccm" {
     "Allow dynamic-group ${oci_identity_dynamic_group.oci-ccm.name} to manage load-balancers in ${local.ns_type_name} ${local.ns_select_name}",
     // CSI
     "Allow dynamic-group ${oci_identity_dynamic_group.oci-ccm.name} to manage volume-family in ${local.ns_type_name} ${local.ns_select_name}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.oci-ccm.name} to manage volume-attachments in ${local.ns_type_name} ${local.ns_select_name}",
   ]
 
   #Optional
