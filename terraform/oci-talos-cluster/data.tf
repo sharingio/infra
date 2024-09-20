@@ -28,8 +28,8 @@ data "talos_image_factory_urls" "this" {
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints            = [for k, v in oci_core_instance.cp : v.public_ip]
-  nodes                = [for k, v in oci_core_instance.cp : v.public_ip]
+  endpoints            = [for k, v in oci_core_instance.controlplane : v.public_ip]
+  nodes                = [for k, v in oci_core_instance.controlplane : v.public_ip]
 }
 
 locals {
@@ -43,7 +43,7 @@ locals {
        kubelet:
          extraArgs:
            cloud-provider: external
-           rotate-server-certificates: true
+           rotate-server-certificates: "true"
        systemDiskEncryption:
          state:
            provider: luks2
@@ -125,7 +125,7 @@ locals {
 data "talos_machine_configuration" "controlplane" {
   cluster_name = var.cluster_name
   # cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
-  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}:6443"
+  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address}:6443"
 
   machine_type    = "controlplane"
   machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
@@ -153,15 +153,15 @@ data "talos_machine_configuration" "controlplane" {
       machine = {
         certSANs = concat([
           var.kube_apiserver_domain,
-          oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address,
-        ], [for k, v in oci_core_instance.cp : v.public_ip])
+          oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address,
+        ], [for k, v in oci_core_instance.controlplane : v.public_ip])
       }
       cluster = {
         apiServer = {
           certSANs = concat([
             var.kube_apiserver_domain,
-            oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address,
-          ], [for k, v in oci_core_instance.cp : v.public_ip])
+            oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address,
+          ], [for k, v in oci_core_instance.controlplane : v.public_ip])
         }
       }
     }),
@@ -171,7 +171,7 @@ data "talos_machine_configuration" "controlplane" {
 data "talos_machine_configuration" "worker" {
   cluster_name = var.cluster_name
   # cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
-  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address}:6443"
+  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address}:6443"
 
   machine_type    = "worker"
   machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
@@ -188,15 +188,15 @@ data "talos_machine_configuration" "worker" {
       machine = {
         certSANs = concat([
           var.kube_apiserver_domain,
-          oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address,
-        ], [for k, v in oci_core_instance.cp : v.public_ip])
+          oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address,
+        ], [for k, v in oci_core_instance.controlplane : v.public_ip])
       }
       cluster = {
         apiServer = {
           certSANs = concat([
             var.kube_apiserver_domain,
-            oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address,
-          ], [for k, v in oci_core_instance.cp : v.public_ip])
+            oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address,
+          ], [for k, v in oci_core_instance.controlplane : v.public_ip])
         }
       }
     }),

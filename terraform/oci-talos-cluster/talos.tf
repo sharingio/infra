@@ -19,12 +19,12 @@ resource "talos_cluster_kubeconfig" "kubeconfig" {
     talos_machine_bootstrap.bootstrap
   ]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoint             = oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address
-  node                 = oci_network_load_balancer_network_load_balancer.cp_load_balancer.ip_addresses[0].ip_address
+  endpoint             = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address
+  node                 = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address
 }
 
-resource "talos_machine_configuration_apply" "this" {
-  for_each                    = { for idx, val in oci_core_instance.cp : idx => val }
+resource "talos_machine_configuration_apply" "controlplane" {
+  for_each                    = { for idx, val in oci_core_instance.controlplane : idx => val }
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
   node                        = each.value.public_ip
@@ -42,10 +42,30 @@ resource "talos_machine_configuration_apply" "this" {
   ]
 }
 
+
+resource "talos_machine_configuration_apply" "worker" {
+  for_each                    = { for idx, val in oci_core_instance.worker : idx => val }
+  client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
+  machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
+  node                        = each.value.public_ip
+
+  config_patches = [
+    yamlencode({
+      machine = {
+        kubelet = {
+          extraArgs = {
+            "provider-id" = each.value.id
+          }
+        }
+      }
+    })
+  ]
+}
+
 resource "talos_machine_bootstrap" "bootstrap" {
-  depends_on = [talos_machine_configuration_apply.this]
+  depends_on = [talos_machine_configuration_apply.controlplane]
 
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoint             = [for k, v in oci_core_instance.cp : v.public_ip][0]
-  node                 = [for k, v in oci_core_instance.cp : v.public_ip][0]
+  endpoint             = [for k, v in oci_core_instance.controlplane : v.public_ip][0]
+  node                 = [for k, v in oci_core_instance.controlplane : v.public_ip][0]
 }
