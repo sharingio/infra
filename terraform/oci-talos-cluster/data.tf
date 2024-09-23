@@ -184,6 +184,23 @@ data "talos_machine_configuration" "worker" {
 
   config_patches = [
     local.talos_base_configuration,
+    <<EOF
+machine:
+  sysctls:
+    vm.nr_hugepages: "1024"
+  nodeLabels:
+    openebs.io/engine: mayastor
+  kubelet:
+    extraMounts:
+      - destination: /var/openebs/local
+        type: bind
+        source: /var/openebs/local
+        options:
+          - rbind
+          - rshared
+          - rw
+EOF
+    ,
     yamlencode({
       machine = {
         certSANs = concat([
