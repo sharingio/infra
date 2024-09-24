@@ -26,8 +26,5 @@ resource "oci_core_volume_attachment" "worker_volume_attachment" {
 
   lifecycle {
     create_before_destroy = "true"
-    ignore_changes = [
-      defined_tags
-    ]
   }
 }

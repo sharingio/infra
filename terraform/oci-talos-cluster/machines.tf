@@ -78,10 +78,6 @@ resource "oci_core_instance" "worker" {
     memory_in_gbs = local.worker_instance_memory_in_gbs
   }
 
-  metadata = {
-    user_data = base64encode(data.talos_machine_configuration.worker.machine_configuration)
-  }
-
   create_vnic_details {
     assign_public_ip = true
     subnet_id        = oci_core_subnet.subnet_regional.id

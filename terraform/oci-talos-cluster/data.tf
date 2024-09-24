@@ -182,14 +182,14 @@ data "talos_machine_configuration" "worker" {
         certSANs = concat([
           var.kube_apiserver_domain,
           oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address,
-        ], [for k, v in oci_core_instance.controlplane : v.public_ip])
+        ], [for k, v in oci_core_instance.controlplane : v.public_ip], [for k, v in oci_core_instance.worker : v.public_ip])
       }
       cluster = {
         apiServer = {
           certSANs = concat([
             var.kube_apiserver_domain,
             oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address,
-          ], [for k, v in oci_core_instance.controlplane : v.public_ip])
+          ], [for k, v in oci_core_instance.controlplane : v.public_ip], [for k, v in oci_core_instance.worker : v.public_ip])
         }
       }
     }),
