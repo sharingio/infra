@@ -84,13 +84,6 @@ locals {
            - https://raw.githubusercontent.com/siderolabs/talos-cloud-controller-manager/${var.talos_ccm_version}/docs/deploy/cloud-controller-manager.yml
            - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager-rbac.yaml
            - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager.yaml
-           - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-csi-node-rbac.yaml
-           - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-csi-controller-driver.yaml
-           - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-csi-node-driver.yaml
-           - https://raw.githubusercontent.com/oracle/oci-cloud-controller-manager/${var.oracle_cloud_ccm_version}/manifests/container-storage-interface/storage-class.yaml
-           - https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/${var.kubernetes_csi_external_snapshotter_version}/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
-           - https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/${var.kubernetes_csi_external_snapshotter_version}/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml
-           - https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/${var.kubernetes_csi_external_snapshotter_version}/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml
        controllerManager:
          extraArgs:
            cloud-provider: external
