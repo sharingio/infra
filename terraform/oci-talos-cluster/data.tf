@@ -177,6 +177,23 @@ data "talos_machine_configuration" "worker" {
 
   config_patches = [
     local.talos_base_configuration,
+    <<EOF
+machine:
+   disks:
+     - device: /dev/sdb
+       partitions:
+         - mountpoint: /var/lib/longhorn
+   kubelet:
+      extraMounts:
+        - destination: /var/lib/longhorn
+          type: bind
+          source: /var/lib/longhorn
+          options:
+          - bind
+          - rshared
+          - rw
+EOF
+    ,
     yamlencode({
       machine = {
         certSANs = concat([
