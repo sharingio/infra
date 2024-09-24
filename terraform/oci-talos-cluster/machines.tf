@@ -1,10 +1,10 @@
 resource "random_pet" "controlplane" {
-  count     = local.controlplane_instance_count
+  count     = var.controlplane_instance_count
   length    = 2
   separator = "-"
 }
 resource "random_pet" "worker" {
-  count     = local.worker_instance_count
+  count     = var.worker_instance_count
   length    = 2
   separator = "-"
 }
@@ -18,8 +18,8 @@ resource "oci_core_instance" "controlplane" {
   compartment_id      = var.compartment_ocid
   shape               = var.instance_shape == null ? data.oci_core_image_shapes.image_shapes.image_shape_compatibilities[0].shape : var.instance_shape
   shape_config {
-    ocpus         = local.controlplane_instance_ocpus
-    memory_in_gbs = local.controlplane_instance_memory_in_gbs
+    ocpus         = var.controlplane_instance_ocpus
+    memory_in_gbs = var.controlplane_instance_memory_in_gbs
   }
 
   create_vnic_details {
@@ -74,8 +74,8 @@ resource "oci_core_instance" "worker" {
   compartment_id      = var.compartment_ocid
   shape               = var.instance_shape == null ? data.oci_core_image_shapes.image_shapes.image_shape_compatibilities[0].shape : var.instance_shape
   shape_config {
-    ocpus         = local.worker_instance_ocpus
-    memory_in_gbs = local.worker_instance_memory_in_gbs
+    ocpus         = var.worker_instance_ocpus
+    memory_in_gbs = var.worker_instance_memory_in_gbs
   }
 
   create_vnic_details {

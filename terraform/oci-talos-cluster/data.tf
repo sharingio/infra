@@ -14,7 +14,7 @@ data "talos_image_factory_extensions_versions" "this" {
   # get the latest talos version
   talos_version = var.talos_version
   filters = {
-    names = local.talos_extensions
+    names = var.talos_extensions
   }
 }
 
@@ -22,13 +22,13 @@ data "talos_image_factory_urls" "this" {
   talos_version = var.talos_version
   schematic_id  = talos_image_factory_schematic.this.id
   platform      = "oracle"
-  architecture  = local.architecture
+  architecture  = var.architecture
 }
 
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints            = concat([for k, v in oci_core_instance.controlplane : v.public_ip], [for k, v in oci_core_instance.worker : v.public_ip])
+  endpoints            = [for k, v in oci_core_instance.controlplane : v.public_ip]
   nodes                = concat([for k, v in oci_core_instance.controlplane : v.public_ip], [for k, v in oci_core_instance.worker : v.public_ip])
 }
 

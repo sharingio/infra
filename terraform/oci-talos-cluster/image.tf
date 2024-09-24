@@ -9,7 +9,7 @@ resource "oci_core_image" "talos_image" {
 
   image_source_details {
     source_type = "objectStorageUri"
-    source_uri  = local.image_source_uri
+    source_uri  = var.talos_image_oci_bucket_url
 
     #Optional
     operating_system         = "Talos Linux"

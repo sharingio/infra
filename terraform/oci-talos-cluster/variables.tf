@@ -80,3 +80,44 @@ variable "service_subnet_block" {
   type    = string
   default = "10.200.0.0/22"
 }
+variable "architecture" {
+  type    = string
+  default = "arm64"
+}
+variable "talos_extensions" {
+  type = set(string)
+  default = [
+    "gvisor",
+    "kata-containers",
+    "iscsi-tools",
+    "mdadm",
+  ]
+}
+variable "controlplane_instance_count" {
+  type    = number
+  default = 3
+}
+variable "worker_instance_count" {
+  type    = number
+  default = 6
+}
+variable "talos_image_oci_bucket_url" {
+  type     = string
+  nullable = false
+}
+variable "controlplane_instance_ocpus" {
+  type    = number
+  default = 4
+}
+variable "controlplane_instance_memory_in_gbs" {
+  type    = string
+  default = "8"
+}
+variable "worker_instance_ocpus" {
+  type    = number
+  default = 4
+}
+variable "worker_instance_memory_in_gbs" {
+  type    = string
+  default = "8"
+}
