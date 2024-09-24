@@ -42,27 +42,8 @@ resource "talos_machine_configuration_apply" "controlplane" {
   ]
 }
 
-
-resource "talos_machine_configuration_apply" "worker" {
-  for_each                    = { for idx, val in oci_core_instance.worker : idx => val }
-  client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
-  machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
-  node                        = each.value.public_ip
-
-  config_patches = [
-    yamlencode({
-      machine = {
-        kubelet = {
-          extraArgs = {
-            "provider-id" = each.value.id
-          }
-        }
-      }
-    })
-  ]
-}
-
 resource "talos_machine_bootstrap" "bootstrap" {
+  count      = 0
   depends_on = [talos_machine_configuration_apply.controlplane]
 
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
