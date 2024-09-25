@@ -14,6 +14,11 @@ terraform {
     }
   }
   required_version = ">= 1.2"
+  backend "kubernetes" {
+    secret_suffix = "cluster-state"
+    namespace     = "tfstate"
+    config_path   = "~/.kube/config-fop"
+  }
 }
 
 provider "oci" {
