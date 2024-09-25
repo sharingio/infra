@@ -5,7 +5,7 @@ resource "oci_core_image" "talos_image" {
   #Optional
   display_name  = "Talos ${var.talos_version}"
   freeform_tags = local.common_labels
-  launch_mode   = local.image_launch_mode
+  launch_mode   = local.instance_mode
 
   image_source_details {
     source_type = "objectStorageUri"
@@ -16,12 +16,6 @@ resource "oci_core_image" "talos_image" {
     operating_system_version = var.talos_version
     source_image_type        = "QCOW2"
   }
-}
-
-data "oci_core_image_shapes" "image_shapes" {
-  depends_on = [oci_core_shape_management.image_shape]
-  #Required
-  image_id = oci_core_image.talos_image.id
 }
 
 resource "oci_core_shape_management" "image_shape" {

@@ -41,9 +41,9 @@ resource "oci_core_instance" "controlplane" {
   freeform_tags = local.common_labels
   launch_options {
     #Optional
-    network_type            = local.instance_launch_network_type
-    remote_data_volume_type = local.instance_launch_network_type
-    boot_volume_type        = local.instance_launch_network_type
+    network_type            = local.instance_mode
+    remote_data_volume_type = local.instance_mode
+    boot_volume_type        = local.instance_mode
     firmware                = "UEFI_64"
   }
   instance_options {
@@ -97,9 +97,9 @@ resource "oci_core_instance" "worker" {
   freeform_tags = local.common_labels
   launch_options {
     #Optional
-    network_type            = local.instance_launch_network_type
-    remote_data_volume_type = local.instance_launch_network_type
-    boot_volume_type        = local.instance_launch_network_type
+    network_type            = local.instance_mode
+    remote_data_volume_type = local.instance_mode
+    boot_volume_type        = local.instance_mode
     firmware                = "UEFI_64"
   }
   instance_options {

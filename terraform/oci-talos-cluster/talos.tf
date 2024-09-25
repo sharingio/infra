@@ -51,10 +51,13 @@ resource "talos_machine_configuration_apply" "worker" {
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {
-  count      = 0
   depends_on = [talos_machine_configuration_apply.controlplane]
 
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   endpoint             = [for k, v in oci_core_instance.controlplane : v.public_ip][0]
   node                 = [for k, v in oci_core_instance.controlplane : v.public_ip][0]
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
