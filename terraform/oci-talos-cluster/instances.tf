@@ -77,7 +77,6 @@ resource "oci_core_instance" "worker" {
     ocpus         = var.worker_instance_ocpus
     memory_in_gbs = var.worker_instance_memory_in_gbs
   }
-
   create_vnic_details {
     assign_public_ip = true
     subnet_id        = oci_core_subnet.subnet_regional.id
@@ -119,4 +118,6 @@ resource "oci_core_instance" "worker" {
       defined_tags
     ]
   }
+
+  depends_on = [oci_core_instance.controlplane]
 }
