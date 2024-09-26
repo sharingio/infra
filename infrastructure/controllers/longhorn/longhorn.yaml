@@ -48,12 +48,12 @@ spec:
       # reclaimPolicy: "Delete"
       migrateable: false # What is this?
     ingress:
-      enabled: true
+      enabled: false
       tls: true
       tlsSecret: wildcard-tls
       ingressClassName: nginx
       # tls: true
-      host: "longhorn.${domain}"
+      # host: "longhorn.${domain}"
       # host: "longhorn.sharing.io"
     # enablePSP: true
     # namespaceOverride: "longhorn"
