@@ -13,3 +13,4 @@ resources:
   # - ./kubevirt-operator.yaml
   - ./reflector.yaml
   - ./capi-operator.yaml
+  - ./kube-system.yaml
