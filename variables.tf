@@ -23,3 +23,16 @@ variable "region" {
   type    = string
   default = ""
 }
+variable "github_org" {
+  type    = string
+  default = "sharingio"
+}
+variable "github_repository" {
+  type    = string
+  default = "infra"
+}
+variable "github_token" {
+  type      = string
+  default   = "infra"
+  sensitive = true
+}
