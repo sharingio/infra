@@ -27,6 +27,3 @@ spec:
     controller:
       ingressClassResource:
         default: true
-      service:
-        externalIPs:
-          - "${ingressip}"
