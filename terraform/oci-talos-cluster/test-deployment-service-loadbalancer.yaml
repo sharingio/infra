@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: lb-test
+  name: lb-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lb-test
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: lb-test
+    spec:
+      containers:
+      - image: nginx:latest
+        imagePullPolicy: Always
+        name: nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    oci.oraclecloud.com/load-balancer-type: nlb
+  labels:
+    app: lb-test
+  name: lb-test
+  namespace: default
+spec:
+  ports:
+  - name: "80"
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: lb-test
+  type: LoadBalancer

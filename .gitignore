@@ -6,6 +6,7 @@ tmp/
 .terraform
 .terraform.lock.hcl
 values.tfvars
+**/*.tfvars
 config.org
 secrets.org
 config.tfvars

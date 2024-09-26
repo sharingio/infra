@@ -1,34 +1,22 @@
+output "factory_disk_image" {
+  value = module.cluster-sharingio-oci.factory_disk_image
+}
+
+output "load_balancer_ip" {
+  value = module.cluster-sharingio-oci.load_balancer_ip
+}
+
 output "talosconfig" {
-  value     = module.cluster.talosconfig
+  value     = module.cluster-sharingio-oci.talosconfig
   sensitive = true
 }
 
 output "kubeconfig" {
-  value     = module.cluster.kubeconfig.kubeconfig_raw
+  value     = module.cluster-sharingio-oci.kubeconfig
   sensitive = true
 }
 
-output "akadmin-password" {
-  value     = module.cluster-manifests.authentik_bootstrap_password
-  sensitive = true
-}
-
-output "akadmin-token" {
-  value     = module.cluster-manifests.authentik_bootstrap_token
-  sensitive = true
-}
-
-output "cluster-apiserver-ip" {
-  value = module.cluster.cluster_apiserver_ip
-}
-
-output "cluster-ingress-ip" {
-  value = module.cluster.cluster_ingress_ip
-}
-output "coder_admin_email" {
-  value = module.cluster-manifests.coder_admin_email
-}
-output "coder_admin_password" {
-  value     = module.cluster-manifests.coder_admin_password
+output "oci_cloud_provider_config" {
+  value     = module.cluster-sharingio-oci.oci_cloud_provider_config
   sensitive = true
 }
