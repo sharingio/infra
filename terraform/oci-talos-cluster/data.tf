@@ -34,7 +34,7 @@ data "talos_client_configuration" "talosconfig" {
   endpoints            = [for k, v in oci_core_instance.controlplane : v.public_ip]
   nodes = concat(
     [for k, v in oci_core_instance.controlplane : v.public_ip],
-    [for k, v in oci_core_instance.worker : v.public_ip]
+    [for k, v in oci_core_instance.worker : v.private_ip]
   )
 }
 
@@ -72,7 +72,6 @@ data "talos_machine_configuration" "controlplane" {
           oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address,
           ],
           [for k, v in oci_core_instance.controlplane : v.public_ip],
-          [for k, v in oci_core_instance.worker : v.public_ip]
         )
       }
       cluster = {
@@ -82,7 +81,6 @@ data "talos_machine_configuration" "controlplane" {
             oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address,
             ],
             [for k, v in oci_core_instance.controlplane : v.public_ip],
-            [for k, v in oci_core_instance.worker : v.public_ip]
           )
         }
       }
@@ -130,7 +128,6 @@ EOF
           oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address,
           ],
           [for k, v in oci_core_instance.controlplane : v.public_ip],
-          [for k, v in oci_core_instance.worker : v.public_ip]
         )
       }
       cluster = {
@@ -140,7 +137,6 @@ EOF
             oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address,
             ],
             [for k, v in oci_core_instance.controlplane : v.public_ip],
-            [for k, v in oci_core_instance.worker : v.public_ip]
           )
         }
       }

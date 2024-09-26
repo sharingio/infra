@@ -73,6 +73,9 @@ resource "oci_core_instance" "worker" {
   availability_domain = data.oci_identity_availability_domains.availability_domains.availability_domains[each.key % length(data.oci_identity_availability_domains.availability_domains.availability_domains)].name
   compartment_id      = var.compartment_ocid
   shape               = var.instance_shape == null ? data.oci_core_image_shapes.image_shapes.image_shape_compatibilities[0].shape : var.instance_shape
+  metadata = {
+    user_data = base64encode(data.talos_machine_configuration.worker.machine_configuration)
+  }
   shape_config {
     ocpus         = var.worker_instance_ocpus
     memory_in_gbs = var.worker_instance_memory_in_gbs
@@ -115,6 +118,7 @@ resource "oci_core_instance" "worker" {
   lifecycle {
     create_before_destroy = "true"
     ignore_changes = [
+      metadata.user_data,
       defined_tags
     ]
   }
