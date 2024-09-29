@@ -7,7 +7,6 @@ resources:
   # - ./cert-manager-webhook-pdns.yaml
   - ./longhorn.yaml
   - ./cert-manager.yaml
-  - ./metallb
   - ./kubevirt-operator.yaml
   - ./kubevirt.yaml
   # - ./kubevirt-operator.yaml
