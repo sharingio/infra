@@ -27,35 +27,31 @@ You'll need .tfvar files, currently we create those via org files.
 
 #+begin_src tmux :session ":tofu"
 cd ~/infra
-mkdir -p ./tmp/
-touch ./tmp/cluster-kubeconfig
-tofu init -var-file=./config.tfvars -var-file=./secrets.tfvars -var github_token="$(gh auth token)" --upgrade
+tofu init -var-file=./.tfvars -var github_token="$(gh auth token)" --upgrade
 #+end_src
 
 plan
 
 #+begin_src tmux :session ":tofu"
-tofu plan -var-file=./config.tfvars -var-file=./secrets.tfvars -var github_token="$(gh auth token)"
+tofu plan -var-file=./.tfvars -var github_token="$(gh auth token)"
 #+end_src
 
 apply
 
 #+begin_src tmux :session ":tofu"
-tofu apply -var-file=./config.tfvars -var-file=./secrets.tfvars -var github_token="$(gh auth token)"
+tofu apply -var-file=./.tfvars -var github_token="$(gh auth token)"
 #+end_src
 
 get talosconfig
 
 #+begin_src tmux :session ":talos"
-mkdir -p ~/.talos
-tofu output -raw talosconfig > ~/.talos/config
+tofu output -raw talosconfig > ./talosconfig
 #+end_src
 
 get kubeconfig
 
 #+begin_src tmux
-mkdir -p ~/.kube
-tofu output -raw kubeconfig > ~/.kube/config
+tofu output -raw kubeconfig > ./kubeconfig
 #+end_src
 
 * Flux usage
@@ -63,17 +59,12 @@ tofu output -raw kubeconfig > ~/.kube/config
 force a reconciliation
 
 #+begin_src tmux
-CLUSTER_NAME=cloudnative-coop
-flux --kubeconfig ~/.kube/config-"$CLUSTER_NAME" reconcile source git flux-system
+flux --kubeconfig ./kubeconfig reconcile source git flux-system
 #+end_src
 
 * Force tear down
 
 #+begin_src tmux :session ":tofu"
 tofu state list | grep -E 'talos|flux|manifests|kubernetes_manifest' | xargs -I{} tofu state rm {}
-tofu destroy -var-file=./config.tfvars -var-file=./secrets.tfvars -var github_token="$(gh auth token)"
+tofu destroy -var-file=./.tfvars -var github_token="$(gh auth token)"
 #+end_src
-
-* Notes
-
-- Equinix Metal Cloud Provider 401 error regarding IP allocation and assigning

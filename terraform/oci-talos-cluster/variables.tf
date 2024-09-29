@@ -50,7 +50,7 @@ variable "subnet_block_regional" {
 }
 variable "talos_version" {
   type    = string
-  default = "v1.7.6"
+  default = "v1.8.0"
 }
 variable "kubernetes_version" {
   type    = string
@@ -58,7 +58,7 @@ variable "kubernetes_version" {
 }
 variable "instance_shape" {
   type    = string
-  default = "VM.Standard.A1.Flex"
+  default = "VM.Standard.E5.Flex"
 }
 variable "oracle_cloud_ccm_version" {
   type    = string
@@ -78,7 +78,7 @@ variable "service_subnet_block" {
 }
 variable "architecture" {
   type    = string
-  default = "arm64"
+  default = "amd64"
 }
 variable "talos_extensions" {
   type = set(string)
@@ -111,11 +111,11 @@ variable "controlplane_instance_memory_in_gbs" {
 }
 variable "worker_instance_ocpus" {
   type    = number
-  default = 4
+  default = 8
 }
 variable "worker_instance_memory_in_gbs" {
   type    = string
-  default = "8"
+  default = "32"
 }
 variable "worker_volume_enabled" {
   type    = bool

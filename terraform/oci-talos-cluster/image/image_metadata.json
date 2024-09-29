@@ -14,11 +14,11 @@
     "imageCapabilityData": null,
     "imageCapsFormatVersion": null,
     "operatingSystem": "Talos",
-    "operatingSystemVersion": "1.7.6",
+    "operatingSystemVersion": "1.8.0",
     "additionalMetadata": {
         "shapeCompatibilities": [
             {
-                "internalShapeName": "VM.Standard.A1.Flex",
+                "internalShapeName": "VM.Standard.E5.Flex",
                 "ocpuConstraints": null,
                 "memoryConstraints": null
             }

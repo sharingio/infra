@@ -69,6 +69,10 @@ EOF
            - ${var.pod_subnet_block}
          serviceSubnets:
            - ${var.service_subnet_block}
+         cni:
+           name: none
+       proxy:
+         disabled: true
        allowSchedulingOnMasters: false
        externalCloudProvider:
          enabled: true
@@ -94,5 +98,14 @@ EOF
              metadata:
                name: oci-cloud-controller-manager
                namespace: kube-system
+         - name: kube-system-namespace-podsecurity
+           contents: |
+             apiVersion: v1
+             kind: Namespace
+             metadata:
+               name: kube-system
+               labels:
+                 pod-security.kubernetes.io/enforce: privileged
+         - name: cilium
     EOT
 }
