@@ -22,17 +22,16 @@ spec:
       interval: 24h
   values:
     logLevel: 4
-    tolerations: [] # we only have control planes for now, TODO more nodes
     image:
       manager:
         image: registry.k8s.io/cluster-api/cluster-api-controller
-        tag: v0.10.1
+        tag: v0.13.0
     manager:
       featureGates:
         ClusterResourceSet: true # https://kubevirt-manager.io/get_started.html
-    # bootstrap: "kubeadm:v1.4.2"
-    # controlPlane: "kubeadm:v1.4.2"
-    # infrastructure: "X:V"
+    bootstrap: talos
+    controlPlane: talos
+    infrastructure: kubevirt
     # addon:
     #   x: true
     # env:
