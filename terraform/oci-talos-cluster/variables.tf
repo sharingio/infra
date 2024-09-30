@@ -66,7 +66,7 @@ variable "oracle_cloud_ccm_version" {
 }
 variable "talos_ccm_version" {
   type    = string
-  default = "v1.6.0"
+  default = "v1.8.0"
 }
 variable "pod_subnet_block" {
   type    = string
