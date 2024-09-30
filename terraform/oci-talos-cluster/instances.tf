@@ -118,7 +118,7 @@ resource "oci_core_instance" "worker" {
   lifecycle {
     create_before_destroy = "true"
     ignore_changes = [
-      metadata.user_data,
+      metadata["user_data"],
       defined_tags
     ]
   }
