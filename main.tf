@@ -42,3 +42,7 @@ resource "flux_bootstrap_git" "this" {
   path               = "clusters/cluster-sharingio-oci"
   components_extra   = ["image-reflector-controller", "image-automation-controller"]
 }
+data "oci_network_load_balancer_network_load_balancers" "nlbs" {
+  #Required
+  compartment_id = var.compartment_ocid
+}

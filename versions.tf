@@ -20,6 +20,14 @@ terraform {
       source  = "integrations/github"
       version = "~>6.3.0"
     }
+    powerdns = {
+      source  = "pan-net/powerdns"
+      version = "1.5.0"
+    }
+    dns = {
+      source  = "hashicorp/dns"
+      version = "3.4.0"
+    }
   }
   required_version = ">= 1.2"
   backend "kubernetes" {
@@ -51,4 +59,16 @@ provider "flux" {
       private_key = tls_private_key.flux.private_key_pem
     }
   }
+}
+provider "dns" {
+  update {
+    server        = var.rfc2136_nameserver
+    key_name      = var.rfc2136_tsig_keyname
+    key_secret    = var.rfc2136_tsig_key
+    key_algorithm = "hmac-sha256"
+  }
+}
+provider "powerdns" {
+  api_key    = var.pdns_api_key
+  server_url = var.pdns_host
 }

@@ -36,3 +36,27 @@ variable "github_token" {
   default   = "infra"
   sensitive = true
 }
+variable "rfc2136_nameserver" {
+  type      = string
+  sensitive = true
+}
+variable "rfc2136_tsig_keyname" {
+  type      = string
+  sensitive = true
+}
+variable "rfc2136_tsig_key" {
+  type      = string
+  sensitive = true
+}
+variable "pdns_host" {
+  type      = string
+  sensitive = true
+}
+variable "pdns_api_key" {
+  type      = string
+  sensitive = true
+}
+variable "domain" {
+  type    = string
+  default = "sharing.io"
+}
