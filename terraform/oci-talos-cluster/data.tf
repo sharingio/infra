@@ -111,7 +111,7 @@ data "talos_machine_configuration" "worker" {
 
   config_patches = [
     local.talos_base_configuration,
-    <<EOF
+    var.worker_volume_enabled == true ? <<EOF
 machine:
    disks:
      - device: /dev/sdb
@@ -127,7 +127,7 @@ machine:
           - rshared
           - rw
 EOF
-    ,
+    : null,
     yamlencode({
       machine = {
         certSANs = concat([

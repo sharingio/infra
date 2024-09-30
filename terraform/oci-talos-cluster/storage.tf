@@ -1,5 +1,5 @@
 resource "oci_core_volume" "worker" {
-  for_each = { for idx, val in oci_core_instance.worker : idx => val if var.worker_volume_enabled }
+  for_each = { for idx, val in oci_core_instance.worker : idx => val if var.worker_volume_enabled == true }
   #Required
   compartment_id = var.compartment_ocid
 
@@ -18,7 +18,7 @@ resource "oci_core_volume" "worker" {
 }
 
 resource "oci_core_volume_attachment" "worker_volume_attachment" {
-  for_each = { for idx, val in oci_core_volume.worker : idx => val if var.worker_volume_enabled }
+  for_each = { for idx, val in oci_core_volume.worker : idx => val if var.worker_volume_enabled == true }
   #Required
   attachment_type = local.instance_mode
   instance_id     = [for val in oci_core_instance.worker : val if val.display_name == each.value.display_name][0].id
