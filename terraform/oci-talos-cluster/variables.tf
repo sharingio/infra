@@ -54,7 +54,7 @@ variable "talos_version" {
 }
 variable "kubernetes_version" {
   type    = string
-  default = "v1.30.3"
+  default = "v1.31.1"
 }
 variable "instance_shape" {
   type    = string
