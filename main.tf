@@ -46,3 +46,29 @@ data "oci_network_load_balancer_network_load_balancers" "nlbs" {
   #Required
   compartment_id = var.compartment_ocid
 }
+module "cluster-sharingio-oci-manifests" {
+  source = "./terraform/manifests"
+
+  ingress_ip = module.cluster.cluster_ingress_ip
+  # dns_ip                   = module.cluster.cluster_dns_ip
+  # wg_ip                    = module.cluster.cluster_wireguard_ip
+  acme_email_address   = local.acme_email_address
+  rfc2136_algorithm    = local.rfc2136_algorithm
+  rfc2136_nameserver   = var.rfc2136_nameserver
+  rfc2136_tsig_keyname = var.rfc2136_tsig_keyname
+  rfc2136_tsig_key     = var.rfc2136_tsig_key
+  domain               = var.domain
+  pdns_host            = var.pdns_host
+  pdns_api_key         = var.pdns_api_key
+  # for coder to directly authenticate via github
+  coder_oauth2_github_client_id     = var.coder_oauth2_github_client_id
+  coder_oauth2_github_client_secret = var.coder_oauth2_github_client_secret
+  # for coder to create gh tokens for rw within workspaces
+  coder_gitauth_0_client_id     = var.coder_gitauth_0_client_id
+  coder_gitauth_0_client_secret = var.coder_gitauth_0_client_secret
+
+  providers = {
+    kubernetes = kubernetes
+    random     = random
+  }
+}

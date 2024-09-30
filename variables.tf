@@ -60,3 +60,23 @@ variable "domain" {
   type    = string
   default = "sharing.io"
 }
+variable "coder_oauth2_github_client_id" {
+  description = "Authenticating Coder directly to github (bypassing authentik)"
+  type        = string
+  default     = ""
+}
+variable "coder_oauth2_github_client_secret" {
+  description = "Authenticating Coder directly to github (bypassing authentik)"
+  type        = string
+  default     = ""
+}
+variable "coder_gitauth_0_client_id" {
+  description = "Retrieving a RW token to save prs / commits etc in workspaces"
+  type        = string
+  default     = ""
+}
+variable "coder_gitauth_0_client_secret" {
+  description = "Retrieving a RW token to save prs / commits etc in workspaces"
+  type        = string
+  default     = ""
+}
