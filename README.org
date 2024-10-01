@@ -21,6 +21,17 @@ brew install opentofu
 
 #+RESULTS:
 
+Create a .tfvars file
+
+#+begin_src hcl
+tenancy_ocid     = "TENANCY OCID                         : https://cloud.oracle.com/tenancy"
+user_ocid        = "YOUR USER OCID                       : https://cloud.oracle.com/identity/domains/my-profile"
+private_key_path = "YOUR PRIVATE KEY PATH                : https://cloud.oracle.com/identity/domains/my-profile/api-keys"
+fingerprint      = "THE FINGERPRINT FOR YOUR PRIVATE KEY : ^^"
+region           = "us-phoenix-1"
+compartment_ocid = "YOUR COMPARTMENT OCID                : https://cloud.oracle.com/identity/compartments # cloudnativecoop"
+#+end_src
+
 * Usage
 
 You'll need .tfvar files, currently we create those via org files.
