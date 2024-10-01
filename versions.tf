@@ -32,6 +32,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "2.27.0"
     }
+    authentik = {
+      source  = "goauthentik/authentik"
+      version = "2024.8.3"
+    }
   }
   required_version = ">= 1.2"
   backend "kubernetes" {
@@ -80,8 +84,14 @@ provider "kubernetes" {
   alias = "cluster-sharingio-oci"
   # config_path = "./kubeconfig"
   # We use an IP here to speed things up, the first nome name might work as well
-  host                   = "https://${module.cluster.cluster_node0_ip}:6443"
+  host                   = module.cluster-sharingio-oci.kubeconfig_host
   client_certificate     = base64decode(module.cluster-sharingio-oci.kubeconfig_client_certificate)
-  client_key             = base64decode(module.clustercluster-sharingio-oci.kubeconfig_client_key)
-  cluster_ca_certificate = base64decode(module.clustercluster-sharingio-oci.kubeconfig_cluster_ca_certificate)
+  client_key             = base64decode(module.cluster-sharingio-oci.kubeconfig_client_key)
+  cluster_ca_certificate = base64decode(module.cluster-sharingio-oci.kubeconfig_ca_certificate)
+}
+provider "authentik" {
+  url   = "https://sso.${var.domain}"
+  token = module.cluster-sharingio-oci-manifests.authentik_bootstrap_token
+  # Optionally set insecure to ignore TLS Certificates
+  # insecure = true
 }

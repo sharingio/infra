@@ -81,9 +81,9 @@ resource "kubernetes_config_map_v1" "powerdns-config" {
       ${var.domain}
     EOT
   }
-  depends_on = [
-    kubernetes_namespace.cert-manager
-  ]
+  # depends_on = [
+  #   kubernetes_namespace.cert-manager
+  # ]
 }
 
 resource "kubernetes_config_map_v1" "powerdns-kustomize" {
@@ -97,7 +97,7 @@ resource "kubernetes_config_map_v1" "powerdns-kustomize" {
     PDNS_API_INGRESS   = "pdns.${var.domain}"
     PDNS_ADMIN_INGRESS = "powerdns.${var.domain}"
   }
-  depends_on = [
-    kubernetes_namespace.cert-manager
-  ]
+  # depends_on = [
+  #   kubernetes_namespace.cert-manager
+  # ]
 }

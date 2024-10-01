@@ -17,17 +17,22 @@ output "kubeconfig" {
 }
 
 output "kubeconfig_ca_certificate" {
-  value     = talos_cluster_kubeconfig.kubeconfig.client_configuration.ca_certificate
+  value     = talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.ca_certificate
   sensitive = true
 }
 
 output "kubeconfig_client_key" {
-  value     = talos_cluster_kubeconfig.kubeconfig.client_configuration.client_key
+  value     = talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.client_key
   sensitive = true
 }
 
 output "kubeconfig_client_certificate" {
-  value     = talos_cluster_kubeconfig.kubeconfig.client_configuration.client_certificate
+  value     = talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.client_certificate
+  sensitive = true
+}
+
+output "kubeconfig_host" {
+  value     = talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.host
   sensitive = true
 }
 

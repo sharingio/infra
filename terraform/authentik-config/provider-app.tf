@@ -12,7 +12,7 @@ resource "authentik_application" "coder" {
 }
 
 
-data "authentik_scope_mapping" "coder" {
+data "authentik_property_mapping_provider_scope" "coder" {
   # Search by name, by managed field or by scope_name
   # name    = "authentik default OAuth Mapping: Proxy outpost"
   managed_list = [
@@ -73,7 +73,7 @@ resource "authentik_provider_oauth2" "coder" {
   #     ~ signing_key                = "62c4656a-8137-4c10-a7cf-655fac74094a" -> (known after apply)
   #       # (11 unchanged attributes hidden)
   #   }
-  property_mappings = data.authentik_scope_mapping.coder.ids
+  property_mappings = data.authentik_property_mapping_provider_scope.coder.ids
   lifecycle {
     ignore_changes = [
       # Ignore any changes to the secret data

@@ -49,9 +49,9 @@ resource "kubernetes_config_map" "coder_kustomize" {
     TUNNELD_WILDCARD_DOMAIN = "try.${var.domain}"
     wg_ip                   = var.wg_ip
   }
-  depends_on = [
-    kubernetes_namespace.flux-system
-  ]
+  # depends_on = [
+  #   kubernetes_namespace.flux-system
+  # ]
 }
 
 resource "kubernetes_secret_v1" "coder" {

@@ -1,15 +1,15 @@
-resource "kubernetes_namespace" "flux-system" {
-  metadata {
-    name = "flux-system"
-  }
+# resource "kubernetes_namespace" "flux-system" {
+#   metadata {
+#     name = "flux-system"
+#   }
 
-  lifecycle {
-    # prevent_destroy = true
-    ignore_changes = [
-      metadata["labels"],
-    ]
-  }
-}
+#   lifecycle {
+#     # prevent_destroy = true
+#     ignore_changes = [
+#       metadata["labels"],
+#     ]
+#   }
+# }
 
 # TODO move outside the manifest module
 resource "random_string" "flux_receiver_token" {
@@ -29,7 +29,7 @@ resource "kubernetes_secret_v1" "flux_receiver_token" {
   data = {
     token = random_string.flux_receiver_token.result
   }
-  depends_on = [
-    kubernetes_namespace.flux-system
-  ]
+  # depends_on = [
+  #   kubernetes_namespace.flux-system
+  # ]
 }

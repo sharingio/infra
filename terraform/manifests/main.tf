@@ -29,7 +29,7 @@ resource "kubernetes_config_map_v1" "ingress-ip" {
   data = {
     ingressip = var.ingress_ip
   }
-  depends_on = [
-    kubernetes_namespace.flux-system
-  ]
+  # depends_on = [
+  #   kubernetes_namespace.flux-system
+  # ]
 }

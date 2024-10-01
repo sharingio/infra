@@ -16,6 +16,11 @@ output "kubeconfig" {
   sensitive = true
 }
 
+output "kubeconfig_host" {
+  value     = module.cluster-sharingio-oci.kubeconfig_host
+  sensitive = true
+}
+
 output "oci_cloud_provider_config" {
   value     = module.cluster-sharingio-oci.oci_cloud_provider_config
   sensitive = true
