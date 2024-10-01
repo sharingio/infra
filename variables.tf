@@ -80,6 +80,16 @@ variable "coder_gitauth_0_client_secret" {
   type        = string
   default     = ""
 }
+variable "authentik_github_oauth_app_id" {
+  description = "Github OAUTH app id"
+  type        = string
+  default     = ""
+}
+variable "authentik_github_oauth_app_secret" {
+  description = "Github OAUTH app secrets"
+  type        = string
+  default     = ""
+}
 variable "coder_version" {
   description = "Version of coder from https://github.com/coder/coder/releases/"
   type        = string
