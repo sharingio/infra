@@ -80,3 +80,13 @@ variable "coder_gitauth_0_client_secret" {
   type        = string
   default     = ""
 }
+variable "coder_version" {
+  description = "Version of coder from https://github.com/coder/coder/releases/"
+  type        = string
+  default     = "v2.16.0"
+}
+variable "authentik_version" {
+  description = "Version of authentik from https://github.com/goauthentik/authentik/releases/"
+  type        = string
+  default     = "2024.8.3"
+}
