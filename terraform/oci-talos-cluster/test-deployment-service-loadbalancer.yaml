@@ -4,6 +4,7 @@ metadata:
   labels:
     app: lb-test
   name: lb-test
+  namespace: default
 spec:
   replicas: 1
   selector:
