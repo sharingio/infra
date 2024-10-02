@@ -98,5 +98,5 @@ variable "coder_version" {
 variable "authentik_version" {
   description = "Version of authentik from https://github.com/goauthentik/authentik/releases/"
   type        = string
-  default     = "2024.8.3"
+  default     = "2024.4.0"
 }
