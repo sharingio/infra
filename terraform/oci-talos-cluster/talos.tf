@@ -49,6 +49,18 @@ resource "talos_machine_configuration_apply" "worker" {
   endpoint                    = [for k, v in oci_core_instance.controlplane : v.public_ip][0]
   node                        = each.value.private_ip
 
+  config_patches = [
+    yamlencode({
+      machine = {
+        kubelet = {
+          extraArgs = {
+            "provider-id" = each.value.id
+          }
+        }
+      }
+    })
+  ]
+
   depends_on = [oci_core_volume_attachment.worker_volume_attachment, talos_machine_configuration_apply.controlplane]
 }
 
