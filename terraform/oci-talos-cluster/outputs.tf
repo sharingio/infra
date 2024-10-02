@@ -40,3 +40,8 @@ output "oci_cloud_provider_config" {
   value     = local.oci_cloud_provider_config
   sensitive = true
 }
+
+output "cilium_yaml" {
+  value     = data.helm_template.cilium.manifest
+  sensitive = true
+}

@@ -71,8 +71,6 @@ EOF
            - ${var.service_subnet_block}
          cni:
            name: none
-       proxy:
-         disabled: true
        allowSchedulingOnMasters: false
        externalCloudProvider:
          enabled: true
