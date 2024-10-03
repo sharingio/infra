@@ -1,0 +1,26 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: kube-fledged
+  namespace: flux-system
+spec:
+  interval: 1h0m0s
+  url: https://senthilrch.github.io/kubefledged-charts/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-fledged
+  namespace: kube-fledged
+spec:
+  releaseName: kube-fledged
+  chart:
+    spec:
+      version: v0.10.0
+      chart: kube-fledged
+      sourceRef:
+        kind: HelmRepository
+        name: kube-fledged
+        namespace: flux-system
+  interval: 1h
