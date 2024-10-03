@@ -8,4 +8,4 @@ spec:
     - images:
         - ghcr.io/ii/iipod:2024.01.18-02 # {"$imagepolicy": "flux-system:ghcr-io-ii-iipod"}
       nodeSelector:
-        node-role.kubernetes.io/worker: ""
+        node-role.ii.nz/worker: ""

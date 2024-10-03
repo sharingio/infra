@@ -111,6 +111,12 @@ data "talos_machine_configuration" "worker" {
 
   config_patches = [
     local.talos_base_configuration,
+    <<EOF
+machine:
+  nodeLabels:
+    node-role.ii.nz/worker: ""
+EOF
+    ,
     var.worker_volume_enabled == true ? <<EOF
 machine:
    disks:
