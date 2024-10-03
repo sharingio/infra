@@ -30,14 +30,14 @@ terraform {
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.27.0"
+      version = "2.32.0"
     }
     authentik = {
       source  = "goauthentik/authentik"
       version = "2024.4.0"
     }
   }
-  required_version = ">= 1.2"
+  required_version = ">= 1.8"
   backend "kubernetes" {
     secret_suffix = "cluster-state"
     namespace     = "tfstate"
