@@ -13,3 +13,4 @@ resources:
   - ./reflector.yaml
   - ./capi-operator.yaml
   - ./kube-system.yaml
+  - ./kube-fledged.yaml
