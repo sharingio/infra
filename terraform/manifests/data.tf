@@ -12,6 +12,20 @@ data "kubernetes_config_map_v1" "authentik_env" {
   }
   depends_on = [kubernetes_config_map.authentik_env]
 }
+data "kubernetes_secret_v1" "authentik_override" {
+  metadata {
+    name      = "authentik-override"
+    namespace = "authentik"
+  }
+  depends_on = [kubernetes_secret_v1.authentik_override]
+}
+data "kubernetes_config_map_v1" "authentik_override" {
+  metadata {
+    name      = "authentik-override"
+    namespace = "authentik"
+  }
+  depends_on = [kubernetes_config_map.authentik_override]
+}
 
 data "kubernetes_config_map_v1" "coder_kustomize" {
   metadata {

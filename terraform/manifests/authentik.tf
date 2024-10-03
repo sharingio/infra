@@ -167,7 +167,9 @@ resource "kubernetes_config_map_v1" "authentik_config_hash" {
   data = {
     confighash = sha1(jsonencode(merge(
       data.kubernetes_secret_v1.authentik_env.data,
+      data.kubernetes_secret_v1.authentik_override.data,
       data.kubernetes_config_map_v1.authentik_env.data,
+      data.kubernetes_config_map_v1.authentik_override.data,
     )))
 
   }
