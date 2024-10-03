@@ -109,6 +109,10 @@ variable "controlplane_instance_memory_in_gbs" {
   type    = string
   default = "8"
 }
+variable "controlplane_boot_volume_size_in_gbs" {
+  type    = string
+  default = "250"
+}
 variable "worker_instance_ocpus" {
   type    = number
   default = 8
@@ -124,4 +128,8 @@ variable "worker_volume_enabled" {
 variable "worker_volume_size_in_gbs" {
   type    = string
   default = "500"
+}
+variable "worker_boot_volume_size_in_gbs" {
+  type    = string
+  default = "250"
 }

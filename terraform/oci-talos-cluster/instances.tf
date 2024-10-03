@@ -53,7 +53,7 @@ resource "oci_core_instance" "controlplane" {
     #Required
     source_type             = "image"
     source_id               = oci_core_image.talos_image.id
-    boot_volume_size_in_gbs = "50"
+    boot_volume_size_in_gbs = var.controlplane_boot_volume_size_in_gbs
   }
   preserve_boot_volume = false
 
@@ -111,7 +111,7 @@ resource "oci_core_instance" "worker" {
     #Required
     source_type             = "image"
     source_id               = oci_core_image.talos_image.id
-    boot_volume_size_in_gbs = "50"
+    boot_volume_size_in_gbs = var.worker_boot_volume_size_in_gbs
   }
   preserve_boot_volume = false
 
