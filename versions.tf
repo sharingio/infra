@@ -58,7 +58,11 @@ provider "github" {
 }
 provider "flux" {
   kubernetes = {
-    config_path = local_file.kubeconfig.filename
+    host                   = module.cluster-sharingio-oci.kubeconfig_host
+    client_certificate     = base64decode(module.cluster-sharingio-oci.kubeconfig_client_certificate)
+    client_key             = base64decode(module.cluster-sharingio-oci.kubeconfig_client_key)
+    cluster_ca_certificate = base64decode(module.cluster-sharingio-oci.kubeconfig_ca_certificate)
+    # config_path = local_file.kubeconfig.filename
   }
   git = {
     url = "ssh://git@github.com/${var.github_org}/${var.github_repository}.git"
