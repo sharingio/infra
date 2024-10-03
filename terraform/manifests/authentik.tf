@@ -89,7 +89,7 @@ resource "kubernetes_config_map" "authentik_override" {
   # https://docs.goauthentik.io/docs/installation/configuration#authentik-settings
   data = {
     AUTHENTIK_LOG_LEVEL = "debug"
-    AUTHENTIK_DEBUG     = "true"
+    AUTHENTIK_DEBUG     = "false"
   }
   depends_on = [
     kubernetes_namespace.authentik

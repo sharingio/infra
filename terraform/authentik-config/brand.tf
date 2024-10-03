@@ -15,11 +15,11 @@ resource "authentik_brand" "ii" {
   flow_invalidation   = data.authentik_flow.default-invalidation-flow.id
   flow_user_settings  = data.authentik_flow.default-user-settings-flow.id
   # https://docs.goauthentik.io/docs/troubleshooting/access
-  attributes = <<-EOT
-  {
-     "goauthentik.io/user/debug" : true
-  }
-  EOT
+  # attributes = <<-EOT
+  # {
+  #    "goauthentik.io/user/debug" : true
+  # }
+  # EOT
   # web_certificate     = ""
   # flow_device_code    = ""
   # flow_recovery       = ""
