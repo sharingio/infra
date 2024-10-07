@@ -52,8 +52,8 @@ spec:
         className: nginx
         tls:
           enable: true
-          secretName: wildcard-tls
-          wildcardSecretName: wildcard-tls
+          secretName: coder-wildcard-tls
+          wildcardSecretName: coder-wildcard-tls
         service:
           type: ClusterIP
         annotations:
