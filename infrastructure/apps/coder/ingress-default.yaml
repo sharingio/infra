@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "https://coder.${CODER_WILDCARD_DOMAIN}/templates/coder/iipod/workspace?mode=auto&param.container-image=ghcr.io%2Fii%2Fiipod%3A2024.10.04-01&param.cpu=4&param.git-url=https%3A%2F%2Fgithub.com%2Fii%2Fiipod%2F&param.memory=8&param.org-url=https%3A%2F%2Fraw.githubusercontent.com%2Fii%2Fiipod%2Forg%2Fvcluster.org"
+  name: coder-default
+  namespace: coder
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "${CODER_WILDCARD_DOMAIN}"
+      http:
+        paths:
+          - backend:
+              service:
+                name: coder
+                port:
+                  name: http
+            path: /
+            pathType: ImplementationSpecific
+  tls:
+    - secretName: wildcard-tls
+      hosts:
+        - "${CODER_WILDCARD_DOMAIN}"
