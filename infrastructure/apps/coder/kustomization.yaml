@@ -5,4 +5,5 @@ resources:
   - helm-release.yaml
   - ingress.yaml
   - ingress-default.yaml
+  - ingress-default-quick.yaml
   - create-admin-job.yaml
