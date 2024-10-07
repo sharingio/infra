@@ -33,3 +33,4 @@ spec:
     - secretName: wildcard-tls
       hosts:
         - "${CODER_WILDCARD_DOMAIN}"
+        - "*.${CODER_WILDCARD_DOMAIN}"
