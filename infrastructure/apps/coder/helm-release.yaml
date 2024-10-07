@@ -51,7 +51,7 @@ spec:
         # This ingress part of the chart needs wildcard love!
         className: nginx
         tls:
-          enable: true
+          enable: false
           secretName: coder-wildcard-tls
           wildcardSecretName: coder-wildcard-tls
         service:
