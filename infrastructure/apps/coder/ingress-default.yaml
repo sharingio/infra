@@ -9,6 +9,16 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
+    - host: "www.${CODER_WILDCARD_DOMAIN}"
+      http:
+        paths:
+          - backend:
+              service:
+                name: coder
+                port:
+                  name: http
+            path: /
+            pathType: ImplementationSpecific
     - host: "${CODER_WILDCARD_DOMAIN}"
       http:
         paths:
