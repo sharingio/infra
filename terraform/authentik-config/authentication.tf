@@ -28,7 +28,7 @@ resource "authentik_stage_identification" "ii-identification-stage" {
     data.authentik_source.built-in.uuid,
     authentik_source_oauth.github.uuid,
   ]
-  show_source_labels = false
+  show_source_labels = true
   enrollment_flow    = authentik_flow.ii-enrollment-flow.uuid
   # passwordless_low = ""
   lifecycle {
