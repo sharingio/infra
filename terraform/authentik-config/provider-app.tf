@@ -41,7 +41,7 @@ resource "authentik_provider_oauth2" "coder" {
   client_id                  = var.authentik_coder_oidc_client_id
   client_secret              = var.authentik_coder_oidc_client_secret
   authorization_flow         = data.authentik_flow.default-provider-authorization-implicit-consent.id
-  authentication_flow        = data.authentik_flow.default-authentication-flow.id
+  authentication_flow        = authentik_flow.ii-authentication-flow.uuid
   access_code_validity       = "minutes=1"
   access_token_validity      = "minutes=10"
   refresh_token_validity     = "days=30"
