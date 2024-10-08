@@ -27,3 +27,11 @@ resource "powerdns_record" "WILDCARD" {
   records    = [local.ingress_ipv4]
   depends_on = [powerdns_zone.coder]
 }
+
+resource "powerdns_record" "root" {
+  zone    = "${var.domain}."
+  name    = "${var.domain}."
+  type    = "A"
+  ttl     = 60
+  records = [local.ingress_ipv4]
+}
