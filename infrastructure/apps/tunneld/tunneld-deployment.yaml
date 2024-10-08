@@ -28,14 +28,20 @@ spec:
       containers:
         - name: tunneld
           envFrom:
-          - configMapRef:
-              name: coder-config
-          - secretRef:
-              name: coder-config
-          - secretRef:
-              name: coder-override
-              optional: true
-          image:
-            ghcr.io/ii/tunneld:0.1.10-sharing
+            - configMapRef:
+                name: coder-config
+            - secretRef:
+                name: coder-config
+            - secretRef:
+                name: coder-override
+                optional: true
+          image: ghcr.io/ii/tunneld:0.1.10-sharing
           ports:
-            - containerPort: 12345
+            - name: api
+              protocol: TCP
+              containerPort: 12345
+              hostport: 12345
+            - name: wg
+              protocol: UDP
+              containerPort: 54321
+              hostport: 54321
