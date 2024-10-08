@@ -10,11 +10,11 @@ spec:
   internalTrafficPolicy: Cluster
   ipFamilyPolicy: SingleStack
   ports:
-  - port: 54321
-    protocol: UDP
-    name: wg
-    targetPort: 54321
+    - port: 54321
+      protocol: UDP
+      name: wg
+      targetPort: 54321
   selector:
     app: tunneld
-  externalIPs:
-    - "${wg_ip}"
+  # externalIPs:
+  #   - "${wg_ip}"

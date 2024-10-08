@@ -25,6 +25,8 @@ spec:
         namespace: flux-system
   interval: 1h
   values:
+    udp:
+      "12345": "coder/tunneld-wg"
     controller:
       ingressClassResource:
         default: true
