@@ -57,9 +57,6 @@ resource "talos_machine_configuration_apply" "worker" {
             "provider-id" = each.value.id
           }
         }
-        nodeLabels = {
-          "node-role.kubernetes.io/worker" = ""
-        }
       }
     })
   ]
