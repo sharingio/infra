@@ -44,7 +44,7 @@ resource "kubernetes_config_map" "coder_kustomize" {
   data = {
     CODER_HOST              = "coder.${var.domain}"
     CODER_ACCESS_URL        = "https://coder.${var.domain}"
-    CODER_WILDCARD_DOMAIN   = "coder.${var.domain}"
+    CODER_WILDCARD_DOMAIN   = var.domain
     CODER_VERSION           = var.coder_version
     TUNNELD_WILDCARD_DOMAIN = "try.${var.domain}"
     wg_ip                   = var.wg_ip
@@ -61,19 +61,19 @@ resource "kubernetes_secret_v1" "coder" {
   }
 
   data = {
-    password                          = random_string.coder_postgresql_password.result
-    postgres-password                 = random_string.coder_postgresql_password.result
-    CODER_PG_CONNECTION_URL           = "postgres://postgres:${random_string.coder_postgresql_password.result}@coder-db-postgresql.coder.svc.cluster.local:5432/coder?sslmode=disable"
-    TUNNELD_WIREGUARD_KEY             = random_bytes.tunneld_key.base64
-    PDNS_TSIG_KEY                     = var.rfc2136_tsig_key
-    PDNS_API_KEY                      = var.pdns_api_key
-    CODER_FIRST_USER_PASSWORD         = random_string.coder_first_user_password.result
-    CODER_OIDC_CLIENT_ID              = random_password.authentik_coder_oidc_client_id.result
-    CODER_OIDC_CLIENT_SECRET          = random_password.authentik_coder_oidc_client_secret.result
-    CODER_OAUTH2_GITHUB_CLIENT_ID     = var.coder_oauth2_github_client_id
-    CODER_OAUTH2_GITHUB_CLIENT_SECRET = var.coder_oauth2_github_client_secret
-    CODER_GITAUTH_0_CLIENT_ID         = var.coder_gitauth_0_client_id
-    CODER_GITAUTH_0_CLIENT_SECRET     = var.coder_gitauth_0_client_secret
+    password                  = random_string.coder_postgresql_password.result
+    postgres-password         = random_string.coder_postgresql_password.result
+    CODER_PG_CONNECTION_URL   = "postgres://postgres:${random_string.coder_postgresql_password.result}@coder-db-postgresql.coder.svc.cluster.local:5432/coder?sslmode=disable"
+    TUNNELD_WIREGUARD_KEY     = random_bytes.tunneld_key.base64
+    PDNS_TSIG_KEY             = var.rfc2136_tsig_key
+    PDNS_API_KEY              = var.pdns_api_key
+    CODER_FIRST_USER_PASSWORD = random_string.coder_first_user_password.result
+    CODER_OIDC_CLIENT_ID      = random_password.authentik_coder_oidc_client_id.result
+    CODER_OIDC_CLIENT_SECRET  = random_password.authentik_coder_oidc_client_secret.result
+    # CODER_OAUTH2_GITHUB_CLIENT_ID     = var.coder_oauth2_github_client_id
+    # CODER_OAUTH2_GITHUB_CLIENT_SECRET = var.coder_oauth2_github_client_secret
+    # CODER_GITAUTH_0_CLIENT_ID     = var.coder_gitauth_0_client_id
+    # CODER_GITAUTH_0_CLIENT_SECRET = var.coder_gitauth_0_client_secret
     # "${TUNNELD_WIREGAURD_HOST=tunneld.sharing.io}:54321"
   }
   depends_on = [
@@ -88,23 +88,23 @@ resource "kubernetes_config_map" "coder_config" {
   }
 
   data = {
-    CODER_HOST                       = "coder.${var.domain}"
-    CODER_ACCESS_URL                 = "https://coder.${var.domain}"
-    TUNNEL_ACCESS_URL                = "https://try.${var.domain}"
-    TUNNEL_WILDCARD_DOMAIN           = "try.${var.domain}"
-    CODER_SSH_KEYGEN_ALGORITHM       = "ed25519"
-    CODER_PROVISIONER_DAEMONS        = "50"
-    CODER_FIRST_USER_USERNAME        = "coder"
-    CODER_FIRST_USER_EMAIL           = "coder@ii.coop"
-    CODER_FIRST_USER_TRIAIL          = "true"
-    CODER_ACCESS_URL                 = "https://coder.${var.domain}"
-    CODER_WILDCARD_DOMAIN            = "coder.${var.domain}"
-    CODER_WILDCARD_ACCESS_URL        = "*.coder.${var.domain}"
-    CODER_SWAGGER_ENABLE             = "true"
-    CODER_TELEMETRY                  = "false"
-    CODER_GITAUTH_0_ID               = "github"
-    CODER_GITAUTH_0_TYPE             = "github"
-    CODER_GITAUTH_0_SCOPES           = "repo" # write:gpg_key"
+    CODER_HOST                 = "coder.${var.domain}"
+    CODER_ACCESS_URL           = "https://coder.${var.domain}"
+    TUNNEL_ACCESS_URL          = "https://try.${var.domain}"
+    TUNNEL_WILDCARD_DOMAIN     = "try.${var.domain}"
+    CODER_SSH_KEYGEN_ALGORITHM = "ed25519"
+    CODER_PROVISIONER_DAEMONS  = "50"
+    CODER_FIRST_USER_USERNAME  = "coder"
+    CODER_FIRST_USER_EMAIL     = "coder@ii.coop"
+    CODER_FIRST_USER_TRIAIL    = "true"
+    CODER_ACCESS_URL           = "https://coder.${var.domain}"
+    CODER_WILDCARD_DOMAIN      = var.domain
+    CODER_WILDCARD_ACCESS_URL  = "*.${var.domain}"
+    CODER_SWAGGER_ENABLE       = "true"
+    CODER_TELEMETRY            = "false"
+    # CODER_GITAUTH_0_ID               = "github"
+    # CODER_GITAUTH_0_TYPE             = "github"
+    # CODER_GITAUTH_0_SCOPES           = "repo" # write:gpg_key"
     CODER_OIDC_ICON_URL              = "https://goauthentik.io/img/icon.png"
     CODER_OIDC_GROUP_AUTO_CREATE     = "true"
     CODER_OIDC_ALLOW_SIGNUPS         = "true"
@@ -125,11 +125,11 @@ resource "kubernetes_config_map" "coder_config" {
             {"authentik Admins": ["owner"]}
             EOT
     # CODER_OAUTH2_GITHUB_ALLOW_EVERYONE = "true"
-    CODER_OAUTH2_GITHUB_ALLOWED_ORGS  = "ii,coder,kubermatic"
-    CODER_OAUTH2_GITHUB_ALLOW_SIGNUPS = "true"
-    # CODER_DISABLE_PASSWORD_AUTH  = "true"
-    CODER_BLOCK_DIRECT = "false"
-    CODER_BROWSER_ONLY = "false"
+    # CODER_OAUTH2_GITHUB_ALLOWED_ORGS  = "ii,coder,kubermatic"
+    # CODER_OAUTH2_GITHUB_ALLOW_SIGNUPS = "true"
+    CODER_DISABLE_PASSWORD_AUTH = "true"
+    CODER_BLOCK_DIRECT          = "false"
+    CODER_BROWSER_ONLY          = "false"
     # GITHUB_TOKEN                      = ""
     TUNNELD_VERBOSE                  = "true"
     TUNNELD_LISTEN_ADDRESS           = "0.0.0.0:12345"
