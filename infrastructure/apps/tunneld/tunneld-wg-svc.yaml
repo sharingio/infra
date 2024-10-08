@@ -6,7 +6,7 @@ metadata:
   name: tunneld-wg
   namespace: coder
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   internalTrafficPolicy: Cluster
   ipFamilyPolicy: SingleStack
   ports:
