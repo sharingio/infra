@@ -6,11 +6,5 @@ metadata:
   namespace: authentik
 spec:
   instances: 3
-  bootstrap:
-    initdb:
-      database: app
-      owner: app
-      secret:
-        name: authentik-postgres
   storage:
     size: 5Gi

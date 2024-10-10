@@ -61,19 +61,15 @@ spec:
         enabled: true
       # This sends anonymous usage-data, stack traces on errors and
       # performance data to sentry.io, and is fully opt-in
-      postgresql:
-        host: authentik-postgres-rw
-        name: app
-        user: app
     postgresql:
-      enabled: false
+      enabled: true
       auth:
         existingSecret: authentik-env
         secretKeys:
           adminPasswordKey: AUTHENTIK_POSTGRESQL__PASSWORD
           userPasswordKey: AUTHENTIK_POSTGRESQL__PASSWORD
     redis:
-      enabled: false
+      enabled: true
 # version: "2023.6.3" # Current as of August 20, 2023
 # WARNING: PostgreSQL is updated from 11 to 15 in 2023.8.1
 # Quite a refactor three months ago: https://github.com/goauthentik/helm/pull/163

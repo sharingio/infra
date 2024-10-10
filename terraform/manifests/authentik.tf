@@ -44,20 +44,6 @@ resource "random_string" "authentik_postgresql_password" {
   numeric = false
 }
 
-resource "kubernetes_secret_v1" "authentik_postgres" {
-  metadata {
-    name      = "authentik-postgres"
-    namespace = "authentik"
-  }
-
-  data = {
-    username = "app"
-    password = random_string.authentik_postgresql_password.result
-  }
-  depends_on = [
-    kubernetes_namespace.authentik
-  ]
-}
 resource "kubernetes_secret_v1" "authentik_env" {
   metadata {
     name      = "authentik-env"
@@ -68,11 +54,7 @@ resource "kubernetes_secret_v1" "authentik_env" {
     AUTHENTIK_BOOTSTRAP_PASSWORD   = random_string.authentik_bootstrap_password.result
     AUTHENTIK_BOOTSTRAP_TOKEN      = random_string.authentik_bootstrap_token.result
     AUTHENTIK_SECRET_KEY           = random_string.authentik_secret_key.result
-    AUTHENTIK_POSTGRESQL__HOST     = "authentik-postgres-rw"
-    AUTHENTIK_POSTGRESQL__NAME     = "app"
-    AUTHENTIK_POSTGRESQL__USER     = "app"
     AUTHENTIK_POSTGRESQL__PASSWORD = random_string.authentik_postgresql_password.result
-    AUTHENTIK_REDIS__HOST          = "redis-cluster-leader"
   }
   depends_on = [
     kubernetes_namespace.authentik
