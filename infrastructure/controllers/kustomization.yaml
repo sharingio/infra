@@ -15,3 +15,4 @@ resources:
   - ./kube-system.yaml
   - ./kube-fledged.yaml
   - ./cnpg-system.yaml
+  - ./redis-operator.yaml
