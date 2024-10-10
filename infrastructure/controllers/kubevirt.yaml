@@ -5,7 +5,7 @@ metadata:
   name: kubevirt
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m
   path: ./infrastructure/controllers/kubevirt
   dependsOn:
     - name: kubevirt-operator

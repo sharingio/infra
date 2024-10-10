@@ -5,11 +5,11 @@ metadata:
   name: infrastructure
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m0s
   sourceRef:
     kind: GitRepository
     name: flux-system
   path: ./infrastructure/controllers
   prune: true
   wait: true
-  timeout: 5m0s
+  timeout: 1m0s

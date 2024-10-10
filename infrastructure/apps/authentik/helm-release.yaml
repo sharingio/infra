@@ -11,7 +11,7 @@ spec:
   # We install the namespace with the secret
   install:
     createNamespace: false
-  interval: 30m
+  interval: 1m
   chart:
     spec:
       chart: authentik
@@ -20,7 +20,7 @@ spec:
         kind: HelmRepository
         name: authentik
         namespace: flux-system
-      interval: 12h
+      interval: 1m
   values:
     # https://github.com/goauthentik/helm/blob/c51952b024451ee90fc3603fae24f39472b1b197/charts/authentik/templates/server-deployment.yaml#L77
     # https://github.com/goauthentik/helm/blob/c51952b024451ee90fc3603fae24f39472b1b197/charts/authentik/templates/worker-deployment.yaml#L80
@@ -65,7 +65,6 @@ spec:
         host: authentik-postgres-rw
         name: app
         user: app
-
     postgresql:
       enabled: false
       auth:

@@ -5,7 +5,7 @@ metadata:
   name: coder
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 1m
   targetNamespace: coder
   releaseName: coder
   storageNamespace: flux-system
@@ -17,7 +17,7 @@ spec:
         kind: HelmRepository
         name: coder
         namespace: flux-system
-      interval: 12h
+      interval: 1m
   values:
     coder:
       podAnnotations:

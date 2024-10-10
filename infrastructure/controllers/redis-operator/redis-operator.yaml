@@ -5,7 +5,7 @@ metadata:
   name: ot-helm
   namespace: redis-operator
 spec:
-  interval: 1h
+  interval: 1m
   url: https://ot-container-kit.github.io/helm-charts/
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
@@ -17,7 +17,7 @@ spec:
   # We install the namespace with the secret
   install:
     createNamespace: false
-  interval: 1h
+  interval: 1m
   releaseName: redis-operator
   chart:
     spec:

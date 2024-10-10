@@ -5,7 +5,7 @@ metadata:
   name: powerdns
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m
   path: ./infrastructure/apps/powerdns
   prune: true
   wait: true

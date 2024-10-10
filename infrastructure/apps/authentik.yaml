@@ -5,7 +5,7 @@ metadata:
   name: authentik
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m
   path: ./infrastructure/apps/authentik
   dependsOn:
     - name: longhorn

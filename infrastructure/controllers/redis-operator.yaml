@@ -5,7 +5,7 @@ metadata:
   name: redis-operator
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m
   path: ./infrastructure/controllers/redis-operator
   prune: true
   wait: true

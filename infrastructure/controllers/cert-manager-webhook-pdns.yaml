@@ -5,7 +5,7 @@ metadata:
   name: cert-manager-webhook-pdns
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m
   path: ./infrastructure/controllers/cert-manager-webhook-pdns
   prune: true
   wait: true

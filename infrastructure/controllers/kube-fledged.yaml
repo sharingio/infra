@@ -5,7 +5,7 @@ metadata:
   name: kube-fledged
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m
   path: ./infrastructure/controllers/kube-fledged
   prune: true
   wait: true

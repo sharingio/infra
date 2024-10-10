@@ -5,7 +5,7 @@ metadata:
   name: cert-manager-webhook-pdns
   namespace: cert-manager
 spec:
-  interval: 24h
+  interval: 1m
   url: https://zachomedia.github.io/cert-manager-webhook-pdns
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
@@ -17,7 +17,7 @@ spec:
   install:
     createNamespace: false
   maxHistory: 10
-  interval: 30m
+  interval: 1m
   driftDetection:
     mode: enabled
   chart:
@@ -28,7 +28,7 @@ spec:
         kind: HelmRepository
         name: cert-manager-webhook-pdns
         namespace: cert-manager
-      interval: 12h
+      interval: 1m
   # https://github.com/zachomedia/cert-manager-webhook-pdns/blob/main/deploy/cert-manager-webhook-pdns/values.yaml
   values:
     groupName: "${domain}"

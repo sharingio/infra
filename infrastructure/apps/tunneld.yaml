@@ -5,7 +5,7 @@ metadata:
   name: tunneld
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m
   path: ./infrastructure/apps/tunneld
   prune: true
   wait: true

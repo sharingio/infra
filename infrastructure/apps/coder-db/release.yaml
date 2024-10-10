@@ -11,7 +11,7 @@ spec:
   install:
     createNamespace: false
   storageNamespace: flux-system
-  interval: 30m
+  interval: 1m
   chart:
     spec:
       chart: postgresql
@@ -20,7 +20,7 @@ spec:
         kind: HelmRepository
         name: bitnami
         namespace: flux-system
-      interval: 12h
+      interval: 1m
   values:
     commonAnnotations:
       ii/config-hash: "${confighash}"
