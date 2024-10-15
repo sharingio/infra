@@ -1,5 +1,5 @@
 locals {
-  talos_image_oci_bucket_url = "https://axe608t7iscj.objectstorage.us-phoenix-1.oci.customer-oci.com/n/axe608t7iscj/b/talos/o/talos-v1.8.0-oracle-amd64.oci"
+  talos_image_oci_bucket_url = "https://axe608t7iscj.objectstorage.us-phoenix-1.oci.customer-oci.com/n/axe608t7iscj/b/talos/o/talos-v1.8.1-oracle-amd64.oci"
 }
 module "cluster-sharingio-oci" {
   source = "./terraform/oci-talos-cluster"
