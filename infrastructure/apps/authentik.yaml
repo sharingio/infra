@@ -9,6 +9,7 @@ spec:
   path: ./infrastructure/apps/authentik
   dependsOn:
     - name: longhorn
+    - name: configs
   prune: true
   wait: true
   sourceRef:

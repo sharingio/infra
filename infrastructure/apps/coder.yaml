@@ -24,8 +24,9 @@ spec:
   prune: true
   interval: 1m
   # Speed up iteration
-  # dependsOn:
-  #   - name: coder-db
+  dependsOn:
+    - name: coder-db
+    - name: authentik
   path: "./infrastructure/apps/coder"
   dependsOn:
     - name: authentik
