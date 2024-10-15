@@ -50,7 +50,7 @@ variable "subnet_block_regional" {
 }
 variable "talos_version" {
   type    = string
-  default = "v1.8.0"
+  default = "v1.8.1"
 }
 variable "kubernetes_version" {
   type    = string
