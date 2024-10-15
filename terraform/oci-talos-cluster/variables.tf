@@ -131,5 +131,5 @@ variable "worker_volume_size_in_gbs" {
 }
 variable "worker_boot_volume_size_in_gbs" {
   type    = string
-  default = "250"
+  default = "1024"
 }
