@@ -20,6 +20,21 @@
 #   }
 # }
 
+resource "kubernetes_namespace" "cert-manager" {
+  metadata {
+    name = "cert-manager"
+  }
+
+  lifecycle {
+    # prevent_destroy = true
+    ignore_changes = [
+      metadata["labels"],
+    ]
+  }
+}
+
+
+
 resource "kubernetes_config_map_v1" "ingress-ip" {
   metadata {
     name      = "ingressip"
