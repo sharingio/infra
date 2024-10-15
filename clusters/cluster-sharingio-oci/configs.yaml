@@ -7,8 +7,6 @@ metadata:
 spec:
   interval: 1m0s
   path: ./infrastructure/configs
-  dependsOn:
-    - name: infrastructure
   prune: true
   wait: true
   sourceRef:
