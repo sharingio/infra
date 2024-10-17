@@ -6,7 +6,7 @@ metadata:
 spec:
   cacheSpec:
     - images:
-        - ghcr.io/ii/iipod:2024.01.18-02 # {"$imagepolicy": "flux-system:ghcr-io-ii-iipod"}
+        - ghcr.io/ii/iipod:2024.10.02-01 # {"$imagepolicy": "flux-system:ghcr-io-ii-iipod"}
         - docker.io/heyste/kinoite:20240523-1505
       nodeSelector:
         node-role.ii.nz/worker: ""
