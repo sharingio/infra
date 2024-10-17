@@ -17,7 +17,7 @@ spec:
   imageRepositoryRef:
     name: ghcr-io-ii-iipod
   policy:
-    numerical:
+    alphabetical:
       order: asc
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta2
