@@ -7,3 +7,4 @@ resources:
   - ./flux-receiver.yaml
   - ./image-cache.yaml
   - ./image-updates.yaml
+  - ./runtimeclass-kata.yaml
