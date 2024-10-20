@@ -8,3 +8,4 @@ resources:
   - ./image-cache.yaml
   - ./image-updates.yaml
   - ./runtimeclass-kata.yaml
+  - ./runtimeclass-gvisor.yaml
