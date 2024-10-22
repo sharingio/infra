@@ -57,6 +57,17 @@ resource "talos_machine_configuration_apply" "worker" {
             "provider-id" = each.value.id
           }
         }
+        files = [
+          {
+            content = <<EOF
+[plugins]
+  [plugins."io.containerd.grpc.v1.cri"]
+    device_ownership_from_security_context = true
+EOF
+            path = "/etc/cri/conf.d/20-customization.part"
+            op = "create"
+          }
+        ]
       }
     })
   ]
