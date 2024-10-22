@@ -132,6 +132,13 @@ machine:
           - bind
           - rshared
           - rw
+        - destination: /opt/local-path-provisioner
+          type: bind
+          source: /opt/local-path-provisioner
+          options:
+          - bind
+          - rshared
+          - rw
 EOF
     : null,
     yamlencode({
