@@ -16,3 +16,4 @@ resources:
   - ./kube-fledged.yaml
   - ./cnpg-system.yaml
   - ./redis-operator.yaml
+  - ./local-path-storage.yaml
