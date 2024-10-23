@@ -68,6 +68,10 @@ variable "talos_ccm_version" {
   type    = string
   default = "v1.8.0"
 }
+variable "cilium_version" {
+  type    = string
+  default = "1.16.3"
+}
 variable "pod_subnet_block" {
   type    = string
   default = "10.32.0.0/12"

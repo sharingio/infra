@@ -170,8 +170,8 @@ data "helm_template" "cilium" {
   repository = "https://helm.cilium.io/"
 
   chart        = "cilium"
-  version      = "1.16.2"
-  kube_version = "v1.30.0"
+  version      = var.cilium_version
+  kube_version = var.kubernetes_version
 
   set {
     name  = "ipam.mode"
