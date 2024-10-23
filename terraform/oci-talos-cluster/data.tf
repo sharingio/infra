@@ -207,4 +207,9 @@ data "helm_template" "cilium" {
     name  = "k8sServicePort"
     value = "7445"
   }
+
+  set {
+    name  = "socketLB.hostNamespaceOnly"
+    value = "true"
+  }
 }
