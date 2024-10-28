@@ -69,6 +69,31 @@ EOF
           }
         ]
       }
+    }),
+    yamlencode({
+      machine = {
+        network = {
+          interfaces = [
+            {
+              interface = "br0"
+              addresses = ["172.16.1.60/24"]
+              bridge = {
+                stp = {
+                  enabled = true
+                }
+                interfaces = ["en01"]
+              }
+              routes = [
+                {
+                  network = "0.0.0.0/0"
+                  gateway = "172.16.1.254"
+                  metric = 1024
+                }
+              ]
+            }
+          ]
+        }
+      }
     })
   ]
 
