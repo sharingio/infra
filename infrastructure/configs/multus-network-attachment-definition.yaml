@@ -1,0 +1,24 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: br0
+  namespace: kube-system
+spec:
+  config: |
+    {
+      "cniVersion": "0.3.0",
+      "type": "macvlan",
+      "master": "br0",
+      "mode": "bridge",
+      "ipam": {
+        "type": "host-local",
+        "subnet": "192.168.0.0/16",
+        "rangeStart": "192.168.0.2",
+        "rangeEnd": "192.168.254.253",
+        "routes": [
+          { "dst": "0.0.0.0/0" }
+        ],
+        "gateway": "192.168.0.1"
+      }
+    }

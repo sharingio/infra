@@ -9,3 +9,4 @@ resources:
   - ./image-updates.yaml
   - ./runtimeclass-kata.yaml
   - ./runtimeclass-gvisor.yaml
+  - ./multus-network-attachment-definition.yaml
