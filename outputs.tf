@@ -25,3 +25,8 @@ output "oci_cloud_provider_config" {
   value     = module.cluster-sharingio-oci.oci_cloud_provider_config
   sensitive = true
 }
+
+output "cilium_yaml" {
+  value = module.cluster-sharingio-oci.cilium_yaml
+  sensitive = true
+}

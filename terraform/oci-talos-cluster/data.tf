@@ -212,4 +212,9 @@ data "helm_template" "cilium" {
     name  = "socketLB.hostNamespaceOnly"
     value = "true"
   }
+
+  set {
+    name  = "cni.exclusive"
+    value = "true"
+  }
 }
