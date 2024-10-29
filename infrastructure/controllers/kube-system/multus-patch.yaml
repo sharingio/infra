@@ -39,18 +39,6 @@ spec:
         name: host-run-netns
       initContainers:
         - command:
-            - rm
-            - -rfv
-            - /opt/cni/bin/multus-shim
-          image: ghcr.io/siderolabs/install-cni:v1.8.0
-          securityContext:
-            privileged: true
-          name: cleanup-cni
-          volumeMounts:
-            - mountPath: /host/opt/cni/bin/
-              mountPropagation: Bidirectional
-              name: cnibin
-        - command:
             - /install-cni.sh
           image: ghcr.io/siderolabs/install-cni:v1.8.0
           securityContext:
