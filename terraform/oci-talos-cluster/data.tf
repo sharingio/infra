@@ -215,6 +215,6 @@ data "helm_template" "cilium" {
 
   set {
     name  = "cni.exclusive"
-    value = "true"
+    value = "false"
   }
 }
