@@ -76,17 +76,17 @@ EOF
           interfaces = [
             {
               interface = "br0"
-              addresses = ["172.16.1.60/24"]
+              addresses = ["192.168.0.0/16"]
               bridge = {
                 stp = {
                   enabled = true
                 }
-                interfaces = ["en01"]
+                interfaces = ["br0"]
               }
               routes = [
                 {
                   network = "0.0.0.0/0"
-                  gateway = "172.16.1.254"
+                  gateway = "192.168.0.1"
                   metric = 1024
                 }
               ]
