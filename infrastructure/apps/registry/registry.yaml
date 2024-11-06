@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: registry
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: registry-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/var/lib/registry"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: registry-pvc
+  namespace: registry
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry
+  namespace: registry
+stringData:
+  # htpasswd -Bbn ii ii
+  htpasswd: |
+    ii:$2y$05$8D9Ta5yVFf9wWqV9qLmG.eoagYEyRN81VbJ0cycGYD8sVZnv3/ZWC
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+  namespace: registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry
+  template:
+    metadata:
+      labels:
+        app: registry
+    spec:
+      containers:
+      - name: registry
+        image: registry:2
+        env:
+        - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+          value: "/var/lib/registry"
+        - name: REGISTRY_AUTH
+          value: htpasswd
+        - name: REGISTRY_AUTH_HTPASSWD_REALM
+          value: Registry Realm
+        - name: REGISTRY_AUTH_HTPASSWD_PATH
+          value: /etc/registry/htpasswd
+  #          e "REGISTRY_AUTH=htpasswd" \
+  # -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
+  # -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd \
+
+        volumeMounts:
+        - name: registry-storage
+          mountPath: "/var/lib/registry"
+        - name: registry-secret
+          mountPath: /etc/registry
+      volumes:
+      - name: registry-storage
+        persistentVolumeClaim:
+          claimName: registry-pvc
+      - name: registry-secret
+        secret:
+          secretName: registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry
+  namespace: registry
+spec:
+  selector:
+    app: registry
+  ports:
+    - protocol: TCP
+      port: 5000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: registry
+  namespace: registry
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+spec:
+  rules:
+  - host: registry.sharing.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: registry
+            port:
+              number: 5000
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+      - registry.sharing.io
+    secretName: wildcard-tls
