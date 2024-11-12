@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: "https://coder.${CODER_WILDCARD_DOMAIN}/templates/coder/iipod/workspace?mode=auto"
+    nginx.ingress.kubernetes.io/rewrite-target: "https://coder.${CODER_WILDCARD_DOMAIN}/templates/coder/iipod-privileged/workspace?mode=auto"
   name: coder-default-auto
   namespace: coder
 spec:
