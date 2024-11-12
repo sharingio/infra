@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: "https://coder.${CODER_WILDCARD_DOMAIN}/templates/coder/iipod-privileged/workspace"
-  name: coder-default
+  name: coder-demo
   namespace: coder
 spec:
   ingressClassName: nginx
