@@ -6,4 +6,5 @@ resources:
   - ingress.yaml
   - ingress-default.yaml
   - ingress-default-quick.yaml
+  - ingress-demo.yaml
   - create-admin-job.yaml
