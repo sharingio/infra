@@ -23,13 +23,10 @@ metadata:
 spec:
   prune: true
   interval: 1m
-  # Speed up iteration
   dependsOn:
     - name: coder-db
     - name: authentik
   path: "./infrastructure/apps/coder"
-  dependsOn:
-    - name: authentik
   sourceRef:
     kind: GitRepository
     name: flux-system
