@@ -1,0 +1,61 @@
+---
+# DNS service with reserved IP via Cilium L2 announcements
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-dns
+  namespace: dns
+  labels:
+    app.kubernetes.io/name: technitium
+  annotations:
+    # Request specific IP from Cilium LB IPAM
+    io.cilium/lb-ipam-ips: "${DNS_IP}"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: ${DNS_IP}
+  selector:
+    app.kubernetes.io/name: technitium
+  ports:
+    - name: dns-udp
+      port: 53
+      protocol: UDP
+      targetPort: 53
+    - name: dns-tcp
+      port: 53
+      protocol: TCP
+      targetPort: 53
+---
+# Web UI service (internal, accessed via Gateway/HTTPRoute)
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-web
+  namespace: dns
+  labels:
+    app.kubernetes.io/name: technitium
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: technitium
+  ports:
+    - name: web-ui
+      port: 5380
+      protocol: TCP
+      targetPort: 5380
+---
+# HTTPRoute for web UI access
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: technitium-web
+  namespace: dns
+spec:
+  parentRefs:
+    - name: main
+      namespace: default
+  hostnames:
+    - "dns.${DOMAIN}"
+  rules:
+    - backendRefs:
+        - name: technitium-web
+          port: 5380

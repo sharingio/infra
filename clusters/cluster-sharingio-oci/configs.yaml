@@ -18,3 +18,5 @@ spec:
         name: rfc2136dnsserver
       - kind: ConfigMap
         name: coder-kustomize
+      - kind: ConfigMap
+        name: cluster-ips

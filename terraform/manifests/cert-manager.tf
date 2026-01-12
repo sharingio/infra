@@ -25,8 +25,6 @@ resource "kubernetes_secret_v1" "rfc2136-dns-server" {
     key        = var.rfc2136_tsig_key
     algorithm  = var.rfc2136_tsig_algorithm
     domain     = var.domain
-    pdnsapikey = var.pdns_api_key
-    pdnshost   = var.pdns_host
   }
   depends_on = [
     kubernetes_namespace.flux-system
@@ -47,16 +45,3 @@ resource "kubernetes_secret_v1" "rfc2136-cert-manager" {
   ]
 }
 
-resource "kubernetes_secret_v1" "pdns-cert-manager" {
-  metadata {
-    name      = "pdns"
-    namespace = "cert-manager"
-  }
-
-  data = {
-    api-key = var.pdns_api_key
-  }
-  depends_on = [
-    kubernetes_namespace.cert-manager
-  ]
-}

@@ -50,11 +50,11 @@ variable "subnet_block_regional" {
 }
 variable "talos_version" {
   type    = string
-  default = "v1.8.1"
+  default = "v1.12.1"
 }
 variable "kubernetes_version" {
   type    = string
-  default = "v1.31.1"
+  default = "v1.35.0"
 }
 variable "instance_shape" {
   type    = string
@@ -66,11 +66,11 @@ variable "oracle_cloud_ccm_version" {
 }
 variable "talos_ccm_version" {
   type    = string
-  default = "v1.8.0"
+  default = "v1.11.0"
 }
 variable "cilium_version" {
   type    = string
-  default = "1.16.3"
+  default = "1.18.5"
 }
 variable "pod_subnet_block" {
   type    = string
@@ -102,8 +102,20 @@ variable "worker_instance_count" {
   default = 6
 }
 variable "talos_image_oci_bucket_url" {
-  type     = string
-  nullable = false
+  type        = string
+  nullable    = true
+  default     = null
+  description = "URL to Talos image in OCI bucket. If null, image is auto-uploaded from Image Factory."
+}
+variable "oci_bucket_name" {
+  type        = string
+  default     = "talos"
+  description = "OCI Object Storage bucket name for Talos images"
+}
+variable "oci_bucket_namespace" {
+  type        = string
+  default     = "axe608t7iscj"
+  description = "OCI Object Storage namespace"
 }
 variable "controlplane_instance_ocpus" {
   type    = number
@@ -136,4 +148,9 @@ variable "worker_volume_size_in_gbs" {
 variable "worker_boot_volume_size_in_gbs" {
   type    = string
   default = "1024"
+}
+variable "domain" {
+  description = "Domain for node hostnames (e.g., sharing.io)"
+  type        = string
+  default     = "sharing.io"
 }

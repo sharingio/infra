@@ -10,3 +10,6 @@ resources:
   - ./runtimeclass-kata.yaml
   - ./runtimeclass-gvisor.yaml
   - ./multus-network-attachment-definition.yaml
+  - ./claude-system.yaml
+  - ./cilium-l2-policy.yaml
+  - ./gateway.yaml

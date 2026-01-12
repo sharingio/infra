@@ -1,6 +1,3 @@
-locals {
-  talos_image_oci_bucket_url = "https://axe608t7iscj.objectstorage.us-phoenix-1.oci.customer-oci.com/n/axe608t7iscj/b/talos/o/talos-v1.8.1-oracle-amd64.oci"
-}
 module "cluster-sharingio-oci" {
   source = "./terraform/oci-talos-cluster"
 
@@ -14,8 +11,9 @@ module "cluster-sharingio-oci" {
   fingerprint      = var.fingerprint
   region           = var.region
 
-  talos_image_oci_bucket_url = local.talos_image_oci_bucket_url
-  cluster_name               = "sharingio"
+  # Image is auto-uploaded from Talos Image Factory if not specified
+  # talos_image_oci_bucket_url = null  # uses default auto-upload
+  cluster_name = "sharingio"
 }
 resource "local_file" "kubeconfig" {
   filename = "kubeconfig"
@@ -28,17 +26,18 @@ data "oci_network_load_balancer_network_load_balancers" "nlbs" {
 module "cluster-sharingio-oci-manifests" {
   source = "./terraform/manifests"
 
-  ingress_ip = local.ingress_ipv4
-  # dns_ip                   = module.cluster.cluster_dns_ip
-  # wg_ip                    = module.cluster.cluster_wireguard_ip
+  # Reserved IPs for service assignment
+  ingress_ip   = local.ingress_ipv4
+  dns_ip       = local.dns_ipv4
+  wg_ip        = local.wireguard_ipv4
+  apiserver_ip = local.apiserver_ipv4
+
   acme_email_address     = local.acme_email_address
   rfc2136_nameserver     = var.rfc2136_nameserver
   rfc2136_tsig_keyname   = var.rfc2136_tsig_keyname
   rfc2136_tsig_key       = var.rfc2136_tsig_key
   rfc2136_tsig_algorithm = "HMACSHA256"
   domain                 = var.domain
-  pdns_host              = var.pdns_host
-  pdns_api_key           = var.pdns_api_key
   coder_version          = var.coder_version
   authentik_version      = var.authentik_version
   # for coder to directly authenticate via github

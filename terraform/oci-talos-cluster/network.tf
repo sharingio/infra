@@ -179,7 +179,7 @@ resource "oci_network_load_balancer_listener" "controlplane_listener" {
   default_backend_set_name = oci_network_load_balancer_backend_set.controlplane_backend_set.name
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.id
   name                     = "${var.cluster_name}-controlplane"
-  port                     = 6443
+  port                     = 443  # NLB listens on 443, forwards to backend 6443
   protocol                 = "TCP"
 }
 

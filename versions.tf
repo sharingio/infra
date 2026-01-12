@@ -2,11 +2,11 @@ terraform {
   required_providers {
     oci = {
       source  = "oracle/oci"
-      version = "6.7.0"
+      version = "~> 7.29"
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~>0.6.0-beta.0"
+      version = "~> 0.9.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -14,34 +14,37 @@ terraform {
     }
     flux = {
       source  = "fluxcd/flux"
-      version = "~>1.3.0"
+      version = "~> 1.4.0"
     }
     github = {
       source  = "integrations/github"
-      version = "~>6.3.0"
-    }
-    powerdns = {
-      source  = "pan-net/powerdns"
-      version = "1.5.0"
-    }
-    dns = {
-      source  = "hashicorp/dns"
-      version = "3.4.0"
+      version = "~> 6.4.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.32.0"
+      version = "~> 2.35.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.17.0"
     }
     authentik = {
       source  = "goauthentik/authentik"
-      version = "2024.4.0"
+      version = "~> 2025.10.0"
+    }
+    dns = {
+      source  = "hashicorp/dns"
+      version = "~> 3.4.0"
+    }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 5.0"
     }
   }
   required_version = ">= 1.8"
-  backend "kubernetes" {
-    secret_suffix = "cluster-state"
-    namespace     = "tfstate"
-    config_path   = "~/.kube/config-fop"
+  # Local backend - remember to back up terraform.tfstate!
+  backend "local" {
+    path = "terraform.tfstate"
   }
 }
 
@@ -72,18 +75,6 @@ provider "flux" {
     }
   }
 }
-provider "dns" {
-  update {
-    server        = var.rfc2136_nameserver
-    key_name      = var.rfc2136_tsig_keyname
-    key_secret    = var.rfc2136_tsig_key
-    key_algorithm = "hmac-sha256"
-  }
-}
-provider "powerdns" {
-  api_key    = var.pdns_api_key
-  server_url = var.pdns_host
-}
 provider "kubernetes" {
   alias = "cluster-sharingio-oci"
   # config_path = "./kubeconfig"
@@ -98,4 +89,16 @@ provider "authentik" {
   token = module.cluster-sharingio-oci-manifests.authentik_bootstrap_token
   # Optionally set insecure to ignore TLS Certificates
   # insecure = true
+}
+provider "dns" {
+  update {
+    server        = var.rfc2136_nameserver
+    port          = var.rfc2136_port
+    key_name      = var.rfc2136_tsig_keyname
+    key_secret    = var.rfc2136_tsig_key
+    key_algorithm = "hmac-sha256"
+  }
+}
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
 }

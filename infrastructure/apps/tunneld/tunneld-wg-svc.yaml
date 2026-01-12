@@ -1,12 +1,16 @@
 # tunneld-wg-svc.yaml
-
+# Wireguard service with reserved IP via Cilium L2 announcements
 apiVersion: v1
 kind: Service
 metadata:
   name: tunneld-wg
   namespace: coder
+  annotations:
+    # Request specific IP from Cilium LB IPAM
+    io.cilium/lb-ipam-ips: "${WIREGUARD_IP}"
 spec:
-  type: ClusterIP
+  type: LoadBalancer
+  loadBalancerIP: ${WIREGUARD_IP}
   internalTrafficPolicy: Cluster
   ipFamilyPolicy: SingleStack
   ports:
@@ -16,5 +20,3 @@ spec:
       targetPort: 54321
   selector:
     app: tunneld
-  # externalIPs:
-  #   - "${wg_ip}"

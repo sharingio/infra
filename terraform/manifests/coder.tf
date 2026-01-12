@@ -66,7 +66,6 @@ resource "kubernetes_secret_v1" "coder" {
     CODER_PG_CONNECTION_URL   = "postgres://postgres:${random_string.coder_postgresql_password.result}@coder-db-postgresql.coder.svc.cluster.local:5432/coder?sslmode=disable"
     TUNNELD_WIREGUARD_KEY     = random_bytes.tunneld_key.base64
     PDNS_TSIG_KEY             = var.rfc2136_tsig_key
-    PDNS_API_KEY              = var.pdns_api_key
     CODER_FIRST_USER_PASSWORD = random_string.coder_first_user_password.result
     CODER_OIDC_CLIENT_ID      = random_password.authentik_coder_oidc_client_id.result
     CODER_OIDC_CLIENT_SECRET  = random_password.authentik_coder_oidc_client_secret.result
@@ -127,7 +126,7 @@ resource "kubernetes_config_map" "coder_config" {
     # CODER_OAUTH2_GITHUB_ALLOW_EVERYONE = "true"
     # CODER_OAUTH2_GITHUB_ALLOWED_ORGS  = "ii,coder,kubermatic"
     # CODER_OAUTH2_GITHUB_ALLOW_SIGNUPS = "true"
-    CODER_DISABLE_PASSWORD_AUTH = "true"
+    # CODER_DISABLE_PASSWORD_AUTH = "true"
     CODER_BLOCK_DIRECT          = "false"
     CODER_BROWSER_ONLY          = "false"
     # GITHUB_TOKEN                      = ""

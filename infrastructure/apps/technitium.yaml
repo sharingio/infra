@@ -2,19 +2,18 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: tunneld
+  name: technitium
   namespace: flux-system
 spec:
   interval: 1m
-  path: ./infrastructure/apps/tunneld
+  path: ./infrastructure/apps/technitium
   prune: true
-  wait: true
   sourceRef:
     kind: GitRepository
     name: flux-system
   postBuild:
     substituteFrom:
       - kind: ConfigMap
-        name: coder-kustomize
-      - kind: ConfigMap
         name: cluster-ips
+  dependsOn:
+    - name: configs

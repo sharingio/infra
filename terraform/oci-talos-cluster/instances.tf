@@ -44,7 +44,7 @@ resource "oci_core_instance" "controlplane" {
     network_type            = local.instance_mode
     remote_data_volume_type = local.instance_mode
     boot_volume_type        = local.instance_mode
-    firmware                = "UEFI_64"
+    # firmware inherited from image - cannot be overridden
   }
   instance_options {
     are_legacy_imds_endpoints_disabled = true
@@ -102,7 +102,7 @@ resource "oci_core_instance" "worker" {
     network_type            = local.instance_mode
     remote_data_volume_type = local.instance_mode
     boot_volume_type        = local.instance_mode
-    firmware                = "UEFI_64"
+    # firmware inherited from image - cannot be overridden
   }
   instance_options {
     are_legacy_imds_endpoints_disabled = true

@@ -30,3 +30,25 @@ output "cilium_yaml" {
   value = module.cluster-sharingio-oci.cilium_yaml
   sensitive = true
 }
+
+# Reserved IPs for registrar glue records and DNS configuration
+output "cluster_ips" {
+  description = "Reserved IPs that survive cluster rebuilds"
+  value = {
+    dns       = module.cluster-sharingio-oci.cluster_dns_ip
+    ingress   = module.cluster-sharingio-oci.cluster_ingress_ip
+    wireguard = module.cluster-sharingio-oci.cluster_wireguard_ip
+    apiserver = module.cluster-sharingio-oci.cluster_apiserver_ip
+  }
+}
+
+# Node information
+output "controlplane_nodes" {
+  description = "Control plane nodes with hostnames and IPs"
+  value       = module.cluster-sharingio-oci.controlplane_nodes
+}
+
+output "worker_nodes" {
+  description = "Worker nodes with hostnames and IPs"
+  value       = module.cluster-sharingio-oci.worker_nodes
+}

@@ -34,8 +34,8 @@ EOF
            - 169.254.169.254
        kubelet:
          extraArgs:
-           cloud-provider: external
            rotate-server-certificates: "true"
+           # cloud-provider flag removed - external CCM handles this
        systemDiskEncryption:
          state:
            provider: luks2
@@ -75,16 +75,25 @@ EOF
        externalCloudProvider:
          enabled: true
          manifests:
+           # Cloud Controller Managers
            - https://raw.githubusercontent.com/siderolabs/talos-cloud-controller-manager/${var.talos_ccm_version}/docs/deploy/cloud-controller-manager.yml
            - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager-rbac.yaml
            - https://github.com/oracle/oci-cloud-controller-manager/releases/download/${var.oracle_cloud_ccm_version}/oci-cloud-controller-manager.yaml
+           # Gateway API CRDs (required for Cilium Gateway API support)
+           - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.0/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml
+           - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.0/config/crd/standard/gateway.networking.k8s.io_gateways.yaml
+           - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.0/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml
+           - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.0/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml
+           - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.0/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml
+           # TLSRoute (experimental, needed for Cilium)
+           - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.0/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
        controllerManager:
-         extraArgs:
-           cloud-provider: external
+         extraArgs: {}
+         # cloud-provider flag removed in Kubernetes 1.27+
        apiServer:
-         extraArgs:
-           cloud-provider: external
-           anonymous-auth: true
+         extraArgs: {}
+         # cloud-provider flag removed in Kubernetes 1.27+
+         # anonymous-auth defaults to false (secure)
        inlineManifests:
          - name: oci-cloud-controller-manager
            contents: |

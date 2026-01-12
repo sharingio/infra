@@ -12,9 +12,9 @@ resource "authentik_application" "coder" {
 }
 
 
-data "authentik_scope_mapping" "coder" {
+data "authentik_property_mapping_provider_scope" "coder" {
+  # Updated for authentik provider 2024.12+
   # Search by name, by managed field or by scope_name
-  # name    = "authentik default OAuth Mapping: Proxy outpost"
   managed_list = [
     "goauthentik.io/providers/oauth2/scope-email",
     "goauthentik.io/providers/oauth2/scope-offline_access",
@@ -31,6 +31,10 @@ data "authentik_flow" "default-authentication-flow" {
   slug = "default-authentication-flow"
 }
 
+data "authentik_flow" "default-provider-invalidation-flow" {
+  slug = "default-provider-invalidation-flow"
+}
+
 data "authentik_certificate_key_pair" "default" {
   name = "authentik Self-signed Certificate"
 }
@@ -42,6 +46,7 @@ resource "authentik_provider_oauth2" "coder" {
   client_secret              = var.authentik_coder_oidc_client_secret
   authorization_flow         = data.authentik_flow.default-provider-authorization-implicit-consent.id
   authentication_flow        = authentik_flow.ii-authentication-flow.uuid
+  invalidation_flow          = data.authentik_flow.default-provider-invalidation-flow.id
   access_code_validity       = "minutes=1"
   access_token_validity      = "minutes=10"
   refresh_token_validity     = "days=30"
@@ -49,8 +54,12 @@ resource "authentik_provider_oauth2" "coder" {
   issuer_mode                = "per_provider"
   sub_mode                   = "user_email"
   signing_key                = data.authentik_certificate_key_pair.default.id
-  redirect_uris = [
-    "https://coder.${var.domain}/api/v2/users/oidc/callback"
+  # Updated for authentik provider 2024.12+: allowed_redirect_uris with matching_mode
+  allowed_redirect_uris = [
+    {
+      matching_mode = "strict"
+      url           = "https://coder.${var.domain}/api/v2/users/oidc/callback"
+    }
   ]
   # authorization_flow         = data.authentik_flow.default-authorization-flow.id
   # authentication_flow = authentik_flow.ii-authentication-flow.uuid
@@ -73,7 +82,7 @@ resource "authentik_provider_oauth2" "coder" {
   #     ~ signing_key                = "62c4656a-8137-4c10-a7cf-655fac74094a" -> (known after apply)
   #       # (11 unchanged attributes hidden)
   #   }
-  property_mappings = data.authentik_scope_mapping.coder.ids
+  property_mappings = data.authentik_property_mapping_provider_scope.coder.ids
   lifecycle {
     ignore_changes = [
       # Ignore any changes to the secret data

@@ -2,18 +2,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: registry
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: registry-pv
-spec:
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: "/var/lib/registry"
+  labels:
+    preserve: ns
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -25,7 +15,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 10Gi
+      storage: 200Gi
 ---
 apiVersion: v1
 kind: Secret
@@ -58,16 +48,12 @@ spec:
         env:
         - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
           value: "/var/lib/registry"
-        - name: REGISTRY_AUTH
-          value: htpasswd
-        - name: REGISTRY_AUTH_HTPASSWD_REALM
-          value: Registry Realm
-        - name: REGISTRY_AUTH_HTPASSWD_PATH
-          value: /etc/registry/htpasswd
-  #          e "REGISTRY_AUTH=htpasswd" \
-  # -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
-  # -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd \
-
+        # - name: REGISTRY_AUTH
+        #   value: htpasswd
+        # - name: REGISTRY_AUTH_HTPASSWD_REALM
+        #   value: Registry Realm
+        # - name: REGISTRY_AUTH_HTPASSWD_PATH
+        #   value: /etc/registry/htpasswd
         volumeMounts:
         - name: registry-storage
           mountPath: "/var/lib/registry"

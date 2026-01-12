@@ -1,9 +1,9 @@
 locals {
-  # TODO add a wait for correct address here or in the resource consuming it
-  ingress_ipv4 = [for ipaddr in toset(
-    [for nlb in data.oci_network_load_balancer_network_load_balancers.nlbs.network_load_balancer_collection[0].items :
-    nlb if startswith(nlb.display_name, "ingress-nginx")][0].ip_addresses
-  ) : ipaddr if ipaddr.is_public == true][0].ip_address
+  # Reserved IPs from OCI module - these survive cluster rebuilds
+  ingress_ipv4       = module.cluster-sharingio-oci.cluster_ingress_ip
+  dns_ipv4           = module.cluster-sharingio-oci.cluster_dns_ip
+  wireguard_ipv4     = module.cluster-sharingio-oci.cluster_wireguard_ip
+  apiserver_ipv4     = module.cluster-sharingio-oci.cluster_apiserver_ip
 
   rfc2136_algorithm  = "hmac-sha256"
   acme_email_address = "letsencrypt@ii.coop"

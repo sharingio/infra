@@ -3,7 +3,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./00-namespaces.yaml
-  - ./ingress-nginx.yaml
+  # NOTE: ingress-nginx removed - using Cilium Gateway API instead
+  # - ./ingress-nginx.yaml
   # - ./cert-manager-webhook-pdns.yaml
   - ./longhorn.yaml
   - ./cert-manager.yaml

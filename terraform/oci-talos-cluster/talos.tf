@@ -32,6 +32,9 @@ resource "talos_machine_configuration_apply" "controlplane" {
   config_patches = [
     yamlencode({
       machine = {
+        network = {
+          hostname = "${random_pet.controlplane[each.key].id}.${var.domain}"
+        }
         kubelet = {
           extraArgs = {
             "provider-id" = each.value.id
@@ -52,6 +55,9 @@ resource "talos_machine_configuration_apply" "worker" {
   config_patches = [
     yamlencode({
       machine = {
+        network = {
+          hostname = "${random_pet.worker[each.key].id}.${var.domain}"
+        }
         kubelet = {
           extraArgs = {
             "provider-id" = each.value.id
@@ -68,31 +74,6 @@ EOF
             op = "create"
           }
         ]
-      }
-    }),
-    yamlencode({
-      machine = {
-        network = {
-          interfaces = [
-            {
-              interface = "br0"
-              addresses = ["192.168.0.0/16"]
-              bridge = {
-                stp = {
-                  enabled = true
-                }
-                interfaces = ["br0"]
-              }
-              routes = [
-                {
-                  network = "0.0.0.0/0"
-                  gateway = "192.168.0.1"
-                  metric = 1024
-                }
-              ]
-            }
-          ]
-        }
       }
     })
   ]

@@ -41,7 +41,7 @@ data "talos_client_configuration" "talosconfig" {
 data "talos_machine_configuration" "controlplane" {
   cluster_name = var.cluster_name
   # cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
-  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address}:6443"
+  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address}:443"
 
   machine_type    = "controlplane"
   machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
@@ -98,7 +98,7 @@ data "talos_machine_configuration" "controlplane" {
 data "talos_machine_configuration" "worker" {
   cluster_name = var.cluster_name
   # cluster_endpoint = "https://${var.kube_apiserver_domain}:6443"
-  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address}:6443"
+  cluster_endpoint = "https://${oci_network_load_balancer_network_load_balancer.controlplane_load_balancer.ip_addresses[0].ip_address}:443"
 
   machine_type    = "worker"
   machine_secrets = talos_machine_secrets.machine_secrets.machine_secrets
@@ -216,5 +216,52 @@ data "helm_template" "cilium" {
   set {
     name  = "cni.exclusive"
     value = "false"
+  }
+
+  # Gateway API support (replaces nginx-ingress)
+  set {
+    name  = "gatewayAPI.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "gatewayAPI.hostNetwork.enabled"
+    value = "true"
+  }
+
+  # L2 announcements for LoadBalancer IPs (reserved IPs)
+  set {
+    name  = "l2announcements.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "externalIPs.enabled"
+    value = "true"
+  }
+
+  # Kubeproxy replacement for better performance
+  set {
+    name  = "kubeProxyReplacement"
+    value = "true"
+  }
+
+  # Rate limiting for L2 announcements (important for API usage)
+  # Formula: QPS = #services × (1 / leaseRenewDeadline)
+  # With ~10 services and default 5s deadline: 10 * 0.2 = 2 QPS
+  set {
+    name  = "k8sClientRateLimit.qps"
+    value = "10"
+  }
+
+  set {
+    name  = "k8sClientRateLimit.burst"
+    value = "20"
+  }
+
+  # Enable device detection for L2 announcements
+  set {
+    name  = "devices"
+    value = "{eth+,ens+,enp+}"
   }
 }

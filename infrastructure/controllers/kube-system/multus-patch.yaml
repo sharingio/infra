@@ -37,6 +37,15 @@ spec:
       - hostPath:
           path: /var/run/netns/
         name: host-run-netns
+      containers:
+        - name: kube-multus
+          resources:
+            limits:
+              cpu: 100m
+              memory: 90Mi
+            requests:
+              cpu: 100m
+              memory: 90Mi
       initContainers:
         - command:
             - /install-cni.sh

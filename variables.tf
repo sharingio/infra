@@ -40,19 +40,15 @@ variable "rfc2136_nameserver" {
   type      = string
   sensitive = true
 }
+variable "rfc2136_port" {
+  type    = number
+  default = 53
+}
 variable "rfc2136_tsig_keyname" {
   type      = string
   sensitive = true
 }
 variable "rfc2136_tsig_key" {
-  type      = string
-  sensitive = true
-}
-variable "pdns_host" {
-  type      = string
-  sensitive = true
-}
-variable "pdns_api_key" {
   type      = string
   sensitive = true
 }
@@ -99,4 +95,10 @@ variable "authentik_version" {
   description = "Version of authentik from https://github.com/goauthentik/authentik/releases/"
   type        = string
   default     = "2024.4.0"
+}
+variable "cloudflare_api_token" {
+  description = "Cloudflare API token for DNS management"
+  type        = string
+  sensitive   = true
+  default     = ""
 }

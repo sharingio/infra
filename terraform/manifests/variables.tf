@@ -33,16 +33,6 @@ variable "github_repository" {
   default     = "infra"
 }
 
-variable "pdns_api_key" {
-  description = "the API key for PowerDNS"
-  type        = string
-  default     = ""
-}
-variable "pdns_host" {
-  description = "the host address for PowerDNS"
-  type        = string
-  default     = ""
-}
 variable "acme_email_address" {
   description = "the email address for LetsEncrypt"
   type        = string
@@ -60,6 +50,11 @@ variable "dns_ip" {
 }
 variable "wg_ip" {
   description = "ip for the WireGuard tunneld service"
+  type        = string
+  default     = ""
+}
+variable "apiserver_ip" {
+  description = "ip for the Kubernetes API server (NLB)"
   type        = string
   default     = ""
 }
