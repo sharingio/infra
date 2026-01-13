@@ -6,6 +6,9 @@ kind: Kustomization
 resources:
   - ./00-namespaces.yaml
 
+  # Phase 0 - Core fixes (before anything else)
+  - ./kube-system.yaml             # CoreDNS config fix for OCI
+
   # Phase 1 - Foundation
   - ./cert-manager.yaml
   # - ./ingress-nginx.yaml       # Replaced by Cilium Gateway API
@@ -17,7 +20,6 @@ resources:
   # - ./cnpg-system.yaml
 
   # Phase 3 - Optional Infrastructure (uncomment when needed)
-  # - ./kube-system.yaml           # metrics-server
   # - ./kube-fledged.yaml          # Image caching
   # - ./redis-operator.yaml
 
