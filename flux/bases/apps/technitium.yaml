@@ -15,5 +15,8 @@ spec:
     substituteFrom:
       - kind: ConfigMap
         name: cluster-ips
+      - kind: ConfigMap
+        name: cluster-config
   dependsOn:
-    - name: configs
+    - name: infrastructure
+    # Note: certificates now depend on technitium, not the other way around

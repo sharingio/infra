@@ -4,11 +4,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  # Phase 1.5 - DNS (needed for cert-manager DNS-01 validation)
+  - ./technitium.yaml        # DNS server (enables certificate issuance)
+
   # Phase 3 - Apps (uncomment when storage & infra ready)
   # - ./coder-db             # PostgreSQL for coder (needs cnpg-system)
   # - ./coder.yaml           # Main app (needs coder-db)
   # - ./authentik.yaml       # SSO (needs storage)
-  # - ./technitium.yaml      # DNS server
 
   # Utilities
   # - ./tunneld.yaml         # Tunnel daemon

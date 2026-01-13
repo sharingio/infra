@@ -10,8 +10,8 @@ resources:
   - ./cert-manager.yaml
   # - ./ingress-nginx.yaml       # Replaced by Cilium Gateway API
 
-  # Phase 2 - Storage & Infra (uncomment when ready)
-  # - ./local-path-storage.yaml
+  # Phase 2 - Storage & Infra
+  - ./local-path-storage.yaml
   # - ./longhorn.yaml              # Choose one storage solution
   # - ./reflector.yaml
   # - ./cnpg-system.yaml
