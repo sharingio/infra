@@ -1,20 +1,9 @@
 ---
 # Native Kustomize file for sharingio-oci overlay
-# References shared bases and adds cluster-specific configuration
+# Only the cluster-config ConfigMap - bases are applied by separate Flux Kustomizations
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
   # Cluster-specific ConfigMap (created before other resources)
   - cluster-config.yaml
-  # Shared bases
-  - ../../bases/controllers
-  - ../../bases/apps
-  - ../../bases/configs
-
-# Optional: cluster-specific patches can be added here
-# patches:
-#   - path: patches/coder-replicas.yaml
-#     target:
-#       kind: HelmRelease
-#       name: coder
