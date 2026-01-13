@@ -42,9 +42,24 @@ terraform {
     }
   }
   required_version = ">= 1.8"
-  # Local backend - remember to back up terraform.tfstate!
-  backend "local" {
-    path = "terraform.tfstate"
+
+  # Remote backend using OCI Object Storage via HTTP (Pre-Authenticated Request)
+  # State is stored in: sharingio-tfstate bucket in OCI
+  # Backups at: sharingio-tfstate/backups/
+  #
+  # NOTE: HTTP backend does not support state locking. Coordinate access.
+  #
+  # SETUP: Set TF_HTTP_ADDRESS environment variable with your PAR URL:
+  #   export TF_HTTP_ADDRESS="https://axe608t7iscj.objectstorage.us-phoenix-1.oci.customer-oci.com/p/<PAR_TOKEN>/n/axe608t7iscj/b/sharingio-tfstate/o/terraform.tfstate"
+  #
+  # To create/renew PAR (valid 1 year):
+  #   oci os preauth-request create --bucket-name sharingio-tfstate --namespace axe608t7iscj \
+  #     --name terraform-state-rw --access-type ObjectReadWrite \
+  #     --time-expires $(date -d "+365 days" +%Y-%m-%dT%H:%M:%SZ) --object-name terraform.tfstate
+  #
+  # The full-path from output goes in TF_HTTP_ADDRESS
+  backend "http" {
+    update_method = "PUT"
   }
 }
 

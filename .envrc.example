@@ -1,0 +1,13 @@
+# Copy this file to .envrc and fill in values
+# Run: direnv allow
+
+# GitHub token for API access
+export GHTOKEN="ghp_your_token_here"
+
+# OCI Object Storage PAR for terraform remote state
+# To create PAR (valid 1 year):
+#   oci os preauth-request create --bucket-name sharingio-tfstate --namespace axe608t7iscj \
+#     --name terraform-state-rw --access-type ObjectReadWrite \
+#     --time-expires $(date -d "+365 days" +%Y-%m-%dT%H:%M:%SZ) --object-name terraform.tfstate
+# Use the full-path from the output
+export TF_HTTP_ADDRESS="https://axe608t7iscj.objectstorage.us-phoenix-1.oci.customer-oci.com/p/<PAR_TOKEN>/n/axe608t7iscj/b/sharingio-tfstate/o/terraform.tfstate"

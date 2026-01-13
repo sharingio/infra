@@ -83,6 +83,49 @@ rules:
     resources: ["pods/portforward"]
     verbs: ["create"]
 ---
+# Override editor - allows modifying *-override ConfigMaps/Secrets for debugging
+# These are escape hatches for runtime configuration without GitOps commits
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: claude-override-editor
+rules:
+  # Edit override ConfigMaps in any namespace
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames:
+      - "authentik-override"
+      - "coder-override"
+      - "tunneld-override"
+      - "powerdns-override"
+      - "technitium-override"
+      - "longhorn-override"
+      - "cert-manager-override"
+    verbs: ["get", "list", "watch", "update", "patch"]
+  # Edit override Secrets in any namespace
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames:
+      - "authentik-override"
+      - "coder-override"
+      - "tunneld-override"
+      - "powerdns-override"
+      - "technitium-override"
+    verbs: ["get", "list", "watch", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: claude-override-editor
+subjects:
+  - kind: ServiceAccount
+    name: claude-operator
+    namespace: claude-system
+roleRef:
+  kind: ClusterRole
+  name: claude-override-editor
+  apiGroup: rbac.authorization.k8s.io
+---
 # Full access to sandbox namespace only
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
