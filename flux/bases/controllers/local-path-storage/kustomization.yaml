@@ -2,7 +2,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - github.com/rancher/local-path-provisioner/deploy?ref=v0.0.30
+  # Vendored from github.com/rancher/local-path-provisioner/deploy?ref=v0.0.30
+  - ./local-path-storage.yaml
 patches:
   - patch: |-
       kind: ConfigMap
