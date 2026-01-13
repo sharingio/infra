@@ -1,8 +1,18 @@
 ---
+# Apps - uncomment after infrastructure is ready
+# See: docs/flux-deployment-phases.md
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./authentik.yaml
-  - ./coder.yaml
-  - ./technitium.yaml
-  - ./tunneld.yaml
+  # Phase 3 - Apps (uncomment when storage & infra ready)
+  # - ./coder-db             # PostgreSQL for coder (needs cnpg-system)
+  # - ./coder.yaml           # Main app (needs coder-db)
+  # - ./authentik.yaml       # SSO (needs storage)
+  # - ./technitium.yaml      # DNS server
+
+  # Utilities
+  # - ./tunneld.yaml         # Tunnel daemon
+
+  # Deprecated/unused
+  # - ./powerdns.yaml
+  # - ./registry
