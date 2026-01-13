@@ -1,0 +1,87 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: authentik
+  namespace: flux-system
+spec:
+  targetNamespace: authentik
+  releaseName: authentik
+  storageNamespace: flux-system
+  # We install the namespace with the secret
+  install:
+    createNamespace: false
+  interval: 1m
+  chart:
+    spec:
+      chart: authentik
+      version: "${AUTHENTIK_VERSION}"
+      sourceRef:
+        kind: HelmRepository
+        name: authentik
+        namespace: flux-system
+      interval: 1m
+  values:
+    # https://github.com/goauthentik/helm/blob/c51952b024451ee90fc3603fae24f39472b1b197/charts/authentik/templates/server-deployment.yaml#L77
+    # https://github.com/goauthentik/helm/blob/c51952b024451ee90fc3603fae24f39472b1b197/charts/authentik/templates/worker-deployment.yaml#L80
+    global:
+      podAnnotations:
+        ii/config-hash: "${confighash}"
+      envFrom:
+        - configMapRef:
+            name: authentik-env
+        - secretRef:
+            name: authentik-env
+        - configMapRef:
+            name: authentik-override
+            optional: true
+        - secretRef:
+            name: authentik-override
+            optional: true
+      env:
+        - name: AUTHENTIK_ERROR_REPORTING__ENABLED
+          value: "true"
+    server:
+      ingress:
+        ingressClassName: "nginx"
+        enabled: true
+        tls:
+          - secretName: wildcard-tls
+            hosts:
+              - "${authentik_host}"
+        hosts:
+          - "${authentik_host}"
+        paths:
+          - "/"
+        pathType: Prefix
+    authentik:
+      # Debugging
+      log_level: trace
+      error_reporting:
+        enabled: true
+      # This sends anonymous usage-data, stack traces on errors and
+      # performance data to sentry.io, and is fully opt-in
+    postgresql:
+      enabled: true
+      auth:
+        existingSecret: authentik-env
+        secretKeys:
+          adminPasswordKey: AUTHENTIK_POSTGRESQL__PASSWORD
+          userPasswordKey: AUTHENTIK_POSTGRESQL__PASSWORD
+    redis:
+      enabled: true
+# version: "2023.6.3" # Current as of August 20, 2023
+# WARNING: PostgreSQL is updated from 11 to 15 in 2023.8.1
+# Quite a refactor three months ago: https://github.com/goauthentik/helm/pull/163
+# https://artifacthub.io/packages/helm/goauthentik/authentik#values
+# # -- see configuration options at https://goauthentik.io/docs/installation/configuration/
+#  postgresql-password: A
+#  postgresql-postgres-password: B
+# As part of the upgrade from Postgres 11 to 15:
+# https://goauthentik.io/docs/troubleshooting/postgres/upgrade_kubernetes#:~:text=Stop%20PostgreSQL%20and%20start%20the%20upgrade%E2%80%8B&text=Now%20run%20helm%20upgrade%20%2D%2D,repeat%20the%20steps%20from%20Prerequisites.
+# While in diagnosticMode we can manipulate the data
+# postgresql:
+# diagnosticMode:
+#   enabled: true
+# image:
+#   tag: 15.2.0-debian-11-r26

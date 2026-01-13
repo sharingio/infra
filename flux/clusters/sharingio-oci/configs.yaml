@@ -1,0 +1,26 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: configs
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  dependsOn:
+    - name: cluster-config
+  path: ./flux/bases/configs
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-config
+      - kind: Secret
+        name: rfc2136dnsserver
+      - kind: ConfigMap
+        name: coder-kustomize
+      - kind: ConfigMap
+        name: cluster-ips

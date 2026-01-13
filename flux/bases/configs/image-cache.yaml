@@ -1,0 +1,12 @@
+apiVersion: kubefledged.io/v1alpha2
+kind: ImageCache
+metadata:
+  name: image-cache
+  namespace: kube-fledged
+spec:
+  cacheSpec:
+    - images:
+        - ghcr.io/ii/iipod:latest # {"$imagepolicy": "flux-system:ghcr-io-ii-iipod"}
+        - docker.io/heyste/kinoite:20240523-1505
+      nodeSelector:
+        node-role.ii.nz/worker: ""

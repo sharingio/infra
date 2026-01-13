@@ -1,0 +1,49 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: ghcr-io-ii-iipod
+  namespace: flux-system
+spec:
+  image: ghcr.io/ii/iipod
+  interval: 1m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: ghcr-io-ii-iipod
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: ghcr-io-ii-iipod
+  policy:
+    alphabetical:
+      order: asc
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageUpdateAutomation
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  interval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: fluxcdbot@users.noreply.gitlab.com
+        name: fluxcdbot
+      messageTemplate: |
+        chore(automation): update images
+
+        {{range .Updated.Images}}- {{println .}}{{"\n"}}{{end}}
+    push:
+      branch: main
+  update:
+    path: ./
+    strategy: Setters

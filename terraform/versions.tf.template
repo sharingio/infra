@@ -1,0 +1,49 @@
+# Shared provider version constraints
+# Each cluster directory includes this and adds its own backend/providers
+
+terraform {
+  required_version = ">= 1.8"
+
+  required_providers {
+    oci = {
+      source  = "oracle/oci"
+      version = "~> 7.29"
+    }
+    talos = {
+      source  = "siderolabs/talos"
+      version = "~> 0.9.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "> 0.0.0"
+    }
+    flux = {
+      source  = "fluxcd/flux"
+      version = "~> 1.4.0"
+    }
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.4.0"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.35.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.17.0"
+    }
+    authentik = {
+      source  = "goauthentik/authentik"
+      version = "~> 2025.10.0"
+    }
+    dns = {
+      source  = "hashicorp/dns"
+      version = "~> 3.4.0"
+    }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 5.0"
+    }
+  }
+}

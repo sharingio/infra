@@ -1,0 +1,29 @@
+---
+# Cluster-specific configuration for sharingio-oci
+# Non-sensitive values that can be committed to git
+# IPs are populated from terraform outputs after deployment
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-config
+  namespace: flux-system
+data:
+  # Cluster identity
+  CLUSTER_NAME: "sharingio"
+  DOMAIN: "sharing.io"
+
+  # App hostnames
+  CODER_HOST: "coder.sharing.io"
+  CODER_WILDCARD_DOMAIN: "coder.sharing.io"
+  AUTHENTIK_HOST: "sso.sharing.io"
+
+  # Versions (can override defaults here)
+  CODER_VERSION: "v2.16.0"
+  AUTHENTIK_VERSION: "2024.4.0"
+
+  # Reserved IPs - update these from terraform output after deployment
+  # Run: tofu output cluster_ips
+  INGRESS_IP: ""
+  DNS_IP: ""
+  WIREGUARD_IP: ""
+  APISERVER_IP: ""

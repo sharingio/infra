@@ -19,6 +19,6 @@ resource "flux_bootstrap_git" "this" {
   depends_on = [
     github_repository_deploy_key.this
   ]
-  path             = "clusters/${var.cluster}"
+  path             = "flux/clusters/${var.cluster}"
   components_extra = ["image-reflector-controller", "image-automation-controller"]
 }
