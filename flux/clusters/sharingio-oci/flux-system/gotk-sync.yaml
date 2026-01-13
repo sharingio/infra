@@ -20,7 +20,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./clusters/cluster-sharingio-oci
+  path: ./flux/clusters/sharingio-oci
   prune: true
   sourceRef:
     kind: GitRepository
