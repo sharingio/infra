@@ -8,7 +8,7 @@ resources:
 
   # Phase 1 - Foundation
   - ./cert-manager.yaml
-  - ./ingress-nginx.yaml
+  # - ./ingress-nginx.yaml       # Replaced by Cilium Gateway API
 
   # Phase 2 - Storage & Infra (uncomment when ready)
   # - ./local-path-storage.yaml
