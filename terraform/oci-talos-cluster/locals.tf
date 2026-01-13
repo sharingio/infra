@@ -27,6 +27,11 @@ EOF
 
   talos_base_configuration = <<-EOT
     machine:
+       network:
+         nameservers:
+%{for ns in var.nameservers~}
+           - ${ns}
+%{endfor~}
        sysctls:
          user.max_user_namespaces: "11255"
        time:

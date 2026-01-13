@@ -11,3 +11,17 @@ config.org
 secrets.org
 config.tfvars
 secrets.tfvars
+
+# Terraform state (should use remote backend)
+terraform.tfstate
+terraform.tfstate.*
+*.tfstate
+*.tfstate.*
+
+# Sensitive cluster configs
+kubeconfig
+talosconfig
+talosconfig.*
+
+# Plan files
+*.plan

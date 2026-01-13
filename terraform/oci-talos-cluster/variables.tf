@@ -154,3 +154,9 @@ variable "domain" {
   type        = string
   default     = "sharing.io"
 }
+
+variable "nameservers" {
+  description = "DNS nameservers for Talos nodes to use for resolution (separate from RFC 2136 update server)"
+  type        = list(string)
+  default     = ["8.8.8.8", "8.8.4.4"]
+}

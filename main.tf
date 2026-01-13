@@ -14,10 +14,63 @@ module "cluster-sharingio-oci" {
   # Image is auto-uploaded from Talos Image Factory if not specified
   # talos_image_oci_bucket_url = null  # uses default auto-upload
   cluster_name = "sharingio"
+
+  # DNS nameservers for Talos nodes (separate from RFC 2136 update server)
+  nameservers = [
+    "161.153.15.215", # Technitium DNS (bootstrap, on build box)
+    "8.8.8.8",        # Google DNS fallback
+  ]
 }
 resource "local_file" "kubeconfig" {
   filename = "kubeconfig"
-  content  = module.cluster-sharingio-oci.kubeconfig
+  content = yamlencode({
+    apiVersion = "v1"
+    kind       = "Config"
+    clusters = [{
+      name = "sharingio"
+      cluster = {
+        server                     = "https://k8s.${var.domain}:443"
+        certificate-authority-data = module.cluster-sharingio-oci.kubeconfig_ca_certificate
+      }
+    }]
+    contexts = [{
+      name = "admin@sharingio"
+      context = {
+        cluster   = "sharingio"
+        namespace = "default"
+        user      = "admin@sharingio"
+      }
+    }]
+    current-context = "admin@sharingio"
+    users = [{
+      name = "admin@sharingio"
+      user = {
+        client-certificate-data = module.cluster-sharingio-oci.kubeconfig_client_certificate
+        client-key-data         = module.cluster-sharingio-oci.kubeconfig_client_key
+      }
+    }]
+  })
+  depends_on = [dns_a_record_set.k8s]
+}
+
+resource "local_file" "talosconfig" {
+  filename = "talosconfig"
+  content = yamlencode({
+    context = "sharingio"
+    contexts = {
+      sharingio = {
+        endpoints = [for name, node in module.cluster-sharingio-oci.controlplane_nodes : node.hostname]
+        nodes = concat(
+          [for name, node in module.cluster-sharingio-oci.controlplane_nodes : node.hostname],
+          [for name, node in module.cluster-sharingio-oci.worker_nodes : node.hostname]
+        )
+        ca  = module.cluster-sharingio-oci.talos_client_ca
+        crt = module.cluster-sharingio-oci.talos_client_crt
+        key = module.cluster-sharingio-oci.talos_client_key
+      }
+    }
+  })
+  depends_on = [dns_a_record_set.controlplane, dns_a_record_set.worker]
 }
 data "oci_network_load_balancer_network_load_balancers" "nlbs" {
   #Required

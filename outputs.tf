@@ -7,8 +7,15 @@ output "load_balancer_ip" {
 }
 
 output "talosconfig" {
-  value     = module.cluster-sharingio-oci.talosconfig
-  sensitive = true
+  description = "Talosconfig with DNS hostnames (stable)"
+  value       = local_file.talosconfig.content
+  sensitive   = true
+}
+
+output "talosconfig_bootstrap" {
+  description = "Talosconfig with IPs (for bootstrap)"
+  value       = module.cluster-sharingio-oci.talosconfig_bootstrap
+  sensitive   = true
 }
 
 output "kubeconfig" {
