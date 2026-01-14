@@ -1,0 +1,225 @@
+#+title: OCI CAPI cluster
+
+Write a tfvars file
+
+#+begin_src hcl
+tenancy_ocid     = "TENANCY OCID"
+user_ocid        = "YOUR USER OCID"
+private_key_path = "YOUR PRIVATE KEY PATH"
+fingerprint      = "THE FINGERPRINT FOR YOUR PRIVATE KEY"
+region           = "us-sanjose-1"
+compartment_ocid = "YOUR COMPARTMENT OCID"
+#+end_src
+
+Provision network resources
+
+#+begin_src shell
+tofu apply --var-file ./.tfvars
+#+end_src
+
+Bring up Kubernetes locally
+
+#+begin_src bash
+kind create cluster
+#+end_src
+
+Define env
+
+#+begin_src bash :tangle .envrc
+[ ! -f priv.env ] || . priv.env
+# export OCI_TENANCY_ID=
+# export OCI_USER_ID=
+# export OCI_CREDENTIALS_FINGERPRINT=
+# export OCI_CREDENTIALS_KEY_B64= # $(base64 < path/to/a/key.pem | tr -d '\n')
+export OCI_REGION=us-sanjose-1
+
+export OCI_TENANCY_ID_B64="$(echo -n "$OCI_TENANCY_ID" | base64 | tr -d '\n')"
+export OCI_CREDENTIALS_FINGERPRINT_B64="$(echo -n "$OCI_CREDENTIALS_FINGERPRINT" | base64 | tr -d '\n')"
+export OCI_USER_ID_B64="$(echo -n "$OCI_USER_ID" | base64 | tr -d '\n')"
+export OCI_REGION_B64="$(echo -n "$OCI_REGION" | base64 | tr -d '\n')"
+
+# if bootstraping from inside OCI
+export USE_INSTANCE_PRINCIPAL="false"
+export USE_INSTANCE_PRINCIPAL_B64="$(echo -n "$USE_INSTANCE_PRINCIPAL" | base64 | tr -d '\n')"
+#+end_src
+
+allow env from .envrc
+
+#+begin_src bash
+direnv allow
+#+end_src
+
+bootstrap capi with oci
+
+#+begin_src bash
+clusterctl init --bootstrap talos:v0.6.5 --control-plane talos:v0.5.6 --infrastructure oci:v0.16.0
+#+end_src
+
+create a namespace
+
+#+begin_src bash
+kubectl create ns sharingio
+#+end_src
+
+#+RESULTS:
+#+begin_example
+namespace/sharingio created
+#+end_example
+
+Define more env
+
+#+begin_src bash :tangle .envrc
+# export OCI_COMPARTMENT_ID=
+# export OCI_IMAGE_ID=ocid1.image.oc1.us-sanjose-1.aaaaaaaazpwpyk7kh6mbu2g6yihups2zf5uwt7moehbafxsu4idaew6nggxq # NOTE Oracle 8
+export OCI_IMAGE_ID=ocid1.image.oc1.us-sanjose-1.aaaaaaaaqemyxu4dnhuapt6dfzuhq6rp5h3f7ld3yqh3crwiu5qtzlk6woma
+export OCI_CONTROL_PLANE_MACHINE_TYPE=VM.Standard.A1.Flex
+export OCI_CONTROL_PLANE_MACHINE_TYPE_OCPUS=4
+export OCI_NODE_MACHINE_TYPE=VM.Standard.A1.Flex
+export OCI_NODE_MACHINE_TYPE_OCPUS=8
+export OCI_SSH_KEY=
+export OCI_CONTROL_PLANE_PV_TRANSIT_ENCRYPTION=true
+export OCI_NODE_PV_TRANSIT_ENCRYPTION=true
+
+export TALOS_INSTALL_IMAGE=factory.talos.dev/installer/d01e4eb407f9a242831748cab07de55550fdcfe8be65ce4defd258a93d94562f:v1.7.6
+export CLUSTER_NAME=cncfocicapi
+export CONTROL_PLANE_MACHINE_COUNT=3
+export KUBERNETES_VERSION=v1.30.1
+export NAMESPACE=sharingio
+export POD_CIDR=192.168.0.0/16
+export SERVICE_CIDR=10.128.0.0/12
+export NODE_MACHINE_COUNT=6
+export OCI_NETWORK_SUBNET_NAME="${CLUSTER_NAME}-subnet"
+
+export OCI_NETWORK_SECURITY_GROUP_ID="$(tofu output --raw oci_network_security_group_id || false)"
+export OCI_NETWORK_SUBNET_ID="$(tofu output --raw oci_network_subnet_id)"
+#+end_src
+
+generate a cluster config
+
+#+begin_src bash :epilogue ". .envrc ; \n"
+clusterctl -n sharingio generate cluster "$CLUSTER_NAME" --from ./cluster-template.yaml --write-to ./cluster.yaml
+#+end_src
+
+#+RESULTS:
+#+begin_example
+#+end_example
+
+apply the cluster
+
+#+begin_src bash
+kubectl -n sharingio apply -f ./cluster.yaml 2>&1
+#+end_src
+
+#+RESULTS:
+#+begin_example
+cluster.cluster.x-k8s.io/cncfocicapi created
+ocicluster.infrastructure.cluster.x-k8s.io/cncfocicapi created
+taloscontrolplane.controlplane.cluster.x-k8s.io/cncfocicapi-control-plane created
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane created
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0 created
+talosconfigtemplate.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0 created
+machinedeployment.cluster.x-k8s.io/cncfocicapi-md-0 created
+#+end_example
+
+view the world
+
+#+begin_src shell
+(
+kubectl -n sharingio get "$(kubectl -n sharingio api-resources | grep x-k8s | awk '{print $1}' | tr '\n' ',' | sed 's/,$//g')"
+) 2>&1 ; :
+#+end_src
+
+#+RESULTS:
+#+begin_example
+NAME                                                                     AGE
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-control-plane-2zmxv   2m53s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-control-plane-6ntpr   2m53s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-control-plane-zc7jw   2m53s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-8lpll      4m13s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-cv7jd      4m13s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-kzjq5      4m13s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-p4smf      4m13s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-rmjb6      4m13s
+talosconfig.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-s67hr      4m13s
+
+NAME                                                              AGE
+talosconfigtemplate.bootstrap.cluster.x-k8s.io/cncfocicapi-md-0   4m13s
+
+NAME                                   CLUSTERCLASS   PHASE         AGE     VERSION
+cluster.cluster.x-k8s.io/cncfocicapi                  Provisioned   4m14s
+
+NAME                                                  CLUSTER       REPLICAS   READY   UPDATED   UNAVAILABLE   PHASE       AGE     VERSION
+machinedeployment.cluster.x-k8s.io/cncfocicapi-md-0   cncfocicapi   6                  6         6             ScalingUp   4m13s   v1.30.1
+
+NAME                                                       CLUSTER       NODENAME   PROVIDERID   PHASE          AGE     VERSION
+machine.cluster.x-k8s.io/cncfocicapi-control-plane-h59cd   cncfocicapi                           Provisioning   2m53s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-control-plane-mrmqj   cncfocicapi                           Provisioning   2m53s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-control-plane-st9j6   cncfocicapi                           Provisioning   2m53s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-8lpll      cncfocicapi                           Pending        4m13s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-cv7jd      cncfocicapi                           Pending        4m13s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-kzjq5      cncfocicapi                           Pending        4m13s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-p4smf      cncfocicapi                           Pending        4m13s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-rmjb6      cncfocicapi                           Pending        4m13s   v1.30.1
+machine.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-s67hr      cncfocicapi                           Pending        4m13s   v1.30.1
+
+NAME                                                 CLUSTER       REPLICAS   READY   AVAILABLE   AGE     VERSION
+machineset.cluster.x-k8s.io/cncfocicapi-md-0-h68x6   cncfocicapi   6                              4m13s   v1.30.1
+
+NAME                                                                        READY   INITIALIZED   REPLICAS   READY REPLICAS   UNAVAILABLE REPLICAS
+taloscontrolplane.controlplane.cluster.x-k8s.io/cncfocicapi-control-plane                         3                           3
+
+NAME                                                     AGE
+ocicluster.infrastructure.cluster.x-k8s.io/cncfocicapi   4m14s
+
+NAME                                                                         AGE
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane-4wq9n   2m53s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane-g8jqg   2m53s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane-jkhnf   2m53s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-8lpll      4m13s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-cv7jd      4m13s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-kzjq5      4m13s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-p4smf      4m13s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-rmjb6      4m13s
+ocimachine.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0-h68x6-s67hr      4m13s
+
+NAME                                                                           AGE
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/cncfocicapi-control-plane   4m13s
+ocimachinetemplate.infrastructure.cluster.x-k8s.io/cncfocicapi-md-0            4m13s
+#+end_example
+
+Get the Talosconfig
+
+#+begin_src shell
+kubectl -n sharingio get secret cncfocicapi-talosconfig -o go-template='{{ .data.talosconfig | base64decode }}' > ./talosconfig
+#+end_src
+
+#+RESULTS:
+#+begin_example
+#+end_example
+
+Get the Kubeconfig
+
+#+begin_src shell
+kubectl -n sharingio get secret sharingio-kubeconfig -o go-template='{{ .data.value | base64decode }}' > ./kubeconfig
+#+end_src
+
+#+RESULTS:
+#+begin_example
+#+end_example
+
+Tear down
+
+#+begin_src shell
+kubectl -n sharingio delete cluster cncfocicapi
+#+end_src
+
+#+RESULTS:
+#+begin_example
+cluster.cluster.x-k8s.io "cncfocicapi" deleted
+taloscontrolplane.controlplane.cluster.x-k8s.io "cncfocicapi-control-plane" deleted
+Error from server (NotFound): error when deleting "./cluster.yaml": ociclusters.infrastructure.cluster.x-k8s.io "cncfocicapi" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": ocimachinetemplates.infrastructure.cluster.x-k8s.io "cncfocicapi-control-plane" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": ocimachinetemplates.infrastructure.cluster.x-k8s.io "cncfocicapi-md-0" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": talosconfigtemplates.bootstrap.cluster.x-k8s.io "cncfocicapi-md-0" not found
+Error from server (NotFound): error when deleting "./cluster.yaml": machinedeployments.cluster.x-k8s.io "cncfocicapi-md-0" not found
+#+end_example
